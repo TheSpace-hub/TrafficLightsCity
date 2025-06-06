@@ -1,7 +1,7 @@
 """
 Основная сцена
 """
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ class State(ABC):
         self.game: 'Game' = game
         self.sprites: dict[str, 'Sprite'] = {}
 
-    def get_sprite(self, uuid: str) -> 'Sprite' | None:
+    def get_sprite(self, uuid: str) -> Optional['Sprite']:
         """
         Добавление спрайта на сцену
         :param uuid: Уникальный идентификатор спрайта
