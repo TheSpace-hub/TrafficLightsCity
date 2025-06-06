@@ -2,7 +2,7 @@
 Основной класс игры.
 Отвечает за цикл игры и изменение состояний.
 """
-from typing import TYPE_CHECKING, Type
+from typing import Type
 
 import os
 import logging
@@ -15,6 +15,8 @@ from pygame.time import Clock
 
 from src.state import State
 
+from src.states import *  # Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
+
 
 class Game:
     """
@@ -22,6 +24,8 @@ class Game:
     """
 
     def __init__(self):
+        Game.configure_logs()
+
         self.states: dict[str, 'State'] = {}
         self.current_state: 'State' | None = None
 
@@ -33,7 +37,7 @@ class Game:
 
         pg.display.set_caption('Город светофоров')
 
-        Game.configure_logs()
+        self.init_states()
 
     def loop(self):
         """
@@ -73,13 +77,13 @@ class Game:
         for state in State.__subclasses__():
             self.register_state(state)
 
-    def register_state(self, state: Type['State']):
+    def register_state(self, state):
         """
         Добавление сцен
         :param state: Объект сцены
         """
-        self.states[state.__class__.__name__] = state(self)
-        self.states[state.__class__.__name__].boot()
+        self.states[str(state.__name__)] = state(self)
+        self.states[str(state.__name__)].boot()
 
     def change_state(self, state: str):
         """

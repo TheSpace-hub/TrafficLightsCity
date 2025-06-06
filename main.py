@@ -8,7 +8,9 @@ def main():
     """
     Функция запускает при запуске программы
     """
-    Game().loop()
+    game = Game()
+    game.change_state('TestState')
+    game.loop()
 
 
 if __name__ == '__main__':
