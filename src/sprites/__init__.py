@@ -1,2 +1,3 @@
 from .text import *
-from .button import Button, InButtonText, ButtonStatus
+from .button import Button, InBlockText, ButtonStatus
+from .input import Input

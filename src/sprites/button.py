@@ -29,7 +29,7 @@ class ButtonView(Enum):
     PRESSED = 2
 
 
-class InButtonText(Text):
+class InBlockText(Text):
     def __init__(self, game: 'Game', text: str, font_size: int,
                  color: tuple[int, int, int, int] | tuple[int, int, int],
                  font_path: str = os.path.join('assets', 'fonts', 'MainFont.ttf')):
@@ -47,7 +47,7 @@ class InButtonText(Text):
 
 
 class Button(Sprite):
-    def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InButtonText,
+    def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
                  func: Callable[[ButtonStatus], None] = None, enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y), )
         self.text: Text = text
