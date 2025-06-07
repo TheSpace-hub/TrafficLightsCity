@@ -9,7 +9,7 @@ def main():
     Функция запускает при запуске программы
     """
     game = Game()
-    game.change_state('TestState')
+    game.change_state('Intro')
     game.loop()
 
 

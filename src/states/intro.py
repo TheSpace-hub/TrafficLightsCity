@@ -1,25 +1,25 @@
 from typing import TYPE_CHECKING
 
-import logging
-
 from src.state import State
+
+from src.sprites import Text
 
 if TYPE_CHECKING:
     from src.game import Game
 
 
-class TestState(State):
+class Intro(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
 
     def boot(self):
-        logging.info('Test boot')
+        self.add_sprite('text', Text(self.game, (400, 400), 'Test text', 32, (255, 255, 255)))
 
     def update(self):
-        logging.info('Test update')
+        pass
 
     def enter(self):
-        logging.info('Test enter')
+        pass
 
     def exit(self):
-        logging.info('Test exit')
+        pass
