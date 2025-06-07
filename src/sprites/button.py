@@ -83,10 +83,12 @@ class Button(Sprite):
             if pg.mouse.get_pressed()[0]:
                 self.view = ButtonView.PRESSED
                 self.update_view()
-                self.func(ButtonStatus.HOLD)
+                if self.func is not None:
+                    self.func(ButtonStatus.HOLD)
                 self.last_status = ButtonStatus.HOLD
             elif self.last_status == ButtonStatus.HOLD:
-                self.func(ButtonStatus.PRESSED)
+                if self.func is not None:
+                    self.func(ButtonStatus.PRESSED)
                 self.last_status = ButtonStatus.NONE
         else:
             self.view = ButtonView.NORMAL
