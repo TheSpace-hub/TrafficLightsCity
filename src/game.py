@@ -31,7 +31,7 @@ class Game:
         self.states: dict[str, 'State'] = {}
         self.current_state: 'State' | None = None
 
-        self.screen: Surface = pg.display.set_mode((800, 800), pg.NOFRAME)
+        self.screen: Surface = pg.display.set_mode((1920, 1080), pg.RESIZABLE)
         self.clock: Clock = Clock()
 
         self.running: bool = True
@@ -69,9 +69,11 @@ class Game:
         """
         Обновляет экран
         """
+        x_factor = pg.display.get_window_size()[0] / 1920
+        y_factor = pg.display.get_window_size()[1] / 1080
         self.screen.fill((32, 32, 32))
         for sprite in self.current_state.sprites.values():
-            self.screen.blit(sprite.image, pg.Rect(sprite.rect.x, sprite.rect.y, 0, 0))
+            self.screen.blit(sprite.image, pg.Rect(sprite.rect.x * x_factor, sprite.rect.y * y_factor, 0, 0))
         pg.display.flip()
 
     def init_states(self):
