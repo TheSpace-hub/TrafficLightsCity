@@ -62,6 +62,8 @@ class Game:
         """
         if self.current_state:
             self.current_state.update()
+            for sprite in self.current_state.sprites.values():
+                sprite.update()
 
         self.update_view()
 
