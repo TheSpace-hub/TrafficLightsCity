@@ -20,7 +20,7 @@ class State(ABC):
         self.game: 'Game' = game
         self.sprites: dict[str, 'Sprite'] = {}
 
-    def get_sprite(self, uuid: str) -> Optional['Sprite']:
+    def get_sprite(self, uuid: str):
         """
         Добавление спрайта на сцену
         :param uuid: Уникальный идентификатор спрайта
