@@ -27,10 +27,6 @@ class TextAlign:
 
 
 class Text(Sprite):
-    """
-    Текст
-    """
-
     def __init__(self, game: 'Game', pos: tuple[int, int], text: str, font_size: int,
                  color: tuple[int, int, int, int] | tuple[int, int, int],
                  font_path: str = os.path.join('assets', 'fonts', 'MainFont.ttf'), align: int = TextAlign.CENTER
@@ -48,9 +44,6 @@ class Text(Sprite):
         TextAlign.apply(align, self)
 
     def update_view(self):
-        """
-        Обновление изображения
-        """
         self.image = pg.font.Font(self.font_path, self.font_size).render(self.text, True, self.color)
 
     def update(self):
