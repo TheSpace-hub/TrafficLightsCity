@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class DirectionOfDecreasing(Enum):
-    INCREASE = 2
-    DECREASE = -2
+    INCREASE = 3
+    DECREASE = -3
 
 
 class Intro(State):
@@ -23,9 +23,9 @@ class Intro(State):
     def boot(self):
         self.add_sprite('name',
                         Text(self.game, (960, 540), 'Город светофоров',
-                             44, (255, 255, 255)))
+                             48, (255, 255, 255)))
         self.add_sprite('tip',
-                        Text(self.game, (960, 600), 'Нажмите любую кнопку чтобы продолжить',
+                        Text(self.game, (960, 600), 'Нажмите любую клавишу чтобы продолжить',
                              18, (200, 200, 200)))
 
     def update(self):
@@ -34,9 +34,9 @@ class Intro(State):
         color: tuple[int, int, int] = tuple[int, int, int](
             tuple(map(lambda c: min(c + self.direction_of_decreasing_the_hint.value, 255), tip.color)))
 
-        if tip.color[0] <= 150 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.DECREASE:
+        if tip.color[0] <= 100 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.DECREASE:
             self.direction_of_decreasing_the_hint = DirectionOfDecreasing.INCREASE
-        elif tip.color[0] >= 255 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.INCREASE:
+        elif tip.color[0] >= 200 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.INCREASE:
             self.direction_of_decreasing_the_hint = DirectionOfDecreasing.DECREASE
 
         tip.color = color
