@@ -1,6 +1,3 @@
-"""
-Текст
-"""
 import os.path
 from typing import TYPE_CHECKING
 import pygame as pg
@@ -12,9 +9,6 @@ if TYPE_CHECKING:
 
 
 class TextAlign:
-    """
-    Расположение текста относительно координат
-    """
     CENTER = 0
     LEFT = 1
     RIGHT = 2

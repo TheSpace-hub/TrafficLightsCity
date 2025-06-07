@@ -2,8 +2,6 @@
 Основной класс игры.
 Отвечает за цикл игры и изменение состояний.
 """
-from typing import Type
-
 import os
 import logging
 
