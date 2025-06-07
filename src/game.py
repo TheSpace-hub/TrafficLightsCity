@@ -31,7 +31,7 @@ class Game:
         self.states: dict[str, 'State'] = {}
         self.current_state: 'State' | None = None
 
-        self.screen: Surface = pg.display.set_mode((1920, 1080), pg.RESIZABLE)
+        self.screen: Surface = pg.display.set_mode((1920, 1080))
         self.clock: Clock = Clock()
 
         self.running: bool = True
