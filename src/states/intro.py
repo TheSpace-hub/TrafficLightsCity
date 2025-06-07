@@ -1,4 +1,6 @@
+import logging
 from typing import TYPE_CHECKING
+from enum import Enum
 
 from src.state import State
 
@@ -8,15 +10,37 @@ if TYPE_CHECKING:
     from src.game import Game
 
 
+class DirectionOfDecreasing(Enum):
+    INCREASE = 2
+    DECREASE = -2
+
+
 class Intro(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
+        self.direction_of_decreasing_the_hint: DirectionOfDecreasing = DirectionOfDecreasing.DECREASE
 
     def boot(self):
-        self.add_sprite('text', Text(self.game, (400, 400), 'Test text', 32, (255, 255, 255)))
+        self.add_sprite('name',
+                        Text(self.game, (960, 540), 'Город светофоров',
+                             44, (255, 255, 255)))
+        self.add_sprite('tip',
+                        Text(self.game, (960, 600), 'Нажмите любую кнопку чтобы продолжить',
+                             18, (200, 200, 200)))
 
     def update(self):
-        pass
+        tip: Text = self.get_sprite('tip')
+
+        color: tuple[int, int, int] = tuple[int, int, int](
+            tuple(map(lambda c: min(c + self.direction_of_decreasing_the_hint.value, 255), tip.color)))
+
+        if tip.color[0] <= 150 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.DECREASE:
+            self.direction_of_decreasing_the_hint = DirectionOfDecreasing.INCREASE
+        elif tip.color[0] >= 255 and self.direction_of_decreasing_the_hint == DirectionOfDecreasing.INCREASE:
+            self.direction_of_decreasing_the_hint = DirectionOfDecreasing.DECREASE
+
+        tip.color = color
+        tip.update_view()
 
     def enter(self):
         pass
