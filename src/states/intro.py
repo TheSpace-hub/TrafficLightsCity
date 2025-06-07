@@ -1,5 +1,7 @@
+import logging
 from typing import TYPE_CHECKING
 from enum import Enum
+import pygame as pg
 
 from src.state import State
 
@@ -40,6 +42,9 @@ class Intro(State):
 
         tip.color = color
         tip.update_view()
+
+        if True in pg.key.get_pressed():
+            self.game.change_state('Menu')
 
     def enter(self):
         pass
