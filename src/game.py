@@ -25,6 +25,8 @@ class Game:
 
     def __init__(self):
         Game.configure_logs()
+        pg.init()
+        pg.font.init()
 
         self.states: dict[str, 'State'] = {}
         self.current_state: 'State' | None = None
@@ -60,6 +62,8 @@ class Game:
         """
         if self.current_state:
             self.current_state.update()
+
+        self.update_view()
 
     def update_view(self):
         """
