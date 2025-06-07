@@ -67,6 +67,9 @@ class Button(Sprite):
         elif self.view == ButtonView.NORMAL:
             self.image.fill((32, 32, 32))
         self.image.blit(self.text.image, self.text.rect)
+        pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
+            0, 0, self.image.get_size()[0], self.image.get_size()[1]
+        ), 3)
 
     def update(self):
         if (self.rect.x < pg.mouse.get_pos()[0] < self.rect.x + self.image.get_size()[0] and self.rect.y <
