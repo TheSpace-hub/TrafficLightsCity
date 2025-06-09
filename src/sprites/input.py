@@ -57,3 +57,19 @@ class Input(Sprite):
             else:
                 self.status = InputStatus.NONE
                 self.update_view()
+        if self.status != InputStatus.SELECTED:
+            return
+
+        for key in self.game.omitted_buttons:
+            if 32 <= key <= 126 and self.enabled:
+                if self.only_digits and not (48 <= key <= 57):
+                    continue
+                self.text.text += chr(key)
+                self.text.correct_position((self.image.get_size()[0], self.image.get_size()[1]))
+                self.text.update_view()
+                self.update_view()
+            if key == 8:
+                self.text.text = self.text.text[:-1]
+                self.text.correct_position((self.image.get_size()[0], self.image.get_size()[1]))
+                self.text.update_view()
+                self.update_view()
