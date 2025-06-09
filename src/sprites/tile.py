@@ -33,14 +33,6 @@ class Tile(Sprite):
         self.update_view()
 
     def update_view(self):
-        pg.draw.polygon(self.image, (255, 255, 255), [
-            [self.image.get_size()[0] / 2, 0], [self.image.get_size()[0], self.image.get_size()[1] / 2],
-            [self.image.get_size()[0] / 2, self.image.get_size()[1]], [0, self.image.get_size()[1] / 2]
-        ])
-        pg.draw.polygon(self.image, (0, 0, 0), [
-            [self.image.get_size()[0] / 2, 1], [self.image.get_size()[0] - 1, self.image.get_size()[1] / 2],
-            [self.image.get_size()[0] / 2, self.image.get_size()[1] - 1], [1, self.image.get_size()[1] / 2]
-        ])
         for y in range(10):
             for x in range(10):
                 color = random.choice([
@@ -54,11 +46,19 @@ class Tile(Sprite):
                     min(255, max(0, color[1] + random.randint(-20, 20))),
                     min(255, max(0, color[2] + random.randint(-20, 20)))
                 )
-                pg.draw.polygon(self.image, (0, 255, 0), [
-                    [0, self.image.get_size()[1] / 2],
-                    [self.pixel_size * sqrt(3) / 2, self.image.get_size()[1] / 2 - self.pixel_size / 2],
-                    [self.pixel_size * sqrt(3), self.image.get_size()[1] / 2],
-                    [self.pixel_size * sqrt(3) / 2, self.image.get_size()[1] / 2 + self.pixel_size / 2]
+                start: tuple[float, float] = (
+                    x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
+                    -x * self.pixel_size / 2 + y * self.pixel_size / 2
+                )
+                pg.draw.polygon(self.image, color, [
+                    [start[0],
+                     start[1] + self.image.get_size()[1] / 2],
+                    [start[0] + self.pixel_size * sqrt(3) / 2,
+                     start[1] + self.image.get_size()[1] / 2 - self.pixel_size / 2],
+                    [start[0] + self.pixel_size * sqrt(3),
+                     start[1] + self.image.get_size()[1] / 2],
+                    [start[0] + self.pixel_size * sqrt(3) / 2,
+                     start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
                 ])
 
     def update(self):
