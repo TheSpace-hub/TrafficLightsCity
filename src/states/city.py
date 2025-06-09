@@ -19,7 +19,14 @@ class City(State):
                                           (255, 255, 255), align=TextAlign.LEFT))
 
     def update(self):
-        pass
+        if 5 in self.game.omitted_mouse_buttons:
+            field: Field = self.get_sprite('field')
+            field.camera_distance -= .1
+            field.update_view()
+        elif 4 in self.game.omitted_mouse_buttons:
+            field: Field = self.get_sprite('field')
+            field.camera_distance += .1
+            field.update_view()
 
     def enter(self):
         pass
