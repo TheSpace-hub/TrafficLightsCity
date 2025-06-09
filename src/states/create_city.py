@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.state import State
 
-from src.sprites import Button, InBlockText, Input
+from src.sprites import Button, InBlockText, Input, ButtonStatus
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -22,8 +22,13 @@ class CreateCity(State):
                                             ))
         self.add_sprite('create_city', Button(self.game, 510, 540, 900, 70,
                                               InBlockText(self.game, 'Создать новый город',
-                                                          16, (255, 255, 255))
+                                                          16, (255, 255, 255)),
+                                              self.on_create_city_button_pressed
                                               ))
+
+    def on_create_city_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('City')
 
     def update(self):
         pass
