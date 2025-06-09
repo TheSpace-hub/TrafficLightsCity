@@ -21,20 +21,21 @@ class Tile(Sprite):
     Представляет собой ромб с углами _perspective_angle * 2 и (360 - _perspective_angle * 4) / 2
     """
 
-    def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, pixel_size: int,
+    def __init__(self, game: 'Game', x: int, y: int, size: int, pixel_size: int,
                  texture):
         self._perspective_angle = 30
-        super().__init__(game, (int(2 * size_x * pixel_size * cos(radians(self._perspective_angle))),
-                                int(2 * size_y * pixel_size * sin(radians(self._perspective_angle)))),
+        super().__init__(game, (int(2 * size * pixel_size * cos(radians(self._perspective_angle))),
+                                int(2 * size * pixel_size * sin(radians(self._perspective_angle)))),
                          (x, y))
+        self.size: int = size
         self.pixel_size: int = pixel_size
         self.texture: TileTexture = texture
 
         self.update_view()
 
     def update_view(self):
-        for y in range(10):
-            for x in range(10):
+        for y in range(self.size):
+            for x in range(self.size ):
                 color = random.choice([
                     (58, 140, 62),
                     (94, 124, 22),
