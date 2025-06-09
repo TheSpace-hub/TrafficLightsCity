@@ -16,6 +16,10 @@ class TileTexture(Enum):
 
 
 class Tile(Sprite):
+    """
+    Клетка на поле
+    Представляет собой ромб с углами 140 и 40
+    """
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, pixel_size: int,
                  texture):
         print((size_x, pixel_size, cos(10)))
