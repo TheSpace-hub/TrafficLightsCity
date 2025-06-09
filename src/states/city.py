@@ -16,7 +16,7 @@ class City(State):
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
-        self.add_sprite('test_tile', Tile(self.game, 300, 300, 10, 10, 10,
+        self.add_sprite('test_tile_1', Tile(self.game, 300, 300, 10, 10, 10,
                                           TileTexture.GRASS))
 
     def update(self):
