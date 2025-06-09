@@ -23,8 +23,9 @@ class Tile(Sprite):
 
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, pixel_size: int,
                  texture):
-        super().__init__(game, (int(2 * size_x * pixel_size * cos(radians(30))),
-                                int(2 * size_y * pixel_size * sin(radians(30)))),
+        self._perspective_angle = 50
+        super().__init__(game, (int(2 * size_x * pixel_size * cos(radians(self._perspective_angle))),
+                                int(size_y * pixel_size * sin(radians(self._perspective_angle)))),
                          (x, y))
         self.pixel_size: int = 0
         self.texture: TileTexture = texture
@@ -32,6 +33,10 @@ class Tile(Sprite):
         self.update_view()
 
     def update_view(self):
+        pg.draw.polygon(self.image, (255, 255, 255), [
+            [self.image.get_size()[0] / 2, 0], [self.image.get_size()[0], self.image.get_size()[1] / 2],
+            [self.image.get_size()[0] / 2, self.image.get_size()[1]], [0, self.image.get_size()[1] / 2]
+        ])
         for y in range(10):
             for x in range(10):
                 color = random.choice([
@@ -45,11 +50,9 @@ class Tile(Sprite):
                     min(255, max(0, color[1] + random.randint(-20, 20))),
                     min(255, max(0, color[2] + random.randint(-20, 20)))
                 )
-                # pg.draw.rect(self.image, color, pg.Rect(x * 10, y * 10, 10, 10))
-                pg.draw.polygon(self.image, (0, 255, 0), [
-                    [self.image.get_size()[0] / 2, 0], [self.image.get_size()[0], self.image.get_size()[1] / 2],
-                    [self.image.get_size()[0] / 2, self.image.get_size()[1]], [0, self.image.get_size()[1] / 2]
-                ])
+                # pg.draw.polygon(self.image, color, [
+                #     [x * ]
+                # ])
 
     def update(self):
         pass
