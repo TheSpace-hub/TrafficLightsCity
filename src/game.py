@@ -33,6 +33,7 @@ class Game:
         self.clock: Clock = Clock()
 
         self.omitted_buttons: list[int] = []
+        self.omitted_mouse_buttons: list[int] = []
 
         self.running: bool = True
         self.delta_time: float = 0
@@ -47,11 +48,14 @@ class Game:
         """
         while self.running:
             self.omitted_buttons = []
+            self.omitted_mouse_buttons = []
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
-                if event.type == pg.KEYDOWN:
+                elif event.type == pg.KEYDOWN:
                     self.omitted_buttons.append(event.key)
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    self.omitted_mouse_buttons.append(event.button)
             self.delta_time = self.clock.tick(60) / 1000
 
             self.update()
