@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 from enum import Enum
 
 import pygame as pg
 
 from src.sprites import InBlockText
-from src.sprites.text import Text
 
 from src.sprite import Sprite
 
