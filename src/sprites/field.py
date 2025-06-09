@@ -19,19 +19,19 @@ class Field(Sprite):
         self.tile_size = 10
         self.pixel_size = 10
 
-        self.camera_distance: float = 1
+        self.camera_distance: int = 10
 
         self.update_view()
 
     def update_view(self):
         self.image.fill((32, 32, 32))
         for i in range(10):
-            tile = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance), TileTexture.GRASS)
+            tile = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10), TileTexture.GRASS)
             self.image.blit(tile.image,
                             (
-                                i * int(self.tile_size * self.pixel_size * self.camera_distance * cos(
+                                i * int(self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
                                     radians(self._perspective_angle))),
-                                i * int(self.tile_size * self.pixel_size * self.camera_distance * sin(
+                                i * int(self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
                                     radians(self._perspective_angle)))))
 
     def update(self):
