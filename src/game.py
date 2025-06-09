@@ -32,6 +32,8 @@ class Game:
         self.screen: Surface = pg.display.set_mode((1920, 1080))
         self.clock: Clock = Clock()
 
+        self.omitted_buttons: list[int] = []
+
         self.running: bool = True
         self.delta_time: float = 0
 
@@ -44,10 +46,12 @@ class Game:
         Основной цикл игры
         """
         while self.running:
+            self.omitted_buttons = []
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
-
+                if event.type == pg.KEYDOWN:
+                    self.omitted_buttons.append(event.key)
             self.delta_time = self.clock.tick(60) / 1000
 
             self.update()
