@@ -38,6 +38,9 @@ class Game:
         self.running: bool = True
         self.delta_time: float = 0
 
+        self.lock_mouse: bool = False
+        self._previous_mouse_location: tuple[int, int] = (0, 0)
+        self.mouse_offset: tuple[int, int] = (0, 0)
         pg.display.set_caption('Город светофоров')
 
         self.init_states()
@@ -49,6 +52,7 @@ class Game:
         while self.running:
             self.omitted_buttons = []
             self.omitted_mouse_buttons = []
+            self.mouse_offset = (0, 0)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
@@ -56,6 +60,13 @@ class Game:
                     self.omitted_buttons.append(event.key)
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     self.omitted_mouse_buttons.append(event.button)
+                if event.type == pg.MOUSEMOTION:
+                    self.mouse_offset = (pg.mouse.get_pos()[0] - self._previous_mouse_location[0],
+                                         pg.mouse.get_pos()[1] - self._previous_mouse_location[1])
+                    if self.lock_mouse:
+                        pg.mouse.set_pos(self._previous_mouse_location)
+                    else:
+                        self._previous_mouse_location = pg.mouse.get_pos()
             self.delta_time = self.clock.tick(60) / 1000
 
             self.update()

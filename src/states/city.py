@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+import pygame as pg
 
 from src.state import State
 
@@ -33,6 +34,14 @@ class City(State):
                 field.camera_distance = 20
             else:
                 field.update_view()
+
+        if self.game.lock_mouse:
+            field: Field = self.get_sprite('field')
+            field.camera_offset = (field.camera_offset[0] + self.game.mouse_offset[0],
+                                   field.camera_offset[1] + self.game.mouse_offset[1])
+            field.update_view()
+
+        self.game.lock_mouse = pg.mouse.get_pressed()[2]
 
     def enter(self):
         pass
