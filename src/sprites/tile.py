@@ -18,7 +18,7 @@ class TileTexture(Enum):
 class Tile(Sprite):
     """
     Клетка на поле
-    Представляет собой ромб с углами 120 и 60
+    Представляет собой ромб с углами _perspective_angle * 2 и (360 - _perspective_angle * 4) / 2
     """
 
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, pixel_size: int,
