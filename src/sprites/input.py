@@ -18,12 +18,12 @@ class InputStatus(Enum):
 
 class Input(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
-                 placeholder: InBlockText, only_digits: bool = False,
-                 enabled: bool = True):
+                 placeholder: InBlockText, only_digits: bool = False, limit: int = 0, enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y), )
         self.text: InBlockText = text
         self.placeholder: InBlockText = placeholder
         self.status: InputStatus = InputStatus.NONE
+        self.limit: int = limit
         self.only_digits = only_digits
         self.enabled: bool = enabled
 
@@ -60,7 +60,7 @@ class Input(Sprite):
             return
 
         for key in self.game.omitted_buttons:
-            if 32 <= key <= 126 and self.enabled:
+            if 32 <= key <= 126 and self.enabled and (len(self.text.text) < self.limit or self.limit <= 0):
                 if self.only_digits and not (48 <= key <= 57):
                     continue
                 self.text.text += chr(key)
