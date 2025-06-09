@@ -14,13 +14,15 @@ class CreateCity(State):
 
     def boot(self):
         self.add_sprite('seed_input', Input(self.game, 510, 460, 900, 70,
-                                            InBlockText(self.game, 'ЭТО ПОЛЕ ДЛЯ СИДА', 16,
+                                            InBlockText(self.game, '', 16,
                                                         (255, 255, 255)),
+                                            InBlockText(self.game, 'Введите seed...',
+                                                        16, (128, 128, 128))
                                             ))
-        # self.add_sprite('seed', Button(self.game, 510, 460, 900, 70,
-        #                                InBlockText(self.game, 'ЭТО ПОЛЕ ДЛЯ СИДА', 16,
-        #                                            (255, 255, 255)),
-        #                                ))
+        self.add_sprite('create_city', Button(self.game, 510, 540, 900, 70,
+                                              InBlockText(self.game, 'Создать новый город',
+                                                          16, (255, 255, 255))
+                                              ))
 
     def update(self):
         pass

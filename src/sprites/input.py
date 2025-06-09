@@ -19,13 +19,16 @@ class InputStatus(Enum):
 
 class Input(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
+                 placeholder: InBlockText,
                  enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y), )
-        self.text: Text = text
+        self.text: InBlockText = text
+        self.placeholder: InBlockText = placeholder
         self.status: InputStatus = InputStatus.NONE
         self.enabled: bool = enabled
 
         text.correct_position((size_x, size_y))
+        placeholder.correct_position((size_x, size_y))
 
         self.update_view()
 
@@ -34,7 +37,11 @@ class Input(Sprite):
             self.image.fill((58, 58, 58))
         elif self.status == InputStatus.NONE:
             self.image.fill((32, 32, 32))
-        self.image.blit(self.text.image, self.text.rect)
+
+        if self.text.text == '':
+            self.image.blit(self.placeholder.image, self.placeholder.rect)
+        else:
+            self.image.blit(self.text.image, self.text.rect)
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
             0, 0, self.image.get_size()[0], self.image.get_size()[1]
         ), 3)
