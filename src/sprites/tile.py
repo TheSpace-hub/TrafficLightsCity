@@ -61,6 +61,7 @@ class Tile(Sprite):
                     [start[0] + self.pixel_size * sqrt(3) / 2,
                      start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
                 ])
+        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, self.image.get_size()[0], self.image.get_size()[1]), 1)
 
     def update(self):
         pass
