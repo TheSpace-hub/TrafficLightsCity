@@ -13,7 +13,7 @@ class City(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('city_name', Text(self.game, (0, 0), 'City.01', 16,
+        self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
     def update(self):
