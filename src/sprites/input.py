@@ -19,12 +19,13 @@ class InputStatus(Enum):
 
 class Input(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
-                 placeholder: InBlockText,
+                 placeholder: InBlockText, only_digits: bool = False,
                  enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y), )
         self.text: InBlockText = text
         self.placeholder: InBlockText = placeholder
         self.status: InputStatus = InputStatus.NONE
+        self.only_digits = only_digits
         self.enabled: bool = enabled
 
         text.correct_position((size_x, size_y))
