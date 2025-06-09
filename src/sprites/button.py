@@ -50,7 +50,7 @@ class Button(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
                  func: Callable[[ButtonStatus], None] = None, enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y), )
-        self.text: Text = text
+        self.text: InBlockText = text
         self.func: Callable[[ButtonStatus], None] = func
         self.last_status: ButtonStatus = ButtonStatus.NONE
         self.last_view: ButtonView = ButtonView.NORMAL
