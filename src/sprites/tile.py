@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from enum import Enum
 import random
-from math import sin, cos, radians
+from math import sin, cos, radians, sqrt
 
 import pygame as pg
 
@@ -27,7 +27,7 @@ class Tile(Sprite):
         super().__init__(game, (int(2 * size_x * pixel_size * cos(radians(self._perspective_angle))),
                                 int(2 * size_y * pixel_size * sin(radians(self._perspective_angle)))),
                          (x, y))
-        self.pixel_size: int = 0
+        self.pixel_size: int = pixel_size
         self.texture: TileTexture = texture
 
         self.update_view()
@@ -36,6 +36,10 @@ class Tile(Sprite):
         pg.draw.polygon(self.image, (255, 255, 255), [
             [self.image.get_size()[0] / 2, 0], [self.image.get_size()[0], self.image.get_size()[1] / 2],
             [self.image.get_size()[0] / 2, self.image.get_size()[1]], [0, self.image.get_size()[1] / 2]
+        ])
+        pg.draw.polygon(self.image, (0, 0, 0), [
+            [self.image.get_size()[0] / 2, 1], [self.image.get_size()[0] - 1, self.image.get_size()[1] / 2],
+            [self.image.get_size()[0] / 2, self.image.get_size()[1] - 1], [1, self.image.get_size()[1] / 2]
         ])
         for y in range(10):
             for x in range(10):
@@ -50,9 +54,12 @@ class Tile(Sprite):
                     min(255, max(0, color[1] + random.randint(-20, 20))),
                     min(255, max(0, color[2] + random.randint(-20, 20)))
                 )
-                # pg.draw.polygon(self.image, color, [
-                #     [x * ]
-                # ])
+                pg.draw.polygon(self.image, (0, 255, 0), [
+                    [0, self.image.get_size()[1] / 2],
+                    [self.pixel_size * sqrt(3) / 2, self.image.get_size()[1] / 2 - self.pixel_size / 2],
+                    [self.pixel_size * sqrt(3), self.image.get_size()[1] / 2],
+                    [self.pixel_size * sqrt(3) / 2, self.image.get_size()[1] / 2 + self.pixel_size / 2]
+                ])
 
     def update(self):
         pass
