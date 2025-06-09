@@ -16,9 +16,9 @@ class CreateCity(State):
         self.add_sprite('seed_input', Input(self.game, 510, 460, 900, 70,
                                             InBlockText(self.game, '', 16,
                                                         (255, 255, 255)),
-                                            InBlockText(self.game, 'Введите seed...',
+                                            InBlockText(self.game, 'Введите seed или оставьте пустым',
                                                         16, (128, 128, 128)),
-                                            True
+                                            True, 10
                                             ))
         self.add_sprite('create_city', Button(self.game, 510, 540, 900, 70,
                                               InBlockText(self.game, 'Создать новый город',
