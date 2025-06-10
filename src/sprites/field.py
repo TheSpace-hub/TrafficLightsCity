@@ -47,6 +47,7 @@ class Field(Sprite):
     def _update_tiles(self, y_iterations: tuple[int, int], x_iterations: tuple[int, int]) -> bool:
         """
         Обновляет словарь с расположениями тайлов.
+
         :return:Возвращает True, есть что-то изменилось
         в словаре из тайлов
         """
