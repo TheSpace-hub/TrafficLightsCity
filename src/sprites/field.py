@@ -48,6 +48,9 @@ class Field(Sprite):
         return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
+        """
+        Получить координаты на экране в зависимости от координат тайла и смещения камеры
+        """
         return (
             self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
             self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
