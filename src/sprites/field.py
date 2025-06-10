@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from math import cos, sin, tan, sqrt
+from math import cos, sin, tan, sqrt, radians
 import pygame as pg
 
 from src.sprite import Sprite
@@ -40,15 +40,12 @@ class Field(Sprite):
         pg.draw.line(self.image, (0, 255, 0), (960, 540),
                      (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
 
-    @staticmethod
-    def _get_zero_vector() -> tuple[tuple[int, int], tuple[int, int]]:
-        sin_a = sqrt(1 / (1 + (9 / 16) ** 2))
-        cos_a = sqrt(1 / (1 + (16 / 9) ** 2))
-        yx = int(sin_a * 50)
-        yy = int(cos_a * 50)
-        # xx = int(  * 50)
-        # xy = int(sqrt(1 / (1 - (9 / 16) ** 2)) * 50)
-        return (0, 0), (yx, yy)
+    def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
+        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * 50)
+        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * 50)
+        xx = int(cos(radians(self._perspective_angle)) * 50)
+        xy = -int(sin(radians(self._perspective_angle)) * 50)
+        return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
