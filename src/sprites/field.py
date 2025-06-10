@@ -39,12 +39,10 @@ class Field(Sprite):
 
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
-            self.camera_offset[0] + y * int(
-                self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
-                    radians(self._perspective_angle))),
-            self.camera_offset[1] + y * int(
-                self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
-                    radians(self._perspective_angle))))
+            self.camera_offset[0] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
+                                                              self._perspective_angle)[0],
+            self.camera_offset[1] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
+                                                              self._perspective_angle)[1])
 
     def _update_tiles(self):
         """
@@ -55,9 +53,10 @@ class Field(Sprite):
         """
         self.field = {}
         start_y: int = -int(min(
-            (self.camera_offset[0] / int(
-                self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle)))) + 1,
-            (self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))) + 1
+            (self.camera_offset[0] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
+                                                           self._perspective_angle)[0]) + 1,
+            (self.camera_offset[1] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
+                                                           self._perspective_angle)[1]) + 1
         ))
         y = start_y
         center_pos: tuple[int, int] = (0, 0)
