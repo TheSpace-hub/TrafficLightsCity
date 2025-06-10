@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from math import cos, sin
+from math import cos, sin, tan, sqrt
 import pygame as pg
 
 from src.sprite import Sprite
@@ -35,6 +35,15 @@ class Field(Sprite):
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
+        pg.draw.line(self.image, (0, 255, 0), (960, 540),
+                     (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
+
+    @staticmethod
+    def _get_zero_vector() -> tuple[tuple[int, int], tuple[int, int]]:
+        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * 50)
+        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * 50)
+        return (0, 0), (yx, yy)
+
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
             self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
@@ -52,19 +61,20 @@ class Field(Sprite):
         updated_field: dict[tuple[int, int], Tile] = {}
         x, y = self._get_position_of_beginning_of_construction()
 
-        center_pos: tuple[int, int] = (0, 0)
-        while not (center_pos[0] > 1920 or center_pos[1] > 1080):
-            center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
-            updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                       TileTexture.GRASS, self._perspective_angle)
-            y += 1
-
-        for last_pos in self.field.keys():
-            if last_pos in updated_field:
-                updated_field[last_pos] = self.field[last_pos]
-
+        # center_pos: tuple[int, int] = (0, 0)
+        # while not (center_pos[0] > 1920 or center_pos[1] > 1080):
+        #     center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
+        #     updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+        #                                TileTexture.GRASS, self._perspective_angle)
+        #     y += 1
+        #
+        # for last_pos in self.field.keys():
+        #     if last_pos in updated_field:
+        #         updated_field[last_pos] = self.field[last_pos]
+        updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                   TileTexture.SAND, self._perspective_angle)
         updated_field[0, 0] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                       TileTexture.STONE , self._perspective_angle)
+                                   TileTexture.STONE, self._perspective_angle)
         self.field = updated_field
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
