@@ -53,8 +53,8 @@ class Field(Sprite):
         """
         self.field = {}
         start_y: int = -int(min(
-            self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle))),
-            self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
+            (self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle)))) + 1,
+            (self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))) + 1
         ))
         print(self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle))),
               self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
