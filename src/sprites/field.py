@@ -53,7 +53,7 @@ class Field(Sprite):
             self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
         ))
         self.field = {(0, start_y): Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                   TileTexture.GRASS, self._perspective_angle)}
+                                         TileTexture.GRASS, self._perspective_angle)}
 
     def update(self):
         pass
