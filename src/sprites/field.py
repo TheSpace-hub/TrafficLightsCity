@@ -50,15 +50,21 @@ class Field(Sprite):
         :return:Возвращает True, есть что-то изменилось
         в словаре из тайлов
         """
-        self.field = {}
+        updated_field: dict[tuple[int, int], Tile] = {}
         x, y = self._get_position_of_beginning_of_construction()
 
         center_pos: tuple[int, int] = (0, 0)
         while not (center_pos[0] > 1000 or center_pos[1] > 1000):
             center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
-            self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                    TileTexture.GRASS, self._perspective_angle)
+            updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                       TileTexture.GRASS, self._perspective_angle)
             y += 1
+
+        for last_pos in self.field.keys():
+            if last_pos in updated_field:
+                updated_field[last_pos] = self.field[last_pos]
+
+        self.field = updated_field
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         start_y: int = -int(min(
