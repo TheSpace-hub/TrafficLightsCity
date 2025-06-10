@@ -38,7 +38,7 @@ class Tile(Sprite):
     """
 
     def __init__(self, game: 'Game', size: int, pixel_size: int,
-                 texture: TileTexture, perspective_angle: int = 0):
+                 texture: TileTexture, perspective_angle: int):
         self.perspective_angle = perspective_angle
         super().__init__(game, (int(2 * size * pixel_size * cos(radians(self.perspective_angle))),
                                 int(2 * size * pixel_size * sin(radians(self.perspective_angle)))),
@@ -71,6 +71,11 @@ class Tile(Sprite):
             [start[0] + self.pixel_size * sqrt(3) / 2,
              start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
         ])
+
+    @staticmethod
+    def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: int) -> tuple[int, int]:
+        return (int(tile_size * pixel_size * cos(radians(perspective_angle))),
+                int(tile_size * pixel_size * sin(radians(perspective_angle))))
 
     def update(self):
         pass
