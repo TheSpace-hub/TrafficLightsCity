@@ -51,7 +51,7 @@ class Field(Sprite):
         в словаре из тайлов
         """
         self.field = {}
-        x, y = self._get_start_position()
+        x, y = self._get_position_of_beginning_of_construction()
 
         center_pos: tuple[int, int] = (0, 0)
         while not (center_pos[0] > 1000 or center_pos[1] > 1000):
@@ -60,7 +60,7 @@ class Field(Sprite):
                                     TileTexture.GRASS, self._perspective_angle)
             y += 1
 
-    def _get_start_position(self) -> tuple[int, int]:
+    def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         start_y: int = -int(min(
             (self.camera_offset[0] / self._get_half_of_tile_size()[0]) + 1,
             (self.camera_offset[1] / self._get_half_of_tile_size()[1]) + 1
