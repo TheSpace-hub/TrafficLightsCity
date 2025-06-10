@@ -22,7 +22,7 @@ class Field(Sprite):
         self.camera_distance: int = 10
         self.camera_offset: tuple[int, int] = (0, 0)
 
-        self.field: dict[tuple[int, int], TileTexture] = {}
+        self.field: dict[tuple[int, int], Tile] = {}
 
         self.update_view()
 
@@ -32,9 +32,9 @@ class Field(Sprite):
             1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
             1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
         )))
+        self._update_tiles(y_iterations, (0, 0))
         for y in range(y_iterations[0], y_iterations[1]):
-            tile = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10), TileTexture.GRASS,
-                        self._perspective_angle)
+            tile = self.field[(0, y)]
             self.image.blit(tile.image,
                             (
                                 self.camera_offset[0] + y * int(
@@ -43,6 +43,21 @@ class Field(Sprite):
                                 self.camera_offset[1] + y * int(
                                     self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
                                         radians(self._perspective_angle)))))
+
+    def _update_tiles(self, y_iterations: tuple[int, int], x_iterations: tuple[int, int]) -> bool:
+        """
+        Обновляет словарь с расположениями тайлов.
+        :return:Возвращает True, есть что-то изменилось
+        в словаре из тайлов
+        """
+        if self.field != {}:
+            return False
+
+        for y in range(y_iterations[0], y_iterations[1]):
+            self.field[(0, y)] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                      TileTexture.GRASS, self._perspective_angle)
+
+        return False
 
     def update(self):
         pass
