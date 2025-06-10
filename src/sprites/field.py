@@ -48,17 +48,12 @@ class Field(Sprite):
         :return:Возвращает True, есть что-то изменилось
         в словаре из тайлов
         """
-        if self.field != {}:
-            return
-
-        y_iterations: tuple[int, int] = (0, round(max(
-            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))) - 1,
-            1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))) - 1
-        )))
-
-        for y in range(y_iterations[0], y_iterations[1]):
-            self.field[(0, y)] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                      TileTexture.GRASS, self._perspective_angle)
+        start_y = -int(min(
+            self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle))),
+            self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
+        ))
+        self.field = {(0, start_y): Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                   TileTexture.GRASS, self._perspective_angle)}
 
     def update(self):
         pass
