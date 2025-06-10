@@ -34,8 +34,6 @@ class Field(Sprite):
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
-        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, 1000, 1000), 1)
-
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
             self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
@@ -54,7 +52,7 @@ class Field(Sprite):
         x, y = self._get_position_of_beginning_of_construction()
 
         center_pos: tuple[int, int] = (0, 0)
-        while not (center_pos[0] > 1000 or center_pos[1] > 1000):
+        while not (center_pos[0] > 1920 or center_pos[1] > 1080):
             center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
             updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                        TileTexture.GRASS, self._perspective_angle)
