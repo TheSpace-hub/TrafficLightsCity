@@ -52,20 +52,23 @@ class Tile(Sprite):
     def update_view(self):
         for y in range(self.size):
             for x in range(self.size):
-                start: tuple[float, float] = (
-                    x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
-                    -x * self.pixel_size / 2 + y * self.pixel_size / 2
-                )
-                pg.draw.polygon(self.image, TileTexture.get_one_of_colors(0), [
-                    [start[0],
-                     start[1] + self.image.get_size()[1] / 2],
-                    [start[0] + self.pixel_size * sqrt(3) / 2,
-                     start[1] + self.image.get_size()[1] / 2 - self.pixel_size / 2],
-                    [start[0] + self.pixel_size * sqrt(3),
-                     start[1] + self.image.get_size()[1] / 2],
-                    [start[0] + self.pixel_size * sqrt(3) / 2,
-                     start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
-                ])
+                self._draw_pixel(x, y)
+
+    def _draw_pixel(self, x: int, y: int):
+        start: tuple[float, float] = (
+            x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
+            -x * self.pixel_size / 2 + y * self.pixel_size / 2
+        )
+        pg.draw.polygon(self.image, TileTexture.get_one_of_colors(0), [
+            [start[0],
+             start[1] + self.image.get_size()[1] / 2],
+            [start[0] + self.pixel_size * sqrt(3) / 2,
+             start[1] + self.image.get_size()[1] / 2 - self.pixel_size / 2],
+            [start[0] + self.pixel_size * sqrt(3),
+             start[1] + self.image.get_size()[1] / 2],
+            [start[0] + self.pixel_size * sqrt(3) / 2,
+             start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
+        ])
 
     def update(self):
         pass
