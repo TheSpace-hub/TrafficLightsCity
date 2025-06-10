@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from math import sin, cos, sqrt, radians
+import pygame as pg
 
 from src.sprite import Sprite
 from src.sprites import Tile, TileTexture
@@ -41,6 +42,8 @@ class Field(Sprite):
                                     self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
                                         radians(self._perspective_angle)))))
 
+        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, 1000, 1000), 1)
+
     def _update_tiles(self):
         """
         Обновляет словарь с расположениями тайлов.
@@ -48,12 +51,29 @@ class Field(Sprite):
         :return:Возвращает True, есть что-то изменилось
         в словаре из тайлов
         """
-        start_y = -int(min(
+        self.field = {}
+        start_y: int = -int(min(
             self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle))),
             self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
         ))
-        self.field = {(0, start_y): Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                         TileTexture.GRASS, self._perspective_angle)}
+        print(self.camera_offset[0] / int(self.pixel_size * self.pixel_size * cos(radians(self._perspective_angle))),
+              self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
+        y = start_y
+        while True:
+            center_pos: tuple[int, int] = (
+                self.camera_offset[0] + y * int(
+                    self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
+                        radians(self._perspective_angle)))
+                + int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
+                self.camera_offset[1] + y * int(
+                    self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
+                        radians(self._perspective_angle)))
+                + int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
+            if center_pos[0] > 1000 or center_pos[1] > 1000:
+                break
+            self.field[0, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                    TileTexture.GRASS, self._perspective_angle)
+            y += 1
 
     def update(self):
         pass
