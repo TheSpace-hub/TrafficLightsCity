@@ -69,7 +69,6 @@ class Field(Sprite):
         """
         updated_field: dict[tuple[int, int], Tile] = {}
         x, y = self._get_position_of_beginning_of_construction()
-        print(x, y)
 
         # center_pos: tuple[int, int] = (0, 0)
         # while not (center_pos[0] > 1920 or center_pos[1] > 1080):
