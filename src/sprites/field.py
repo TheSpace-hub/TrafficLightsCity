@@ -35,13 +35,19 @@ class Field(Sprite):
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
+        pg.draw.line(self.image, (255, 0, 0), (960, 540),
+                     (960 + self._get_zero_vector()[0][0], 540 + self._get_zero_vector()[0][1]))
         pg.draw.line(self.image, (0, 255, 0), (960, 540),
                      (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
 
     @staticmethod
     def _get_zero_vector() -> tuple[tuple[int, int], tuple[int, int]]:
-        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * 50)
-        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * 50)
+        sin_a = sqrt(1 / (1 + (9 / 16) ** 2))
+        cos_a = sqrt(1 / (1 + (16 / 9) ** 2))
+        yx = int(sin_a * 50)
+        yy = int(cos_a * 50)
+        # xx = int(  * 50)
+        # xy = int(sqrt(1 / (1 - (9 / 16) ** 2)) * 50)
         return (0, 0), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
