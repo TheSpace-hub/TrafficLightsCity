@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from math import sin, cos, sqrt, radians
 import pygame as pg
 
 from src.sprite import Sprite
@@ -39,14 +38,8 @@ class Field(Sprite):
 
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
-            self.camera_offset[0] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle, self.camera_distance)[0] +
-            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle, self.camera_distance)[
-                0],
-            self.camera_offset[1] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle, self.camera_distance)[1] -
-            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle, self.camera_distance)[
-                1])
+            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
+            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
 
     # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
     #  перемещение по отрицательным координатам
@@ -69,10 +62,8 @@ class Field(Sprite):
 
     def _get_start_position(self) -> tuple[int, int]:
         start_y: int = -int(min(
-            (self.camera_offset[0] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                           self._perspective_angle, self.camera_distance)[0]) + 1,
-            (self.camera_offset[1] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                           self._perspective_angle, self.camera_distance)[1]) + 1
+            (self.camera_offset[0] / self._get_half_of_tile_size()[0]) + 1,
+            (self.camera_offset[1] / self._get_half_of_tile_size()[1]) + 1
         ))
         start_x: int = 0
 
@@ -80,14 +71,12 @@ class Field(Sprite):
 
     def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
         return (
-            self.camera_offset[0] + y * int(
-                self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
-                    radians(self._perspective_angle)))
-            + int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
-            self.camera_offset[1] + y * int(
-                self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
-                    radians(self._perspective_angle)))
-            + int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
+            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (y + 1),
+            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y + 1))
+
+    def _get_half_of_tile_size(self) -> tuple[int, int]:
+        return Tile.get_half_of_size(self.tile_size, self.pixel_size,
+                                     self._perspective_angle, self.camera_distance)
 
     def update(self):
         pass
