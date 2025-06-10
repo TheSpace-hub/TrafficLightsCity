@@ -28,8 +28,8 @@ class Field(Sprite):
 
     def update_view(self):
         self.image.fill((32, 32, 32))
-        y_iterations: tuple[int, int] = (0, round(min(
-            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
+        y_iterations: tuple[int, int] = (0, round(max(
+            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))) - 1,
             1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))) - 1
         )))
         self._update_tiles(y_iterations, (0, 0))
