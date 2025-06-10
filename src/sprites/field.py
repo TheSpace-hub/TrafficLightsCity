@@ -40,9 +40,11 @@ class Field(Sprite):
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
             self.camera_offset[0] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle)[0],
+                                                              self._perspective_angle)[0] +
+            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle)[0],
             self.camera_offset[1] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle)[1])
+                                                              self._perspective_angle)[1] -
+            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle)[1])
 
     def _update_tiles(self):
         """
@@ -63,6 +65,8 @@ class Field(Sprite):
         while not (center_pos[0] > 1000 or center_pos[1] > 1000):
             center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
             self.field[0, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                    TileTexture.GRASS, self._perspective_angle)
+            self.field[1, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                     TileTexture.GRASS, self._perspective_angle)
             y += 1
 
