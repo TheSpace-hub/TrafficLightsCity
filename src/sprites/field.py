@@ -33,16 +33,18 @@ class Field(Sprite):
         self._update_tiles()
         for pos in self.field.keys():
             tile = self.field[pos]
-            self.image.blit(tile.image,
-                            (
-                                self.camera_offset[0] + pos[1] * int(
-                                    self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
-                                        radians(self._perspective_angle))),
-                                self.camera_offset[1] + pos[1] * int(
-                                    self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
-                                        radians(self._perspective_angle)))))
+            self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
         pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, 1000, 1000), 1)
+
+    def _get_offset_from_coordinates(self, x: int, y: int):
+        return (
+            self.camera_offset[0] + y * int(
+                self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
+                    radians(self._perspective_angle))),
+            self.camera_offset[1] + y * int(
+                self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
+                    radians(self._perspective_angle))))
 
     def _update_tiles(self):
         """
@@ -64,6 +66,9 @@ class Field(Sprite):
             self.field[0, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                     TileTexture.GRASS, self._perspective_angle)
             y += 1
+
+    def _update_tiles_by_x(self, y: int):
+        pass
 
     def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
         return (
