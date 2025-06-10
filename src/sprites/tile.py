@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class TileTexture(Enum):
     GRASS = 0
     STONE = 1
+    SAND = 2
 
     @classmethod
     def get_one_of_colors(cls, texture: int) -> tuple[int, int, int]:
@@ -26,12 +27,19 @@ class TileTexture(Enum):
                 (58, 109, 53)
             ])
 
-        if texture == TileTexture.STONE.value:
+        elif texture == TileTexture.STONE.value:
             color = random.choice([
                 (90, 90, 90),
                 (120, 120, 120),
                 (60, 60, 60),
                 (150, 150, 150)
+            ])
+        elif texture == TileTexture.SAND.value:
+            color = random.choice([
+                (180, 165, 140),
+                (160, 145, 120),
+                (140, 125, 100),
+                (120, 105, 80)
             ])
         return (
             min(255, max(0, color[0] + random.randint(-20, 20))),
