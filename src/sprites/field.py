@@ -58,21 +58,23 @@ class Field(Sprite):
             (self.camera_offset[1] / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))) + 1
         ))
         y = start_y
-        while True:
-            center_pos: tuple[int, int] = (
-                self.camera_offset[0] + y * int(
-                    self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
-                        radians(self._perspective_angle)))
-                + int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
-                self.camera_offset[1] + y * int(
-                    self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
-                        radians(self._perspective_angle)))
-                + int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
-            if center_pos[0] > 1000 or center_pos[1] > 1000:
-                break
+        center_pos: tuple[int, int] = (0, 0)
+        while not (center_pos[0] > 1000 or center_pos[1] > 1000):
+            center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
             self.field[0, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                     TileTexture.GRASS, self._perspective_angle)
             y += 1
+
+    def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
+        return (
+            self.camera_offset[0] + y * int(
+                self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
+                    radians(self._perspective_angle)))
+            + int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
+            self.camera_offset[1] + y * int(
+                self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
+                    radians(self._perspective_angle)))
+            + int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))))
 
     def update(self):
         pass
