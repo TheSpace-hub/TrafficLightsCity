@@ -68,7 +68,7 @@ class Field(Sprite):
         в словаре из тайлов
         """
         updated_field: dict[tuple[int, int], Tile] = {}
-        y, x = self._get_position_of_beginning_of_construction()
+        x, y = self._get_position_of_beginning_of_construction()
         print(x, y)
 
         # center_pos: tuple[int, int] = (0, 0)
@@ -105,10 +105,10 @@ class Field(Sprite):
              self._get_half_of_tile_size()[0]
         wy = self._get_half_of_tile_size()[1] - self._get_offset_from_coordinates(0, 0)[1] - \
              self._get_half_of_tile_size()[1]
-        ux = self._get_zero_vector()[1][0] * 2
-        uy = self._get_zero_vector()[1][1] * 2
-        vx = self._get_zero_vector()[0][0] * 2
-        vy = self._get_zero_vector()[0][1] * 2
+        ux = self._get_zero_vector()[0][0] * 2
+        uy = self._get_zero_vector()[0][1] * 2
+        vx = self._get_zero_vector()[1][0] * 2
+        vy = self._get_zero_vector()[1][1] * 2
         return round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx))
 
     def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
