@@ -54,24 +54,25 @@ class Field(Sprite):
         в словаре из тайлов
         """
         self.field = {}
+        x, y = self._get_start_position()
+
+        center_pos: tuple[int, int] = (0, 0)
+        while not (center_pos[0] > 1000 or center_pos[1] > 1000):
+            center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
+            self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                    TileTexture.GRASS, self._perspective_angle)
+            y += 1
+
+    def _get_start_position(self) -> tuple[int, int]:
         start_y: int = -int(min(
             (self.camera_offset[0] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
                                                            self._perspective_angle)[0]) + 1,
             (self.camera_offset[1] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
                                                            self._perspective_angle)[1]) + 1
         ))
-        y = start_y
-        center_pos: tuple[int, int] = (0, 0)
-        while not (center_pos[0] > 1000 or center_pos[1] > 1000):
-            center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
-            self.field[0, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                    TileTexture.GRASS, self._perspective_angle)
-            self.field[1, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                    TileTexture.GRASS, self._perspective_angle)
-            y += 1
+        start_x: int = 0
 
-    def _update_tiles_by_x(self, y: int):
-        pass
+        return start_x, start_y
 
     def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
         return (
