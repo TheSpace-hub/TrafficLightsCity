@@ -46,6 +46,8 @@ class Field(Sprite):
                                                               self._perspective_angle)[1] -
             x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle)[1])
 
+    # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
+    #  перемещение по отрицательным координатам
     def _update_tiles(self):
         """
         Обновляет словарь с расположениями тайлов.
