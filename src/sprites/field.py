@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class Field(Sprite):
     """
-    Поле. Состоит из объектов типа Tile
+    Поле занимает весь экран и состоит из объектов типа Tile
     """
 
     def __init__(self, game: 'Game'):
