@@ -40,11 +40,13 @@ class Field(Sprite):
     def _get_offset_from_coordinates(self, x: int, y: int):
         return (
             self.camera_offset[0] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle)[0] +
-            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle)[0],
+                                                              self._perspective_angle, self.camera_distance)[0] +
+            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle, self.camera_distance)[
+                0],
             self.camera_offset[1] + y * Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                              self._perspective_angle)[1] -
-            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle)[1])
+                                                              self._perspective_angle, self.camera_distance)[1] -
+            x * Tile.get_half_of_size(self.tile_size, self.pixel_size, self._perspective_angle, self.camera_distance)[
+                1])
 
     # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
     #  перемещение по отрицательным координатам
@@ -68,9 +70,9 @@ class Field(Sprite):
     def _get_start_position(self) -> tuple[int, int]:
         start_y: int = -int(min(
             (self.camera_offset[0] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                           self._perspective_angle)[0]) + 1,
+                                                           self._perspective_angle, self.camera_distance)[0]) + 1,
             (self.camera_offset[1] / Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                                           self._perspective_angle)[1]) + 1
+                                                           self._perspective_angle, self.camera_distance)[1]) + 1
         ))
         start_x: int = 0
 
