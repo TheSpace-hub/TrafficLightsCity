@@ -35,6 +35,9 @@ class Field(Sprite):
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
+        self._draw_zero_vectors()
+
+    def _draw_zero_vectors(self):
         pg.draw.line(self.image, (255, 0, 0), (960, 540),
                      (960 + self._get_zero_vector()[0][0], 540 + self._get_zero_vector()[0][1]))
         pg.draw.line(self.image, (0, 255, 0), (960, 540),
