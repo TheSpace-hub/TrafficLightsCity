@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from math import cos, sin
 import pygame as pg
 
 from src.sprite import Sprite
@@ -62,6 +63,8 @@ class Field(Sprite):
             if last_pos in updated_field:
                 updated_field[last_pos] = self.field[last_pos]
 
+        updated_field[0, 0] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                       TileTexture.STONE , self._perspective_angle)
         self.field = updated_field
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:

@@ -13,9 +13,11 @@ if TYPE_CHECKING:
 
 class TileTexture(Enum):
     GRASS = 0
+    STONE = 1
 
     @classmethod
     def get_one_of_colors(cls, texture: int) -> tuple[int, int, int]:
+        color = (255, 255, 255)
         if texture == TileTexture.GRASS.value:
             color = random.choice([
                 (58, 140, 62),
@@ -23,12 +25,19 @@ class TileTexture(Enum):
                 (102, 162, 24),
                 (58, 109, 53)
             ])
-            return (
-                min(255, max(0, color[0] + random.randint(-20, 20))),
-                min(255, max(0, color[1] + random.randint(-20, 20))),
-                min(255, max(0, color[2] + random.randint(-20, 20)))
-            )
-        return 255, 255, 255
+
+        if texture == TileTexture.STONE.value:
+            color = random.choice([
+                (90, 90, 90),
+                (120, 120, 120),
+                (60, 60, 60),
+                (150, 150, 150)
+            ])
+        return (
+            min(255, max(0, color[0] + random.randint(-20, 20))),
+            min(255, max(0, color[1] + random.randint(-20, 20))),
+            min(255, max(0, color[2] + random.randint(-20, 20)))
+        )
 
 
 class Tile(Sprite):
@@ -61,7 +70,7 @@ class Tile(Sprite):
             x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
             -x * self.pixel_size / 2 + y * self.pixel_size / 2
         )
-        pg.draw.polygon(self.image, TileTexture.get_one_of_colors(0), [
+        pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture.value), [
             [start[0],
              start[1] + self.image.get_size()[1] / 2],
             [start[0] + self.pixel_size * sqrt(3) / 2,
@@ -73,7 +82,8 @@ class Tile(Sprite):
         ])
 
     @staticmethod
-    def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: int, camera_distance: float) -> tuple[int, int]:
+    def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: int, camera_distance: float) -> tuple[
+        int, int]:
         return (int(tile_size * pixel_size * camera_distance / 10 * cos(radians(perspective_angle))),
                 int(tile_size * pixel_size * camera_distance / 10 * sin(radians(perspective_angle))))
 
