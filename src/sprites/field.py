@@ -22,12 +22,19 @@ class Field(Sprite):
         self.camera_distance: int = 10
         self.camera_offset: tuple[int, int] = (0, 0)
 
+        self.field: dict[tuple[int, int], TileTexture] = {}
+
         self.update_view()
 
     def update_view(self):
         self.image.fill((32, 32, 32))
-        for y in range(10):
-            tile = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10), TileTexture.GRASS)
+        y_iterations: tuple[int, int] = (-1, int(min(
+            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))),
+            1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle)))
+        )))
+        for y in range(y_iterations[0], y_iterations[1]):
+            tile = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10), TileTexture.GRASS,
+                        self._perspective_angle)
             self.image.blit(tile.image,
                             (
                                 self.camera_offset[0] + y * int(
