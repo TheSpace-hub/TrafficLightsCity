@@ -68,7 +68,8 @@ class Field(Sprite):
         в словаре из тайлов
         """
         updated_field: dict[tuple[int, int], Tile] = {}
-        x, y = self._get_position_of_beginning_of_construction()
+        y, x = self._get_position_of_beginning_of_construction()
+        print(x, y)
 
         # center_pos: tuple[int, int] = (0, 0)
         # while not (center_pos[0] > 1920 or center_pos[1] > 1080):
@@ -87,13 +88,28 @@ class Field(Sprite):
         self.field = updated_field
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
-        start_y: int = -int(min(
-            (self.camera_offset[0] / self._get_half_of_tile_size()[0]) + 1,
-            (self.camera_offset[1] / self._get_half_of_tile_size()[1]) + 1
-        ))
-        start_x: int = 0
+        """
+        Решение системы уравнений из (1) и (2):
+        (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
+        (2) k2 = (UxWy - UyWx) / (UxVy - UyVx)
+        Где k1 - кол-во векторов "y" и k2 - кол-во векторов "x"
 
-        return start_x, start_y
+        Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
+        """
+        pg.draw.line(self.image, (255, 255, 255), (
+            self._get_offset_from_coordinates(0, 0)[0] + self._get_half_of_tile_size()[0],
+            self._get_offset_from_coordinates(0, 0)[1] + self._get_half_of_tile_size()[1]),
+                     self._get_half_of_tile_size())
+
+        wx = self._get_half_of_tile_size()[0] - self._get_offset_from_coordinates(0, 0)[0] - \
+             self._get_half_of_tile_size()[0]
+        wy = self._get_half_of_tile_size()[1] - self._get_offset_from_coordinates(0, 0)[1] - \
+             self._get_half_of_tile_size()[1]
+        ux = self._get_zero_vector()[1][0] * 2
+        uy = self._get_zero_vector()[1][1] * 2
+        vx = self._get_zero_vector()[0][0] * 2
+        vy = self._get_zero_vector()[0][1] * 2
+        return round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx))
 
     def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
         return (
