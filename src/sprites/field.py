@@ -28,23 +28,20 @@ class Field(Sprite):
 
     def update_view(self):
         self.image.fill((32, 32, 32))
-        y_iterations: tuple[int, int] = (0, round(max(
-            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))) - 1,
-            1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))) - 1
-        )))
-        self._update_tiles(y_iterations, (0, 0))
-        for y in range(y_iterations[0], y_iterations[1]):
-            tile = self.field[(0, y)]
+
+        self._update_tiles()
+        for pos in self.field.keys():
+            tile = self.field[pos]
             self.image.blit(tile.image,
                             (
-                                self.camera_offset[0] + y * int(
+                                self.camera_offset[0] + pos[1] * int(
                                     self.tile_size * self.pixel_size * self.camera_distance / 10 * cos(
                                         radians(self._perspective_angle))),
-                                self.camera_offset[1] + y * int(
+                                self.camera_offset[1] + pos[1] * int(
                                     self.tile_size * self.pixel_size * self.camera_distance / 10 * sin(
                                         radians(self._perspective_angle)))))
 
-    def _update_tiles(self, y_iterations: tuple[int, int], x_iterations: tuple[int, int]) -> bool:
+    def _update_tiles(self):
         """
         Обновляет словарь с расположениями тайлов.
 
@@ -52,13 +49,16 @@ class Field(Sprite):
         в словаре из тайлов
         """
         if self.field != {}:
-            return False
+            return
+
+        y_iterations: tuple[int, int] = (0, round(max(
+            1920 / int(self.tile_size * self.pixel_size * cos(radians(self._perspective_angle))) - 1,
+            1080 / int(self.tile_size * self.pixel_size * sin(radians(self._perspective_angle))) - 1
+        )))
 
         for y in range(y_iterations[0], y_iterations[1]):
             self.field[(0, y)] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                       TileTexture.GRASS, self._perspective_angle)
-
-        return False
 
     def update(self):
         pass
