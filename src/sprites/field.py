@@ -47,8 +47,10 @@ class Field(Sprite):
     def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
         yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
         yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        xx = int(cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        xy = -int(sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
+        xx = int(
+            cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
+        xy = -int(
+            sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
         return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
@@ -65,9 +67,7 @@ class Field(Sprite):
         self.field = {}
         x, y = self._get_position_of_beginning_of_construction()
 
-        center_pos: tuple[int, int] = self._get_offset_from_coordinates(x, y)
-        while center_pos[0] < 1920 and center_pos[1] < 1080:
-            center_pos: tuple[int, int] = self._get_offset_from_coordinates(x, y)
+        while not self._does_tile_extend_beyond_field(x, y):
             self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                     TileTexture.GRASS, self._perspective_angle)
             y += 1
@@ -110,6 +110,12 @@ class Field(Sprite):
     def _get_half_of_tile_size(self) -> tuple[int, int]:
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
                                      self._perspective_angle, self.camera_distance)
+
+    def _does_tile_extend_beyond_field(self, x: int, y: int) -> bool:
+        return not (self._get_offset_from_coordinates(x, y)[0] < 1920 and self._get_offset_from_coordinates(x, y)[
+            1] < 1080
+                    and self._get_offset_from_coordinates(x, y)[0] + 2 * self._get_half_of_tile_size()[0] > 0 and
+                    self._get_offset_from_coordinates(x, y)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
 
     def update(self):
         pass
