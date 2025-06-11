@@ -46,9 +46,15 @@ class Field(Sprite):
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def update_camera_distance(self, distance: int):
+    def change_camera_distance(self, distance: int):
+        if not (5 < distance < 20):
+            return
         self._camera_distance = distance
         self._camera_distance_changed = True
+        self.update_view()
+
+    def get_camera_distance(self) -> int:
+        return self._camera_distance
 
     # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
     #  перемещение по отрицательным координатам
