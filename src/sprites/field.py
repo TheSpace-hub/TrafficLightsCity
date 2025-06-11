@@ -62,12 +62,6 @@ class Field(Sprite):
     # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
     #  перемещение по отрицательным координатам
     def _update_tiles(self):
-        """
-        Обновляет словарь с расположениями тайлов.
-
-        :return:Возвращает True, есть что-то изменилось
-        в словаре из тайлов
-        """
         self.field = {}
         x, y = self._get_position_of_beginning_of_construction()
 
