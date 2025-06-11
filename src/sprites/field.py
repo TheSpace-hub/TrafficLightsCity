@@ -45,10 +45,10 @@ class Field(Sprite):
                      (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
 
     def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * 50)
-        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * 50)
-        xx = int(cos(radians(self._perspective_angle)) * 50)
-        xy = -int(sin(radians(self._perspective_angle)) * 50)
+        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
+        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
+        xx = int(cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
+        xy = -int(sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
         return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
