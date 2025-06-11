@@ -34,9 +34,7 @@ class Field(Sprite):
         for pos in self.field.keys():
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
-
-        print(self._get_tile_center_pos(0, 0))
-        pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(0, 0), 5)
+            pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 5)
 
         self._draw_zero_vectors()
 
@@ -70,24 +68,13 @@ class Field(Sprite):
         :return:Возвращает True, есть что-то изменилось
         в словаре из тайлов
         """
-        updated_field: dict[tuple[int, int], Tile] = {}
+        self.field = {}
         x, y = self._get_position_of_beginning_of_construction()
 
-        # center_pos: tuple[int, int] = (0, 0)
-        # while not (center_pos[0] > 1920 or center_pos[1] > 1080):
-        #     center_pos: tuple[int, int] = self._get_tile_center_pos(y + 1)
-        #     updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-        #                                TileTexture.GRASS, self._perspective_angle)
-        #     y += 1
-        #
-        # for last_pos in self.field.keys():
-        #     if last_pos in updated_field:
-        #         updated_field[last_pos] = self.field[last_pos]
-        updated_field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                   TileTexture.SAND, self._perspective_angle)
-        updated_field[0, 0] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
-                                   TileTexture.STONE, self._perspective_angle)
-        self.field = updated_field
+        self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                TileTexture.SAND, self._perspective_angle)
+        self.field[0, 0] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                TileTexture.STONE, self._perspective_angle)
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         """
@@ -113,10 +100,11 @@ class Field(Sprite):
         vy = self._get_zero_vector()[1][1] * 2
         return round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx))
 
-    def _get_tile_center_pos(self, y: int, x: int) -> tuple[int, int]:
+    def _get_tile_center_pos(self, x: int, y: int) -> tuple[int, int]:
         return (
-            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (y + 1) + self._get_half_of_tile_size()[0] * x,
-            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y + 1) + self._get_half_of_tile_size()[1] * x)
+            self._get_offset_from_coordinates(x, y)[0] + self._get_half_of_tile_size()[0],
+            self._get_offset_from_coordinates(x, y)[1] + self._get_half_of_tile_size()[1]
+        )
 
     def _get_half_of_tile_size(self) -> tuple[int, int]:
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
