@@ -70,6 +70,17 @@ class Field(Sprite):
         while not self._does_tile_extend_beyond_field(x, y):
             self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                     TileTexture.GRASS, self._perspective_angle)
+            last_x = x
+            while not self._does_tile_extend_beyond_field(x, y):
+                self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                        TileTexture.GRASS, self._perspective_angle)
+                x += 1
+            x = last_x
+            while not self._does_tile_extend_beyond_field(x, y):
+                self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                        TileTexture.GRASS, self._perspective_angle)
+                x -= 1
+            x = last_x
             y += 1
 
         self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
