@@ -22,6 +22,7 @@ class Field(Sprite):
 
         self.camera_distance: int = 10
         self.camera_offset: tuple[int, int] = (0, 0)
+        self.debug_view_mode: bool = False
 
         self.field: dict[tuple[int, int], Tile] = {}
 
@@ -34,9 +35,15 @@ class Field(Sprite):
         for pos in self.field.keys():
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
-            # pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 5)
+            if self.debug_view_mode:
+                pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 5)
+                pg.draw.rect(self.image, (255, 255, 255),
+                             pg.Rect(self._get_tile_center_pos(pos[0], pos[1])[0],
+                                     self._get_tile_center_pos(pos[0], pos[1])[1], self.image.get_size()[0],
+                                     self.image.get_size()[1]), 1)
 
-        self._draw_zero_vectors()
+        if self.debug_view_mode:
+            self._draw_zero_vectors()
 
     def _draw_zero_vectors(self):
         pg.draw.line(self.image, (255, 0, 0), (960, 540),

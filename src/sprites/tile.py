@@ -70,8 +70,6 @@ class Tile(Sprite):
         for y in range(self.size):
             for x in range(self.size):
                 self._draw_pixel(x, y)
-        # pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, self.image.get_size()[0], self.image.get_size()[1]),
-        #              1)
 
     def _draw_pixel(self, x: int, y: int):
         start: tuple[float, float] = (
