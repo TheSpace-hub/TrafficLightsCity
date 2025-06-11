@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from math import cos, sin, tan, sqrt, radians
+from math import cos, sin, sqrt, radians
 import pygame as pg
 
 from src.sprite import Sprite
@@ -20,7 +20,8 @@ class Field(Sprite):
         self.tile_size = 10
         self.pixel_size = 10
 
-        self.camera_distance: int = 10
+        self._camera_distance: int = 10
+        self._camera_distance_changed: bool = True
         self.camera_offset: tuple[int, int] = (0, 0)
         self.debug_view_mode: bool = False
 
@@ -45,32 +46,16 @@ class Field(Sprite):
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def _draw_zero_vectors(self):
-        pg.draw.line(self.image, (255, 0, 0), (960, 540),
-                     (960 + self._get_zero_vector()[0][0], 540 + self._get_zero_vector()[0][1]))
-        pg.draw.line(self.image, (0, 255, 0), (960, 540),
-                     (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
-
-    def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        xx = int(
-            cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        xy = -int(
-            sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self.camera_distance / 10)
-        return (xx, xy), (yx, yy)
-
-    def _get_offset_from_coordinates(self, x: int, y: int):
-        """
-        Получить координаты на экране в зависимости от координат тайла и смещения камеры
-        """
-        return (
-            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
-            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
+    def update_camera_distance(self, distance: int):
+        self._camera_distance = distance
+        self._camera_distance_changed = True
 
     # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
     #  перемещение по отрицательным координатам
     def _update_tiles(self):
+        if self._camera_distance_changed:
+            self.field = {}
+            self._camera_distance_changed = False
         x, y = self._get_position_of_beginning_of_construction()
 
         updated_pos: list[tuple[int, int]] = []
@@ -93,9 +78,33 @@ class Field(Sprite):
             if pos in self.field.keys():
                 updated_field[pos] = self.field[pos]
             else:
-                updated_field[pos] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                updated_field[pos] = Tile(self.game, self.tile_size,
+                                          int(self.pixel_size * self._camera_distance / 10),
                                           TileTexture.GRASS, self._perspective_angle)
         self.field = updated_field
+
+    def _draw_zero_vectors(self):
+        pg.draw.line(self.image, (255, 0, 0), (960, 540),
+                     (960 + self._get_zero_vector()[0][0], 540 + self._get_zero_vector()[0][1]))
+        pg.draw.line(self.image, (0, 255, 0), (960, 540),
+                     (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
+
+    def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
+        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
+        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
+        xx = int(
+            cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
+        xy = -int(
+            sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
+        return (xx, xy), (yx, yy)
+
+    def _get_offset_from_coordinates(self, x: int, y: int):
+        """
+        Получить координаты на экране в зависимости от координат тайла и смещения камеры
+        """
+        return (
+            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
+            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         """
@@ -106,10 +115,11 @@ class Field(Sprite):
 
         Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
         """
-        pg.draw.line(self.image, (255, 255, 255), (
-            self._get_offset_from_coordinates(0, 0)[0] + self._get_half_of_tile_size()[0],
-            self._get_offset_from_coordinates(0, 0)[1] + self._get_half_of_tile_size()[1]),
-                     self._get_half_of_tile_size())
+        if self._camera_distance_changed:
+            pg.draw.line(self.image, (255, 255, 255), (
+                self._get_offset_from_coordinates(0, 0)[0] + self._get_half_of_tile_size()[0],
+                self._get_offset_from_coordinates(0, 0)[1] + self._get_half_of_tile_size()[1]),
+                         self._get_half_of_tile_size())
 
         wx = self._get_half_of_tile_size()[0] - self._get_offset_from_coordinates(0, 0)[0] - \
              self._get_half_of_tile_size()[0]
@@ -129,7 +139,7 @@ class Field(Sprite):
 
     def _get_half_of_tile_size(self) -> tuple[int, int]:
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                     self._perspective_angle, self.camera_distance)
+                                     self._perspective_angle, self._camera_distance)
 
     def _does_tile_extend_beyond_field(self, x: int, y: int) -> bool:
         return not (self._get_offset_from_coordinates(x, y)[0] < 1920 and self._get_offset_from_coordinates(x, y)[
