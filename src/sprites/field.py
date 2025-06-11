@@ -35,6 +35,9 @@ class Field(Sprite):
             tile = self.field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
 
+        print(self._get_tile_center_pos(0, 0))
+        pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(0, 0), 5)
+
         self._draw_zero_vectors()
 
     def _draw_zero_vectors(self):
@@ -110,10 +113,10 @@ class Field(Sprite):
         vy = self._get_zero_vector()[1][1] * 2
         return round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx))
 
-    def _get_tile_center_pos(self, y: int) -> tuple[int, int]:
+    def _get_tile_center_pos(self, y: int, x: int) -> tuple[int, int]:
         return (
-            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (y + 1),
-            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y + 1))
+            self.camera_offset[0] + self._get_half_of_tile_size()[0] * (y + 1) + self._get_half_of_tile_size()[0] * x,
+            self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y + 1) + self._get_half_of_tile_size()[1] * x)
 
     def _get_half_of_tile_size(self) -> tuple[int, int]:
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
