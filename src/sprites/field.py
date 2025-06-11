@@ -65,6 +65,13 @@ class Field(Sprite):
         self.field = {}
         x, y = self._get_position_of_beginning_of_construction()
 
+        center_pos: tuple[int, int] = self._get_offset_from_coordinates(x, y)
+        while center_pos[0] < 1920 and center_pos[1] < 1080:
+            center_pos: tuple[int, int] = self._get_offset_from_coordinates(x, y)
+            self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
+                                    TileTexture.GRASS, self._perspective_angle)
+            y += 1
+
         self.field[x, y] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
                                 TileTexture.SAND, self._perspective_angle)
         self.field[0, 0] = Tile(self.game, self.tile_size, int(self.pixel_size * self.camera_distance / 10),
