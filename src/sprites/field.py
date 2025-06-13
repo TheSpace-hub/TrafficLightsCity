@@ -61,13 +61,11 @@ class Field(Sprite):
         return self._camera_distance
 
     def _generate_field(self):
-        for x in range(30):
-            for y in range(30):
-                texture: dict[bool, TileTexture] = {
-                    True: TileTexture.STONE,
-                    False: TileTexture.GRASS
-                }
-                self.field[(x, y)] = texture[x == 0 or y == 0 or x == 29 or y == 29]
+        size: tuple[int, int] = (30, 30)
+        for x in range(size[0]):
+            for y in range(size[1]):
+                self.field[(x, y)] = TileTexture.GRASS
+        self.field[(size[0] // 2, size[1] // 2)] = TileTexture.ASPHALT
 
     def _update_tiles(self):
         if self._camera_distance_changed:
