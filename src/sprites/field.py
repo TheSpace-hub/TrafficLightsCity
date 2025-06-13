@@ -26,8 +26,10 @@ class Field(Sprite):
         self.move_speed: int = 10
         self.debug_view_mode: bool = False
 
+        self.field: dict[tuple[int, int], TileTexture] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
 
+        self._generate_field()
         self.update_view()
 
     def update_view(self):
@@ -57,10 +59,14 @@ class Field(Sprite):
     def get_camera_distance(self) -> int:
         return self._camera_distance
 
-    # def _generate_field(self):
-    #     for x in range(30):
-    #         for y in range(30):
-    #             self.field[(x, y)] = Tile.
+    def _generate_field(self):
+        for x in range(30):
+            for y in range(30):
+                texture: dict[bool, TileTexture] = {
+                    True: TileTexture.STONE,
+                    False: TileTexture.GRASS
+                }
+                self.field[(x, y)] = texture[x == 0 or y == 0 or x == 29 or y == 29]
 
     def _update_tiles(self):
         if self._camera_distance_changed:
@@ -87,10 +93,14 @@ class Field(Sprite):
         for pos in updated_pos:
             if pos in self.view_field.keys():
                 updated_field[pos] = self.view_field[pos]
+            elif pos in self.field:
+                updated_field[pos] = Tile(self.game, self.tile_size,
+                                          int(self.pixel_size * self._camera_distance / 10),
+                                          self.field[pos], self._perspective_angle)
             else:
                 updated_field[pos] = Tile(self.game, self.tile_size,
                                           int(self.pixel_size * self._camera_distance / 10),
-                                          TileTexture.GRASS, self._perspective_angle)
+                                          TileTexture.WATER, self._perspective_angle)
         self.view_field = updated_field
 
     def _draw_zero_vectors(self):
