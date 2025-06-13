@@ -105,11 +105,11 @@ class Field(Sprite):
         self.view_field = updated_field
         if not list(self.view_field.keys()):
             x, y = self._get_position_of_beginning_of_construction()
-            logging.warn('Поле пустое, потому что в списке отображаемого поля (self.view_field) ничего нет!')
-            logging.info('Смещение камеры: %s', str(self.camera_offset))
-            logging.info('Начальная позиция относ.: %s', str((x, y)))
-            logging.info('Начальная позиция абсол.: %s', str(self._get_offset_from_coordinates(x, y)))
-            logging.info('Заходит ли начальный тайл за карту: %s', str(self._does_tile_extend_beyond_field(x, y)))
+            logging.warning('Поле пустое, потому что в списке отображаемого поля (self.view_field) ничего нет!')
+            logging.warning('  Смещение камеры: %s', str(self.camera_offset))
+            logging.warning('  Начальная позиция относ.: %s', str((x, y)))
+            logging.warning('  Начальная позиция абсол.: %s', str(self._get_offset_from_coordinates(x, y)))
+            logging.warning('  Заходит ли начальный тайл за карту: %s', str(self._does_tile_extend_beyond_field(x, y)))
 
     def _draw_zero_vectors(self):
         pg.draw.line(self.image, (255, 0, 0), (960, 540),
