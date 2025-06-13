@@ -32,7 +32,8 @@ class Field(Sprite):
         self.field: dict[tuple[int, int], TileTexture] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
 
-        self._generate_field()
+        self.now_index = 1
+        self._generate_field(1)
         self.update_view()
 
     def update_view(self):
@@ -62,8 +63,8 @@ class Field(Sprite):
     def get_camera_distance(self) -> int:
         return self._camera_distance
 
-    def _generate_field(self):
-        self.field = MapGenerator((30, 30)).generate_map()
+    def _generate_field(self, index):
+        self.field = MapGenerator((30, 30), index).generate_map()
 
     def _update_tiles(self):
         if self._camera_distance_changed:
@@ -176,4 +177,13 @@ class Field(Sprite):
                     self._get_offset_from_coordinates(x, y)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
 
     def update(self):
-        pass
+        if ord('i') in self.game.omitted_buttons:
+            self.now_index += 1
+            self._generate_field(self.now_index)
+            self.view_field = {}
+            self.update_view()
+        if ord('k') in self.game.omitted_buttons:
+            self.now_index -= 1
+            self._generate_field(self.now_index)
+            self.view_field = {}
+            self.update_view()
