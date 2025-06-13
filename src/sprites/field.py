@@ -6,6 +6,8 @@ import pygame as pg
 from src.sprite import Sprite
 from src.sprites import Tile, TileTexture
 
+from src.modules import generate_map
+
 if TYPE_CHECKING:
     from src.game import Game
 
@@ -61,11 +63,7 @@ class Field(Sprite):
         return self._camera_distance
 
     def _generate_field(self):
-        size: tuple[int, int] = (30, 30)
-        for x in range(size[0]):
-            for y in range(size[1]):
-                self.field[(x, y)] = TileTexture.GRASS
-        self.field[(size[0] // 2, size[1] // 2)] = TileTexture.ASPHALT
+        self.field = generate_map()
 
     def _update_tiles(self):
         if self._camera_distance_changed:
