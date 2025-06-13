@@ -14,16 +14,20 @@ class Direction(Enum):
     def get_territory_that_should_be_empty(direction: tuple[int, int]):
         variants: dict[tuple[int, int], list[tuple[int, int]]] = {
             Direction.RIGHT.value: [
-                (1, -1), (1, 0), (1, 1)
+                (1, -1), (1, 0), (1, 1),
+                (2, -1), (2, 0), (2, 1),
             ],
             Direction.LEFT.value: [
-                (-1, -1), (-1, 0), (-1, 1)
+                (-1, -1), (-1, 0), (-1, 1),
+                (-2, -1), (-2, 0), (-2, 1),
             ],
             Direction.TOP.value: [
-                (-1, -1), (0, -1), (1, -1)
+                (-1, -1), (0, -1), (1, -1),
+                (-1, -2), (0, -2), (1, -2),
             ],
             Direction.BOTTOM.value: [
-                (-1, 1), (0, 1), (1, 0)
+                (-1, 1), (0, 1), (1, 1),
+                (-1, 2), (0, 2), (1, 2),
             ]
         }
         return variants[direction]
@@ -73,7 +77,8 @@ class MapGenerator:
         directions: list[Direction] = []
         for direction in [Direction.RIGHT, Direction.LEFT, Direction.TOP, Direction.BOTTOM]:
             can_build: bool = True
-            print(f' CPoints: {direction}: {direction.value} ({Direction.get_territory_that_should_be_empty(direction.value)}) ')
+            print(
+                f' CPoints: {direction}: {direction.value} ({Direction.get_territory_that_should_be_empty(direction.value)}) ')
             for check_point in Direction.get_territory_that_should_be_empty(direction.value):
                 x: int = point[0] + check_point[0]
                 y: int = point[1] + check_point[1]
