@@ -63,7 +63,7 @@ class Field(Sprite):
         return self._camera_distance
 
     def _generate_field(self):
-        self.field = MapGenerator.generate_map()
+        self.field = MapGenerator((30, 30)).generate_map()
 
     def _update_tiles(self):
         if self._camera_distance_changed:
