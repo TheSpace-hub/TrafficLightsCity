@@ -23,10 +23,10 @@ class Field(Sprite):
         self._camera_distance: int = 10
         self._camera_distance_changed: bool = True
         self.camera_offset: tuple[int, int] = (0, 0)
-        self.move_speed: int = 20
+        self.move_speed: int = 10
         self.debug_view_mode: bool = False
 
-        self.field: dict[tuple[int, int], Tile] = {}
+        self.view_field: dict[tuple[int, int], Tile] = {}
 
         self.update_view()
 
@@ -34,8 +34,8 @@ class Field(Sprite):
         self.image.fill((32, 32, 32))
 
         self._update_tiles()
-        for pos in self.field.keys():
-            tile = self.field[pos]
+        for pos in self.view_field.keys():
+            tile = self.view_field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
             if self.debug_view_mode:
                 pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 5)
@@ -57,11 +57,14 @@ class Field(Sprite):
     def get_camera_distance(self) -> int:
         return self._camera_distance
 
-    # TODO - Работает правильно только в случае, когда camera_offset по x и y положительны. Исправить или заблокировать
-    #  перемещение по отрицательным координатам
+    # def _generate_field(self):
+    #     for x in range(30):
+    #         for y in range(30):
+    #             self.field[(x, y)] = Tile.
+
     def _update_tiles(self):
         if self._camera_distance_changed:
-            self.field = {}
+            self.view_field = {}
             self._camera_distance_changed = False
         x, y = self._get_position_of_beginning_of_construction()
 
@@ -82,13 +85,13 @@ class Field(Sprite):
 
         updated_field: dict[tuple[int, int], Tile] = {}
         for pos in updated_pos:
-            if pos in self.field.keys():
-                updated_field[pos] = self.field[pos]
+            if pos in self.view_field.keys():
+                updated_field[pos] = self.view_field[pos]
             else:
                 updated_field[pos] = Tile(self.game, self.tile_size,
                                           int(self.pixel_size * self._camera_distance / 10),
                                           TileTexture.GRASS, self._perspective_angle)
-        self.field = updated_field
+        self.view_field = updated_field
 
     def _draw_zero_vectors(self):
         pg.draw.line(self.image, (255, 0, 0), (960, 540),
