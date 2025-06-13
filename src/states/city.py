@@ -27,13 +27,23 @@ class City(State):
             field: Field = self.get_sprite('field')
             field.change_camera_distance(field.get_camera_distance() + 1)
 
-        if self.game.lock_mouse:
+        if (pg.key.get_pressed()[pg.K_w] or pg.key.get_pressed()[pg.K_s] or pg.key.get_pressed()[pg.K_a] or
+                pg.key.get_pressed()[pg.K_d]):
             field: Field = self.get_sprite('field')
-            field.camera_offset = (field.camera_offset[0] + self.game.mouse_offset[0],
-                                   field.camera_offset[1] + self.game.mouse_offset[1])
+            direction: dict[int, tuple[int, int]] = {
+                pg.K_w: (0, 1),
+                pg.K_s: (0, -1),
+                pg.K_a: (1, 0),
+                pg.K_d: (-1, 0)
+            }
+            for key in [pg.K_w, pg.K_s, pg.K_a, pg.K_d]:
+                if pg.key.get_pressed()[key]:
+                    field.camera_offset = (
+                        field.camera_offset[0] + int(
+                            direction[key][0] * field.move_speed * field.get_camera_distance() / 10),
+                        field.camera_offset[1] + int(
+                            direction[key][1] * field.move_speed * field.get_camera_distance() / 10))
             field.update_view()
-
-        self.game.lock_mouse = pg.mouse.get_pressed()[2]
 
     def enter(self):
         pass

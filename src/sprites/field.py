@@ -23,6 +23,7 @@ class Field(Sprite):
         self._camera_distance: int = 10
         self._camera_distance_changed: bool = True
         self.camera_offset: tuple[int, int] = (0, 0)
+        self.move_speed: int = 20
         self.debug_view_mode: bool = False
 
         self.field: dict[tuple[int, int], Tile] = {}
