@@ -16,6 +16,7 @@ class TileTexture(Enum):
     STONE = 1
     SAND = 2
     WATER = 3
+    ASPHALT = 4
 
     @classmethod
     def get_one_of_colors(cls, texture: int) -> tuple[int, int, int]:
@@ -43,13 +44,19 @@ class TileTexture(Enum):
                 (0, 150, 170),
                 (70, 200, 200),
                 (0, 105, 120)
+            ],
+            TileTexture.ASPHALT.value: [
+                (50, 50, 50),
+                (60, 55, 50),
+                (30, 30, 30),
+                (70, 65, 60)
             ]
         }
         color = random.choice(colors[texture])
         return (
-            min(255, max(0, color[0] + random.randint(-20, 20))),
-            min(255, max(0, color[1] + random.randint(-20, 20))),
-            min(255, max(0, color[2] + random.randint(-20, 20)))
+            min(255, max(0, color[0] + random.randint(-10, 10))),
+            min(255, max(0, color[1] + random.randint(-10, 10))),
+            min(255, max(0, color[2] + random.randint(-10, 10)))
         )
 
 
