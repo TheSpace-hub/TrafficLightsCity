@@ -61,6 +61,8 @@ class MapGenerator:
 
         possible_directions: list[Direction] = self._get_possible_construction_directions(point)
         k = randint(1, len(possible_directions)) if len(possible_directions) > 1 else len(possible_directions)
+        if point == (round(self._size[0] / 2), round(self._size[1] // 2)):
+            k = 4
         for direction in choices(possible_directions, k=k):
             self._field[(point[0] + direction.value[0], point[1] + direction.value[1])] = TileTexture.ASPHALT
             self._construction_points.append((point[0] + direction.value[0], point[1] + direction.value[1]))
