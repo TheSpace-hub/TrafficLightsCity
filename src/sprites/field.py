@@ -1,3 +1,4 @@
+import logging
 from typing import TYPE_CHECKING
 from math import cos, sin, sqrt, radians
 import pygame as pg
@@ -102,6 +103,13 @@ class Field(Sprite):
                                           int(self.pixel_size * self._camera_distance / 10),
                                           TileTexture.WATER, self._perspective_angle)
         self.view_field = updated_field
+        if not list(self.view_field.keys()):
+            x, y = self._get_position_of_beginning_of_construction()
+            logging.warn('В списке ничего нет!')
+            logging.info('Смещение камеры: %s', str(self.camera_offset))
+            logging.info('Начальная позиция относ.: %s', str((x, y)))
+            logging.info('Начальная позиция абсол.: %s', str(self._get_offset_from_coordinates(x, y)))
+            logging.info('Заходит ли начальный тайл за карту: %s', str(self._does_tile_extend_beyond_field(x, y)))
 
     def _draw_zero_vectors(self):
         pg.draw.line(self.image, (255, 0, 0), (960, 540),
@@ -149,7 +157,11 @@ class Field(Sprite):
         uy = self._get_zero_vector()[0][1] * 2
         vx = self._get_zero_vector()[1][0] * 2
         vy = self._get_zero_vector()[1][1] * 2
-        return round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
+
+        x, y = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
+        while self._does_tile_extend_beyond_field(x, y):
+            y += 1
+        return x, y
 
     def _get_tile_center_pos(self, x: int, y: int) -> tuple[int, int]:
         return (
