@@ -1,4 +1,5 @@
 import logging
+from random import choices, randint
 from enum import Enum
 
 from src.sprites import TileTexture
@@ -63,7 +64,10 @@ class MapGenerator:
             logging.warning('Точки %s нет в списке точек для построения', point)
             return
         print(f'Point: {point} with dirs:')
-        for direction in self._get_possible_construction_directions(point):
+
+        possible_directions: list[Direction] = self._get_possible_construction_directions(point)
+        k = randint(1, len(possible_directions)) if len(possible_directions) > 1 else len(possible_directions)
+        for direction in choices(possible_directions, k=k):
             print(f'{direction} ', end='')
             self._field[(point[0] + direction.value[0], point[1] + direction.value[1])] = TileTexture.ASPHALT
             self._construction_points.append((point[0] + direction.value[0], point[1] + direction.value[1]))
