@@ -69,8 +69,8 @@ class Tile(Sprite):
     def __init__(self, game: 'Game', size: int, pixel_size: int,
                  texture: TileTexture, perspective_angle: int):
         self.perspective_angle = perspective_angle
-        super().__init__(game, (int(2 * size * pixel_size * cos(radians(self.perspective_angle))),
-                                int(2 * size * pixel_size * sin(radians(self.perspective_angle)))),
+        super().__init__(game, (round(2 * size * pixel_size * cos(radians(self.perspective_angle))),
+                                round(2 * size * pixel_size * sin(radians(self.perspective_angle)))),
                          (0, 0))
         self.size: int = size
         self.pixel_size: int = pixel_size
@@ -85,8 +85,8 @@ class Tile(Sprite):
 
     def _draw_pixel(self, x: int, y: int):
         start: tuple[float, float] = (
-            x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
-            -x * self.pixel_size / 2 + y * self.pixel_size / 2
+            self.pixel_size * sqrt(3) * (x + y) / 2,
+            self.pixel_size * (y - x) / 2
         )
         pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture), [
             [start[0],
