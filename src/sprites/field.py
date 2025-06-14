@@ -93,7 +93,6 @@ class Field(Sprite):
                                           TileTexture.WATER, self.perspective_angle)
 
         self.view_field = updated_field
-        print(self.view_field)
         if not list(self.view_field.keys()):
             x, y = self._get_position_of_beginning_of_construction()
             logging.warning('Поле пустое, потому что в списке отображаемого поля (self.view_field) ничего нет!')
