@@ -86,18 +86,17 @@ class Tile(Sprite):
 
     def _draw_pixel(self, x: int, y: int):
         start: tuple[float, float] = (
-            self.pixel_size * sqrt(3) * (x + y) / 2,
-            self.pixel_size * (y - x) / 2
+            self.pixel_size * cos(self.perspective_angle) * (x + y),
+            self.pixel_size * sin(self.perspective_angle) * (y - x)
+            + self.size * self.pixel_size * sin(self.perspective_angle)
         )
         pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture), [
-            [round(start[0]),
-             round(start[1] + self.image.get_size()[1] / 2)],
-            [round(start[0] + self.pixel_size * sqrt(3) / 2),
-             round(start[1] + (self.image.get_size()[1] - self.pixel_size) / 2)],
-            [round(start[0] + self.pixel_size * sqrt(3)),
-             round(start[1] + self.image.get_size()[1] / 2)],
-            [round(start[0] + self.pixel_size * sqrt(3) / 2),
-             round(start[1] + (self.image.get_size()[1] + self.pixel_size) / 2)]
+            [start[0], start[1]],
+            [start[0] + self.pixel_size * cos(self.perspective_angle),
+             start[1] - self.pixel_size * sin(self.perspective_angle)],
+            [start[0] + 2 * self.pixel_size * cos(self.perspective_angle), start[1]],
+            [start[0] + self.pixel_size * cos(self.perspective_angle),
+             start[1] + self.pixel_size * sin(self.perspective_angle)]
         ])
 
     @staticmethod
