@@ -26,7 +26,7 @@ class Field(Sprite):
         self._camera_distance: int = 10
         self._camera_distance_changed: bool = True
         self.camera_offset: tuple[int, int] = (0, 0)
-        self.move_speed: int = 1
+        self.move_speed: int = 3
         self.debug_view_mode: bool = True
 
         self.field: dict[tuple[int, int], TileTexture] = {}
@@ -44,9 +44,10 @@ class Field(Sprite):
             if self.debug_view_mode:
                 pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 1)
                 pg.draw.rect(self.image, (255, 255, 255),
-                             pg.Rect(self._get_tile_center_pos(pos[0], pos[1])[0],
-                                     self._get_tile_center_pos(pos[0], pos[1])[1], self.image.get_size()[0],
-                                     self.image.get_size()[1]), 1)
+                             pg.Rect(self._get_tile_center_pos(pos[0], pos[1])[0] - self._get_half_of_tile_size()[0],
+                                     self._get_tile_center_pos(pos[0], pos[1])[1] - self._get_half_of_tile_size()[1],
+                                     2 * self._get_half_of_tile_size()[0],
+                                     2 * self._get_half_of_tile_size()[1]), 1)
 
         if self.debug_view_mode:
             self._draw_zero_vectors()
@@ -64,6 +65,7 @@ class Field(Sprite):
     def generate_field(self, seed: int | None = None):
         self.view_field = {}
         self.field = MapGenerator((30, 30), seed).generate_map()
+        self.field = {(0, 10): TileTexture.GRASS}
 
     def _update_tiles(self):
         if self._camera_distance_changed:
@@ -95,9 +97,10 @@ class Field(Sprite):
                                           round(self.pixel_size * self._camera_distance / 10),
                                           self.field[pos], self._perspective_angle)
             else:
-                updated_field[pos] = Tile(self.game, self.tile_size,
-                                          round(self.pixel_size * self._camera_distance / 10),
-                                          TileTexture.WATER, self._perspective_angle)
+                pass
+                # updated_field[pos] = Tile(self.game, self.tile_size,
+                #                           round(self.pixel_size * self._camera_distance / 10),
+                #                           TileTexture.WATER, self._perspective_angle)
         self.view_field = updated_field
         if not list(self.view_field.keys()):
             x, y = self._get_position_of_beginning_of_construction()
