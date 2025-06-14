@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Self
 from enum import Enum
 import random
-from math import sin, cos, radians, sqrt
+from math import sin, cos, radians, sqrt, ceil, floor
 
 import pygame as pg
 
@@ -66,19 +66,20 @@ class Tile(Sprite):
     Представляет собой ромб с углами _perspective_angle * 2 и (360 - _perspective_angle * 4) / 2
     """
 
-    def __init__(self, game: 'Game', size: int, pixel_size: int,
-                 texture: TileTexture, perspective_angle: int):
-        self.perspective_angle = perspective_angle
-        super().__init__(game, (round(2 * size * pixel_size * cos(radians(self.perspective_angle))),
-                                round(2 * size * pixel_size * sin(radians(self.perspective_angle)))),
+    def __init__(self, game: 'Game', size: int, pixel_size: float,
+                 texture: TileTexture, perspective_angle: float):
+        super().__init__(game, (floor(2 * size * pixel_size * cos(perspective_angle)),
+                                floor(2 * size * pixel_size * sin(perspective_angle))),
                          (0, 0))
         self.size: int = size
-        self.pixel_size: int = pixel_size
+        self.perspective_angle = perspective_angle
+        self.pixel_size: float = pixel_size
         self.texture: TileTexture = texture
 
         self.update_view()
 
     def update_view(self):
+        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, self.image.get_size()[0], self.image.get_size()[1]), 1)
         for y in range(self.size):
             for x in range(self.size):
                 self._draw_pixel(x, y)
@@ -100,10 +101,10 @@ class Tile(Sprite):
         ])
 
     @staticmethod
-    def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: int, camera_distance: int) -> tuple[
+    def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: float, camera_distance: float) -> tuple[
         int, int]:
-        return (round(tile_size * pixel_size * camera_distance / 10 * cos(radians(perspective_angle))),
-                round(tile_size * pixel_size * camera_distance / 10 * sin(radians(perspective_angle))))
+        return (round(tile_size * pixel_size * camera_distance / 10 * cos(perspective_angle)),
+                round(tile_size * pixel_size * camera_distance / 10 * sin(perspective_angle)))
 
     def update(self):
         pass

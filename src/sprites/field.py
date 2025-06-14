@@ -23,10 +23,9 @@ class Field(Sprite):
         self.tile_size = 10
         self.pixel_size = 9
 
-        self._camera_distance: int = 10
-        self._camera_distance_changed: bool = True
+        self._camera_distance: float = 1
         self.camera_offset: tuple[int, int] = (0, 0)
-        self.move_speed: int = 3
+        self.move_speed: int = 1
         self.debug_view_mode: bool = True
 
         self.field: dict[tuple[int, int], TileTexture] = {}
@@ -52,14 +51,13 @@ class Field(Sprite):
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def change_camera_distance(self, distance: int):
-        if not (5 < distance < 20):
+    def change_camera_distance(self, distance: float):
+        if not (0.5 < distance < 2):
             return
         self._camera_distance = distance
-        self._camera_distance_changed = True
         self.update_view()
 
-    def get_camera_distance(self) -> int:
+    def get_camera_distance(self) -> float:
         return self._camera_distance
 
     def generate_field(self, seed: int | None = None):
@@ -68,9 +66,6 @@ class Field(Sprite):
         self.field = {(0, 10): TileTexture.GRASS}
 
     def _update_tiles(self):
-        if self._camera_distance_changed:
-            self.view_field = {}
-            self._camera_distance_changed = False
         x, y = self._get_position_of_beginning_of_construction()
 
         updated_pos: list[tuple[int, int]] = []
@@ -142,12 +137,6 @@ class Field(Sprite):
 
         Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
         """
-        if self._camera_distance_changed:
-            pg.draw.line(self.image, (255, 255, 255), (
-                self._get_offset_from_coordinates(0, 0)[0] + self._get_half_of_tile_size()[0],
-                self._get_offset_from_coordinates(0, 0)[1] + self._get_half_of_tile_size()[1]),
-                         self._get_half_of_tile_size())
-
         wx = self._get_half_of_tile_size()[0] - self._get_offset_from_coordinates(0, 0)[0] - \
              self._get_half_of_tile_size()[0]
         wy = self._get_half_of_tile_size()[1] - self._get_offset_from_coordinates(0, 0)[1] - \
