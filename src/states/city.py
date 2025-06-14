@@ -33,7 +33,7 @@ class City(State):
             field.update_view()
             print(field.perspective_angle)
         if pg.key.get_pressed()[pg.K_s]:
-            field.perspective_angle = max(field.perspective_angle - 0.01, 0.1)
+            field.perspective_angle = max(field.perspective_angle - 0.01, 0.3)
             field.view_field = {}
             field.update_view()
             print(field.perspective_angle)
