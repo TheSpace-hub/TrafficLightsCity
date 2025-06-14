@@ -75,11 +75,12 @@ class MapGenerator:
         if self._get_directions_of_road(point) == [] or (
                 self._get_directions_of_road(point)[0] in possible_directions and randint(0, 4) in [0, 1]):
             k = randint(1, len(possible_directions)) if len(possible_directions) > 1 else len(possible_directions)
-            if point == (round(self._size[0] / 2), round(self._size[1] // 2)):
-                k = 4
             new_directions = choices(possible_directions, k=k)
         elif self._get_directions_of_road(point) == [] or self._get_directions_of_road(point)[0] in possible_directions:
             new_directions = [self._get_directions_of_road(point)[0]]
+
+        if point == (round(self._size[0] / 2), round(self._size[1] // 2)):
+            new_directions = [Direction.RIGHT, Direction.LEFT, Direction.TOP, Direction.BOTTOM]
 
         for direction in new_directions:
             self._field[(point[0] + direction.value[0], point[1] + direction.value[1])] = TileTexture.ASPHALT
