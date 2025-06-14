@@ -20,7 +20,7 @@ class Field(Sprite):
     def __init__(self, game: 'Game'):
         self._perspective_angle = 30
         super().__init__(game, (1920, 1080), (0, 0))
-        self.tile_size = 10
+        self.tile_size = 9
         self.pixel_size = 10
 
         self._camera_distance: int = 10
