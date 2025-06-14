@@ -21,13 +21,13 @@ class Field(Sprite):
         self._perspective_angle = 30
         super().__init__(game, (1920, 1080), (0, 0))
         self.tile_size = 10
-        self.pixel_size = 6
+        self.pixel_size = 9
 
         self._camera_distance: int = 10
         self._camera_distance_changed: bool = True
         self.camera_offset: tuple[int, int] = (0, 0)
-        self.move_speed: int = 15
-        self.debug_view_mode: bool = False
+        self.move_speed: int = 1
+        self.debug_view_mode: bool = True
 
         self.field: dict[tuple[int, int], TileTexture] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
