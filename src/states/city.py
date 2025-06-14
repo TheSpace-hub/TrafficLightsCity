@@ -1,4 +1,6 @@
+from dataclasses import field
 from typing import TYPE_CHECKING
+from math import pi
 import pygame as pg
 
 from src.state import State
@@ -12,11 +14,10 @@ if TYPE_CHECKING:
 class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
+        self.a = 0.52
 
     def boot(self):
-        # self.add_sprite('field', Field(self.game))
-
-        self.add_sprite('tile', Tile(self.game, 9, 10, TileTexture.GRASS, 0.52))
+        self.add_sprite('field', Field(self.game))
 
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
@@ -25,7 +26,18 @@ class City(State):
                                                            (255, 255, 255), align=TextAlign.LEFT))
 
     def update(self):
-        pass
+        field: Field = self.get_sprite('field')
+        if pg.key.get_pressed()[pg.K_w]:
+            field.perspective_angle = min(field.perspective_angle + 0.01, pi / 4)
+            field.view_field = {}
+            field.update_view()
+            print(field.perspective_angle)
+        if pg.key.get_pressed()[pg.K_s]:
+            field.perspective_angle = max(field.perspective_angle - 0.01, 0.1)
+            field.view_field = {}
+            field.update_view()
+            print(field.perspective_angle)
+
         # if 5 in self.game.omitted_mouse_buttons:
         #     field: Field = self.get_sprite('field')
         #     field.change_camera_distance(field.get_camera_distance() - 1)
