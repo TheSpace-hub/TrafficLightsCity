@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 from enum import Enum
 import random
 from math import sin, cos, radians, sqrt
@@ -19,33 +19,33 @@ class TileTexture(Enum):
     ASPHALT = 4
 
     @classmethod
-    def get_one_of_colors(cls, texture: int) -> tuple[int, int, int]:
-        colors: dict[int, list[tuple[int, int, int]]] = {
-            TileTexture.GRASS.value: [
+    def get_one_of_colors(cls, texture: Self) -> tuple[int, int, int]:
+        colors: dict[Self, list[tuple[int, int, int]]] = {
+            TileTexture.GRASS: [
                 (58, 140, 62),
                 (94, 124, 22),
                 (102, 162, 24),
                 (58, 109, 53)
             ],
-            TileTexture.STONE.value: [
+            TileTexture.STONE: [
                 (90, 90, 90),
                 (120, 120, 120),
                 (60, 60, 60),
                 (150, 150, 150)
             ],
-            TileTexture.SAND.value: [
+            TileTexture.SAND: [
                 (180, 165, 140),
                 (160, 145, 120),
                 (140, 125, 100),
                 (120, 105, 80)
             ],
-            TileTexture.WATER.value: [
+            TileTexture.WATER: [
                 (100, 210, 220),
                 (0, 150, 170),
                 (70, 200, 200),
                 (0, 105, 120)
             ],
-            TileTexture.ASPHALT.value: [
+            TileTexture.ASPHALT: [
                 (50, 50, 50),
                 (60, 55, 50),
                 (30, 30, 30),
@@ -88,7 +88,7 @@ class Tile(Sprite):
             x * self.pixel_size * sqrt(3) / 2 + y * self.pixel_size * sqrt(3) / 2,
             -x * self.pixel_size / 2 + y * self.pixel_size / 2
         )
-        pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture.value), [
+        pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture), [
             [start[0],
              start[1] + self.image.get_size()[1] / 2],
             [start[0] + self.pixel_size * sqrt(3) / 2,
