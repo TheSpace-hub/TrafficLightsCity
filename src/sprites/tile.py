@@ -92,11 +92,11 @@ class Tile(Sprite):
             [start[0],
              start[1] + self.image.get_size()[1] / 2],
             [start[0] + self.pixel_size * sqrt(3) / 2,
-             start[1] + self.image.get_size()[1] / 2 - self.pixel_size / 2],
+             start[1] + (self.image.get_size()[1] - self.pixel_size) / 2],
             [start[0] + self.pixel_size * sqrt(3),
              start[1] + self.image.get_size()[1] / 2],
             [start[0] + self.pixel_size * sqrt(3) / 2,
-             start[1] + self.image.get_size()[1] / 2 + self.pixel_size / 2]
+             start[1] + (self.image.get_size()[1] + self.pixel_size) / 2]
         ])
 
     @staticmethod
