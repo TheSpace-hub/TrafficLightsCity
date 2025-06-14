@@ -68,8 +68,8 @@ class Tile(Sprite):
 
     def __init__(self, game: 'Game', size: int, pixel_size: float,
                  texture: TileTexture, perspective_angle: float):
-        super().__init__(game, (floor(2 * size * pixel_size * cos(perspective_angle)),
-                                floor(2 * size * pixel_size * sin(perspective_angle))),
+        super().__init__(game, (round(2 * size * pixel_size * cos(perspective_angle)),
+                                round(2 * size * pixel_size * sin(perspective_angle))),
                          (0, 0))
         self.size: int = size
         self.perspective_angle = perspective_angle
