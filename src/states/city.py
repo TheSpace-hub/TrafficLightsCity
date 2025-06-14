@@ -19,6 +19,9 @@ class City(State):
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
+        self.add_sprite('debug_camera_distance_text', Text(self.game, (10, 30), '0', 16,
+                                                           (255, 255, 255), align=TextAlign.LEFT))
+
     def update(self):
         if 5 in self.game.omitted_mouse_buttons:
             field: Field = self.get_sprite('field')
@@ -44,6 +47,11 @@ class City(State):
                         field.camera_offset[1] + int(
                             direction[key][1] * field.move_speed * field.get_camera_distance() / 10))
             field.update_view()
+
+        field: Field = self.get_sprite('field')
+        debug_camera_distance_text: Text = self.get_sprite('debug_camera_distance_text')
+        debug_camera_distance_text.text = str(field.get_camera_distance())
+        debug_camera_distance_text.update_view()
 
     def enter(self):
         field: Field = self.get_sprite('field')

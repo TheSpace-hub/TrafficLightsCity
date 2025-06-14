@@ -4,7 +4,7 @@ from math import cos, sin, sqrt, radians
 import pygame as pg
 
 from src.sprite import Sprite
-from src.sprites import Tile, TileTexture
+from src.sprites import Tile, TileTexture, Text
 
 from src.modules import MapGenerator
 
@@ -20,8 +20,8 @@ class Field(Sprite):
     def __init__(self, game: 'Game'):
         self._perspective_angle = 30
         super().__init__(game, (1920, 1080), (0, 0))
-        self.tile_size = 9
-        self.pixel_size = 10
+        self.tile_size = 10
+        self.pixel_size = 6
 
         self._camera_distance: int = 10
         self._camera_distance_changed: bool = True
@@ -42,7 +42,7 @@ class Field(Sprite):
             tile = self.view_field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
             if self.debug_view_mode:
-                pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 5)
+                pg.draw.circle(self.image, (255, 255, 255), self._get_tile_center_pos(pos[0], pos[1]), 1)
                 pg.draw.rect(self.image, (255, 255, 255),
                              pg.Rect(self._get_tile_center_pos(pos[0], pos[1])[0],
                                      self._get_tile_center_pos(pos[0], pos[1])[1], self.image.get_size()[0],
@@ -92,11 +92,11 @@ class Field(Sprite):
                 updated_field[pos] = self.view_field[pos]
             elif pos in self.field:
                 updated_field[pos] = Tile(self.game, self.tile_size,
-                                          int(self.pixel_size * self._camera_distance / 10),
+                                          round(self.pixel_size * self._camera_distance / 10),
                                           self.field[pos], self._perspective_angle)
             else:
                 updated_field[pos] = Tile(self.game, self.tile_size,
-                                          int(self.pixel_size * self._camera_distance / 10),
+                                          round(self.pixel_size * self._camera_distance / 10),
                                           TileTexture.WATER, self._perspective_angle)
         self.view_field = updated_field
         if not list(self.view_field.keys()):
@@ -114,12 +114,12 @@ class Field(Sprite):
                      (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
 
     def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        yx = int(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
-        yy = int(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
-        xx = int(
-            cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
-        xy = -int(
-            sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size / 2 * self._camera_distance / 10)
+        yx = round(sqrt(1 / (1 + (9 / 16) ** 2)) * self.pixel_size * self.tile_size * self._camera_distance / 20)
+        yy = round(sqrt(1 / (1 + (16 / 9) ** 2)) * self.pixel_size * self.tile_size * self._camera_distance / 20)
+        xx = round(
+            cos(radians(self._perspective_angle)) * self.pixel_size * self.tile_size * self._camera_distance / 20)
+        xy = -round(
+            sin(radians(self._perspective_angle)) * self.pixel_size * self.tile_size * self._camera_distance / 20)
         return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):
