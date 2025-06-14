@@ -89,14 +89,14 @@ class Tile(Sprite):
             self.pixel_size * (y - x) / 2
         )
         pg.draw.polygon(self.image, TileTexture.get_one_of_colors(self.texture), [
-            [start[0],
-             start[1] + self.image.get_size()[1] / 2],
-            [start[0] + self.pixel_size * sqrt(3) / 2,
-             start[1] + (self.image.get_size()[1] - self.pixel_size) / 2],
-            [start[0] + self.pixel_size * sqrt(3),
-             start[1] + self.image.get_size()[1] / 2],
-            [start[0] + self.pixel_size * sqrt(3) / 2,
-             start[1] + (self.image.get_size()[1] + self.pixel_size) / 2]
+            [round(start[0]),
+             round(start[1] + self.image.get_size()[1] / 2)],
+            [round(start[0] + self.pixel_size * sqrt(3) / 2),
+             round(start[1] + (self.image.get_size()[1] - self.pixel_size) / 2)],
+            [round(start[0] + self.pixel_size * sqrt(3)),
+             round(start[1] + self.image.get_size()[1] / 2)],
+            [round(start[0] + self.pixel_size * sqrt(3) / 2),
+             round(start[1] + (self.image.get_size()[1] + self.pixel_size) / 2)]
         ])
 
     @staticmethod
