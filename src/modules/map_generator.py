@@ -1,6 +1,7 @@
 import logging
 from typing import Self
 from random import choices, randint
+import random
 from enum import Enum
 
 from src.sprites import TileTexture
@@ -46,14 +47,16 @@ class Direction(Enum):
 
 
 class MapGenerator:
-    def __init__(self, size: tuple[int, int]):
+    def __init__(self, size: tuple[int, int], seed: int | None):
         if size[0] < 3 or size[1] < 3:
             logging.error('Поле не может быть размером меньше 3x3. (Размер поля: %s)', size)
         self._field: dict[tuple[int, int], TileTexture] = {}
         self._construction_points: list[tuple[int, int]] = [(round(size[0] / 2), round(size[1] // 2))]
         self._size: tuple[int, int] = size
+        self._seed = seed
 
     def generate_map(self) -> dict[tuple[int, int], TileTexture]:
+        random.seed(self._seed)
         for x in range(self._size[0]):
             for y in range(self._size[1]):
                 self._field[(x, y)] = TileTexture.GRASS

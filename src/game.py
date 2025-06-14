@@ -4,6 +4,7 @@
 """
 import os
 import logging
+from typing import Any
 
 from colorlog import ColoredFormatter
 
@@ -28,6 +29,7 @@ class Game:
 
         self.states: dict[str, 'State'] = {}
         self.current_state: 'State' | None = None
+        self.transmitted_data: dict[str, Any] = {}
 
         self.screen: Surface = pg.display.set_mode((1920, 1080))
         self.clock: Clock = Clock()
@@ -110,10 +112,12 @@ class Game:
         self.states[str(state.__name__)] = state(self)
         self.states[str(state.__name__)].boot()
 
-    def change_state(self, state: str):
+    def change_state(self, state: str, transmitted_data: dict[str, Any] = None):
         """
         Изменить сцену
         """
+        if transmitted_data is None:
+            transmitted_data = {}
         if state not in self.states:
             logging.error('Сцена с названием %s не зарегистрирована.', state)
             return
@@ -122,7 +126,9 @@ class Game:
             self.current_state.exit()
 
         self.current_state = self.states[state]
+        self.transmitted_data = transmitted_data
         self.current_state.enter()
+        self.transmitted_data = {}
 
     @staticmethod
     def configure_logs():

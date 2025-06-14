@@ -28,7 +28,11 @@ class CreateCity(State):
 
     def on_create_city_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
-            self.game.change_state('City')
+            seed_input: Input = self.get_sprite('seed_input')
+            if seed_input.text.text.isdigit():
+                self.game.change_state('City', {'seed': int(seed_input.text.text)})
+            else:
+                self.game.change_state('City')
 
     def update(self):
         pass

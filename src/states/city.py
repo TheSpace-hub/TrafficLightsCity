@@ -46,7 +46,13 @@ class City(State):
             field.update_view()
 
     def enter(self):
-        pass
+        field: Field = self.get_sprite('field')
+
+        seed = None
+        if 'seed' in self.game.transmitted_data and type(self.game.transmitted_data['seed']) == int:
+            seed = self.game.transmitted_data['seed']
+        field.generate_field(seed)
+        field.update_view()
 
     def exit(self):
         pass
