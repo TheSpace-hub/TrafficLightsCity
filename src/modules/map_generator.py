@@ -1,4 +1,5 @@
 import logging
+from typing import Self
 from random import choices, randint
 from enum import Enum
 
@@ -11,27 +12,37 @@ class Direction(Enum):
     TOP = (0, -1)
     BOTTOM = (0, 1)
 
-    @staticmethod
-    def get_territory_that_should_be_empty(direction: tuple[int, int]):
-        variants: dict[tuple[int, int], list[tuple[int, int]]] = {
-            Direction.RIGHT.value: [
+    @classmethod
+    def get_territory_that_should_be_empty(cls, direction: Self):
+        variants: dict[Self, list[tuple[int, int]]] = {
+            Direction.RIGHT: [
                 (1, -1), (1, 0), (1, 1),
                 (2, -1), (2, 0), (2, 1),
             ],
-            Direction.LEFT.value: [
+            Direction.LEFT: [
                 (-1, -1), (-1, 0), (-1, 1),
                 (-2, -1), (-2, 0), (-2, 1),
             ],
-            Direction.TOP.value: [
+            Direction.TOP: [
                 (-1, -1), (0, -1), (1, -1),
                 (-1, -2), (0, -2), (1, -2),
             ],
-            Direction.BOTTOM.value: [
+            Direction.BOTTOM: [
                 (-1, 1), (0, 1), (1, 1),
                 (-1, 2), (0, 2), (1, 2),
             ]
         }
         return variants[direction]
+
+    @classmethod
+    def get_opposite_direction(cls, direction: Self):
+        opposite: dict[Self, Self] = {
+            Direction.RIGHT: Direction.LEFT,
+            Direction.LEFT: Direction.RIGHT,
+            Direction.TOP: Direction.BOTTOM,
+            Direction.BOTTOM: Direction.TOP
+        }
+        return opposite[direction]
 
 
 class MapGenerator:
@@ -60,10 +71,17 @@ class MapGenerator:
             return
 
         possible_directions: list[Direction] = self._get_possible_construction_directions(point)
-        k = randint(1, len(possible_directions)) if len(possible_directions) > 1 else len(possible_directions)
-        if point == (round(self._size[0] / 2), round(self._size[1] // 2)):
-            k = 4
-        for direction in choices(possible_directions, k=k):
+        new_directions = []
+        if self._get_directions_of_road(point) == [] or (
+                self._get_directions_of_road(point)[0] in possible_directions and randint(0, 4) in [0, 1]):
+            k = randint(1, len(possible_directions)) if len(possible_directions) > 1 else len(possible_directions)
+            if point == (round(self._size[0] / 2), round(self._size[1] // 2)):
+                k = 4
+            new_directions = choices(possible_directions, k=k)
+        elif self._get_directions_of_road(point) == [] or self._get_directions_of_road(point)[0] in possible_directions:
+            new_directions = [self._get_directions_of_road(point)[0]]
+
+        for direction in new_directions:
             self._field[(point[0] + direction.value[0], point[1] + direction.value[1])] = TileTexture.ASPHALT
             self._construction_points.append((point[0] + direction.value[0], point[1] + direction.value[1]))
 
@@ -75,7 +93,7 @@ class MapGenerator:
         directions: list[Direction] = []
         for direction in [Direction.RIGHT, Direction.LEFT, Direction.TOP, Direction.BOTTOM]:
             can_build: bool = True
-            for check_point in Direction.get_territory_that_should_be_empty(direction.value):
+            for check_point in Direction.get_territory_that_should_be_empty(direction):
                 x: int = point[0] + check_point[0]
                 y: int = point[1] + check_point[1]
                 if not (0 < x < self._size[0]) or not (0 < y < self._size[1]) or self._field[
@@ -84,4 +102,15 @@ class MapGenerator:
                     break
             if can_build:
                 directions.append(direction)
+        return directions
+
+    def _get_directions_of_road(self, point: tuple[int, int]) -> list[Direction]:
+        directions: list[Direction] = []
+        for direction in [Direction.RIGHT, Direction.LEFT, Direction.TOP, Direction.BOTTOM]:
+            x: int = point[0] + direction.value[0]
+            y: int = point[1] + direction.value[1]
+            if not (0 < x < self._size[0]) or not (0 < y < self._size[1]):
+                continue
+            if self._field[(x, y)] == TileTexture.ASPHALT:
+                directions.append(Direction.get_opposite_direction(direction))
         return directions
