@@ -56,7 +56,6 @@ class Field(Sprite):
     def generate_field(self, seed: int | None = None):
         self.view_field = {}
         self.field = MapGenerator((30, 30), seed).generate_map()
-        self.field = {(0, 10): TileTexture.GRASS}
 
     def _update_tiles(self):
         updated_pos: list[tuple[int, int]] = []
