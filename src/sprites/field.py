@@ -58,6 +58,7 @@ class Field(Sprite):
 
     # TODO - когда угол перспективы такой, что ось y, проведённая при неизменном x не по подает в угол
     #  экрана, то карта не заполняется полностью.
+    #  P.S. Можно сделать 2 начальных тайла в правом нижнем и левом верхнем углах
     def _update_tiles(self):
         updated_pos: list[tuple[int, int]] = []
         x, y = self._get_position_of_beginning_of_construction()
