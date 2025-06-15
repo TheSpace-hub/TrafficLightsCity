@@ -30,12 +30,10 @@ class City(State):
             field.perspective_angle = min(field.perspective_angle + 0.01, pi / 4)
             field.view_field = {}
             field.update_view()
-            print(field.perspective_angle)
         if pg.key.get_pressed()[pg.K_j]:
             field.perspective_angle = max(field.perspective_angle - 0.01, 0.3)
             field.view_field = {}
             field.update_view()
-            print(field.perspective_angle)
 
         if 5 in self.game.omitted_mouse_buttons:
             field.change_camera_distance(field.get_camera_distance() - 1)
