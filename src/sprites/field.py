@@ -57,6 +57,8 @@ class Field(Sprite):
         self.view_field = {}
         self.field = MapGenerator((30, 30), seed).generate_map()
 
+    # TODO - когда угол перспективы такой, что ось y, проведённая при неизменном x не по подает в угол
+    #  экрана, то карта не заполняется полностью.
     def _update_tiles(self):
         updated_pos: list[tuple[int, int]] = []
         x, y = self._get_position_of_beginning_of_construction()
