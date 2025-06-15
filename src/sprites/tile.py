@@ -79,7 +79,6 @@ class Tile(Sprite):
         self.update_view()
 
     def update_view(self):
-        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(0, 0, self.image.get_size()[0], self.image.get_size()[1]), 1)
         for y in range(self.size):
             for x in range(self.size):
                 self._draw_pixel(x, y)
