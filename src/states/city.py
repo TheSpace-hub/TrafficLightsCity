@@ -21,17 +21,14 @@ class City(State):
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
-        self.add_sprite('debug_camera_distance_text', Text(self.game, (10, 30), '0', 16,
-                                                           (255, 255, 255), align=TextAlign.LEFT))
-
     def update(self):
         field: Field = self.get_sprite('field')
         if pg.key.get_pressed()[pg.K_u]:
-            field.perspective_angle = min(field.perspective_angle + 0.01, pi / 4)
+            field.perspective_angle = min(field.perspective_angle + 0.1, pi / 4)
             field.view_field = {}
             field.update_view()
         if pg.key.get_pressed()[pg.K_j]:
-            field.perspective_angle = max(field.perspective_angle - 0.01, 0.3)
+            field.perspective_angle = max(field.perspective_angle - 0.1, 0.3)
             field.view_field = {}
             field.update_view()
 
@@ -58,14 +55,13 @@ class City(State):
             field.update_view()
 
     def enter(self):
-        pass
-        # field: Field = self.get_sprite('field')
-        #
-        # seed = None
-        # if 'seed' in self.game.transmitted_data and type(self.game.transmitted_data['seed']) == int:
-        #     seed = self.game.transmitted_data['seed']
-        # field.generate_field(seed)
-        # field.update_view()
+        field: Field = self.get_sprite('field')
+
+        seed = None
+        if 'seed' in self.game.transmitted_data and type(self.game.transmitted_data['seed']) == int:
+            seed = self.game.transmitted_data['seed']
+        field.generate_field(seed)
+        field.update_view()
 
     def exit(self):
         pass
