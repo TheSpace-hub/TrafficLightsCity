@@ -1,4 +1,3 @@
-from dataclasses import field
 from typing import TYPE_CHECKING
 from math import pi
 import pygame as pg
@@ -27,46 +26,38 @@ class City(State):
 
     def update(self):
         field: Field = self.get_sprite('field')
-        if pg.key.get_pressed()[pg.K_w]:
+        if pg.key.get_pressed()[pg.K_u]:
             field.perspective_angle = min(field.perspective_angle + 0.01, pi / 4)
             field.view_field = {}
             field.update_view()
             print(field.perspective_angle)
-        if pg.key.get_pressed()[pg.K_s]:
+        if pg.key.get_pressed()[pg.K_j]:
             field.perspective_angle = max(field.perspective_angle - 0.01, 0.3)
             field.view_field = {}
             field.update_view()
             print(field.perspective_angle)
 
-        # if 5 in self.game.omitted_mouse_buttons:
-        #     field: Field = self.get_sprite('field')
-        #     field.change_camera_distance(field.get_camera_distance() - 1)
-        # elif 4 in self.game.omitted_mouse_buttons:
-        #     field: Field = self.get_sprite('field')
-        #     field.change_camera_distance(field.get_camera_distance() + 1)
-        #
-        # if (pg.key.get_pressed()[pg.K_w] or pg.key.get_pressed()[pg.K_s] or pg.key.get_pressed()[pg.K_a] or
-        #         pg.key.get_pressed()[pg.K_d]):
-        #     field: Field = self.get_sprite('field')
-        #     direction: dict[int, tuple[int, int]] = {
-        #         pg.K_w: (0, 1),
-        #         pg.K_s: (0, -1),
-        #         pg.K_a: (1, 0),
-        #         pg.K_d: (-1, 0)
-        #     }
-        #     for key in [pg.K_w, pg.K_s, pg.K_a, pg.K_d]:
-        #         if pg.key.get_pressed()[key]:
-        #             field.camera_offset = (
-        #                 field.camera_offset[0] + int(
-        #                     direction[key][0] * field.move_speed * field.get_camera_distance() / 10),
-        #                 field.camera_offset[1] + int(
-        #                     direction[key][1] * field.move_speed * field.get_camera_distance() / 10))
-        #     field.update_view()
-        #
-        # field: Field = self.get_sprite('field')
-        # debug_camera_distance_text: Text = self.get_sprite('debug_camera_distance_text')
-        # debug_camera_distance_text.text = str(field.get_camera_distance())
-        # debug_camera_distance_text.update_view()
+        if 5 in self.game.omitted_mouse_buttons:
+            field.change_camera_distance(field.get_camera_distance() - 1)
+        elif 4 in self.game.omitted_mouse_buttons:
+            field.change_camera_distance(field.get_camera_distance() + 1)
+
+        if (pg.key.get_pressed()[pg.K_w] or pg.key.get_pressed()[pg.K_s] or pg.key.get_pressed()[pg.K_a] or
+                pg.key.get_pressed()[pg.K_d]):
+            direction: dict[int, tuple[int, int]] = {
+                pg.K_w: (0, 1),
+                pg.K_s: (0, -1),
+                pg.K_a: (1, 0),
+                pg.K_d: (-1, 0)
+            }
+            for key in [pg.K_w, pg.K_s, pg.K_a, pg.K_d]:
+                if pg.key.get_pressed()[key]:
+                    field.camera_offset = (
+                        field.camera_offset[0] + int(
+                            direction[key][0] * field.move_speed * field.get_camera_distance()),
+                        field.camera_offset[1] + int(
+                            direction[key][1] * field.move_speed * field.get_camera_distance()))
+            field.update_view()
 
     def enter(self):
         pass
