@@ -25,8 +25,8 @@ class Field(Sprite):
         self.perspective_angle = 0.52
         self._camera_distance: float = 1
         self.camera_offset: tuple[int, int] = (0, 0)
-        self.move_speed: int = 1
-        self.debug_view_mode: bool = True
+        self.move_speed: int = 15
+        self.debug_view_mode: bool = False
 
         self.field: dict[tuple[int, int], TileTexture] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
@@ -60,10 +60,19 @@ class Field(Sprite):
 
     def _update_tiles(self):
         updated_pos: list[tuple[int, int]] = []
-
         x, y = self._get_position_of_beginning_of_construction()
-        updated_pos.append((0, 0))
-        updated_pos.append((x, y))
+
+        for delta_y in [1, -1]:
+            y = self._get_position_of_beginning_of_construction()[1]
+            while not self._does_tile_extend_beyond_field(x, y):
+                updated_pos.append((x, y))
+                x = self._get_position_of_beginning_of_construction()[0]
+                for delta_x in [1, -1]:
+                    while not self._does_tile_extend_beyond_field(x, y):
+                        x += delta_x
+                        updated_pos.append((x, y))
+                    x = self._get_position_of_beginning_of_construction()[0]
+                y += delta_y
 
         updated_field: dict[tuple[int, int], Tile] = {}
         for pos in updated_pos[:]:
