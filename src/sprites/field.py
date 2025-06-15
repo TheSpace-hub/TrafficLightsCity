@@ -19,8 +19,8 @@ class Field(Sprite):
 
     def __init__(self, game: 'Game'):
         super().__init__(game, (1920, 1080), (0, 0))
-        self.tile_size = 10
-        self.pixel_size = 9
+        self.tile_size = 16
+        self.pixel_size = 5
 
         self.perspective_angle = 0.52
         self._camera_distance: float = 1
@@ -59,25 +59,11 @@ class Field(Sprite):
         self.field = {(0, 10): TileTexture.GRASS}
 
     def _update_tiles(self):
-        x, y = self._get_position_of_beginning_of_construction()
-
         updated_pos: list[tuple[int, int]] = []
-        while not self._does_tile_extend_beyond_field(x, y) and False:
-            updated_pos.append((x, y))
-            last_x = x
-            while not self._does_tile_extend_beyond_field(x, y):
-                updated_pos.append((x, y))
-                x += 1
-            x = last_x
-            while not self._does_tile_extend_beyond_field(x, y):
-                updated_pos.append((x, y))
-                x -= 1
-            x = last_x
-            y += 1
 
-        updated_pos = [
-            (0, 1), (0, 2)
-        ]
+        x, y = self._get_position_of_beginning_of_construction()
+        updated_pos.append((0, 0))
+        updated_pos.append((x, y))
 
         updated_field: dict[tuple[int, int], Tile] = {}
         for pos in updated_pos[:]:
@@ -90,7 +76,7 @@ class Field(Sprite):
             else:
                 updated_field[pos] = Tile(self.game, self.tile_size,
                                           self.pixel_size,
-                                          TileTexture.WATER, self.perspective_angle)
+                                          TileTexture.GRASS, self.perspective_angle)
 
         self.view_field = updated_field
         if not list(self.view_field.keys()):
@@ -122,6 +108,30 @@ class Field(Sprite):
                 self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
+        """
+        Наход координаты тайла с которого стоит начинать строительство карты.
+        Оптимальный тайл находится на середине карты.
+
+        Решение системы уравнений из (1) и (2):
+        (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
+        (2) k2 = (UxWy - UyWx) / (UxVy - UyVx)
+        Где k1 - кол-во векторов "y" и k2 - кол-во векторов "x"
+
+        Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
+        """
+        wx = 960 - self._get_offset_from_coordinates(0, 0)[0]
+        wy = 540 - self._get_offset_from_coordinates(0, 0)[1]
+        ux = self._get_zero_vector()[0][0] * 2
+        uy = self._get_zero_vector()[0][1] * 2
+        vx = self._get_zero_vector()[1][0] * 2
+        vy = self._get_zero_vector()[1][1] * 2
+
+        x, y = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
+        while self._does_tile_extend_beyond_field(x, y):
+            y += 1
+        return x, y
+
+    def _get_position_of_ending_of_construction(self) -> tuple[int, int]:
         """
         Решение системы уравнений из (1) и (2):
         (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
