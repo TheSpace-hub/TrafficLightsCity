@@ -48,6 +48,7 @@ class Field(Sprite):
         if not (0.5 <= distance <= 2):
             return
         self._camera_distance = round(distance, 1)
+        self.view_field = {}
         self.update_view()
 
     def get_camera_distance(self) -> float:
@@ -81,11 +82,11 @@ class Field(Sprite):
                 updated_field[pos] = self.view_field[pos]
             elif pos in self.field:
                 updated_field[pos] = Tile(self.game, self.tile_size,
-                                          self.pixel_size,
+                                          self.pixel_size * self._camera_distance,
                                           self.field[pos], self.perspective_angle)
             else:
                 updated_field[pos] = Tile(self.game, self.tile_size,
-                                          self.pixel_size,
+                                          self.pixel_size * self._camera_distance,
                                           TileTexture.GRASS, self.perspective_angle)
 
         self.view_field = updated_field
@@ -97,10 +98,10 @@ class Field(Sprite):
                      (960 + self._get_zero_vector()[1][0], 540 + self._get_zero_vector()[1][1]))
 
     def _get_zero_vector(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        yx = round(self.tile_size * self.pixel_size * cos(self.perspective_angle) / 2)
-        yy = round(self.tile_size * self.pixel_size * sin(self.perspective_angle) / 2)
-        xx = round(self.tile_size * self.pixel_size * cos(self.perspective_angle) / 2)
-        xy = -round(self.tile_size * self.pixel_size * sin(self.perspective_angle) / 2)
+        yx = round(self._get_half_of_tile_size()[0] / 2)
+        yy = round(self._get_half_of_tile_size()[1] / 2)
+        xx = round(self._get_half_of_tile_size()[0] / 2)
+        xy = -round(self._get_half_of_tile_size()[1] / 2)
         return (xx, xy), (yx, yy)
 
     def _get_offset_from_coordinates(self, x: int, y: int):

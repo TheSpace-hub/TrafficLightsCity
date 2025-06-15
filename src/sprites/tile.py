@@ -101,8 +101,8 @@ class Tile(Sprite):
     @staticmethod
     def get_half_of_size(tile_size: int, pixel_size: int, perspective_angle: float, camera_distance: float) -> tuple[
         int, int]:
-        return (round(tile_size * pixel_size * cos(perspective_angle)),
-                round(tile_size * pixel_size * sin(perspective_angle)))
+        return (round(tile_size * pixel_size * cos(perspective_angle) * camera_distance),
+                round(tile_size * pixel_size * sin(perspective_angle) * camera_distance))
 
     def update(self):
         pass
