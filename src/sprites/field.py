@@ -45,9 +45,9 @@ class Field(Sprite):
             self._draw_zero_vectors()
 
     def change_camera_distance(self, distance: float):
-        if not (0.5 < distance < 2):
+        if not (0.5 <= distance <= 2):
             return
-        self._camera_distance = distance
+        self._camera_distance = round(distance, 1)
         self.update_view()
 
     def get_camera_distance(self) -> float:
