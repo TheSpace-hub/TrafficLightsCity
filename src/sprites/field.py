@@ -1,6 +1,4 @@
-import logging
 from typing import TYPE_CHECKING
-from math import cos, sin, sqrt, radians
 import pygame as pg
 
 from src.sprite import Sprite
