@@ -20,7 +20,10 @@ class Menu(State):
         self.add_sprite('open_city', Button(self.game, 510, 540, 900, 70,
                                             InBlockText(self.game, 'Открыть город', 16,
                                                         (255, 255, 255))))
-        self.add_sprite('settings', Button(self.game, 510, 620, 900, 70,
+        self.add_sprite('traffic_light_editor', Button(self.game, 510, 620, 900, 70,
+                                                       InBlockText(self.game, 'Редактор светофоров', 16,
+                                                                   (255, 255, 255))))
+        self.add_sprite('settings', Button(self.game, 510, 700, 900, 70,
                                            InBlockText(self.game, 'Настройки', 16,
                                                        (255, 255, 255))))
 
