@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 import pygame as pg
 
 from src.sprite import Sprite
-from src.sprites import Tile, TileTexture, Text
+from src.sprites import Tile, TileTexture
 
 from src.modules import MapGenerator
 
