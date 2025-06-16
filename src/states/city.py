@@ -33,9 +33,9 @@ class City(State):
             field.update_view()
 
         if 5 in self.game.omitted_mouse_buttons:
-            field.change_camera_distance(field.get_camera_distance() - 0.1)
+            field.change_camera_distance(-.1)
         elif 4 in self.game.omitted_mouse_buttons:
-            field.change_camera_distance(field.get_camera_distance() + 0.1)
+            field.change_camera_distance(.1)
 
         if (pg.key.get_pressed()[pg.K_w] or pg.key.get_pressed()[pg.K_s] or pg.key.get_pressed()[pg.K_a] or
                 pg.key.get_pressed()[pg.K_d]):

@@ -42,10 +42,22 @@ class Field(Sprite):
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def change_camera_distance(self, distance: float):
-        if not (0.5 <= distance <= 2):
+    def change_camera_distance(self, offset: float):
+        if not (0.5 <= self._camera_distance + offset <= 2):
             return
-        self._camera_distance = round(distance, 1)
+
+        location_of_zero_tile_before: tuple[int, int] = self._get_position_of_beginning_of_construction()
+
+        self._camera_distance = round(self._camera_distance + offset, 1)
+
+        position_of_zero_tile_after: tuple[int, int] = self._get_offset_from_coordinates(
+            location_of_zero_tile_before[0], location_of_zero_tile_before[1]
+        )
+
+        deviation: tuple[int, int] = (960 - position_of_zero_tile_after[0],
+                                      540 - position_of_zero_tile_after[1])
+        self.camera_offset = (self.camera_offset[0] + deviation[0], self.camera_offset[1] + deviation[1])
+
         self.view_field = {}
         self.update_view()
 
@@ -55,6 +67,18 @@ class Field(Sprite):
     def generate_field(self, seed: int | None = None):
         self.view_field = {}
         self.field = MapGenerator((30, 30), seed).generate_map()
+
+    def _get_number_of_initial_tiles(self) -> int:
+        updated_pos: list[tuple[int, int]] = []
+        x, y = self._get_position_of_beginning_of_construction()
+
+        for delta_y in [1, -1]:
+            y = self._get_position_of_beginning_of_construction()[1]
+            while not self._does_tile_extend_beyond_field(x, y):
+                updated_pos.append((x, y))
+                y += delta_y
+
+        return len(updated_pos)
 
     # TODO - когда угол перспективы такой, что ось y, проведённая при неизменном x не по подает в угол
     #  экрана, то карта не заполняется полностью.
@@ -163,9 +187,12 @@ class Field(Sprite):
             self._get_offset_from_coordinates(x, y)[1] + self._get_half_of_tile_size()[1]
         )
 
-    def _get_half_of_tile_size(self) -> tuple[int, int]:
+    def _get_half_of_tile_size(self, c_distance: float = None) -> tuple[int, int]:
+        camera_distance = self._camera_distance
+        if c_distance is not None:
+            camera_distance = c_distance
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
-                                     self.perspective_angle, self._camera_distance)
+                                     self.perspective_angle, camera_distance)
 
     def _does_tile_extend_beyond_field(self, x: int, y: int) -> bool:
         return not (self._get_offset_from_coordinates(x, y)[0] < 1920 and self._get_offset_from_coordinates(x, y)[
