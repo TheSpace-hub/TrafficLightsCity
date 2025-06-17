@@ -25,7 +25,8 @@ class Menu(State):
                                                                    (255, 255, 255))))
         self.add_sprite('settings', Button(self.game, 510, 700, 900, 70,
                                            InBlockText(self.game, 'Настройки', 16,
-                                                       (255, 255, 255))))
+                                                       (255, 255, 255)),
+                                           self.on_settings_button_pressed))
 
     def update(self):
         pass
@@ -39,3 +40,7 @@ class Menu(State):
     def on_create_world_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('CreateCity')
+
+    def on_settings_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('Settings')
