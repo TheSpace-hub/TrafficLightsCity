@@ -32,9 +32,15 @@ class ChoiceOfSeveralOptions(Sprite):
                                           InBlockText(self.game, '>', 16, (255, 255, 255)),
                                           offset=pos)
 
+        for option in self.options:
+            option.text.correct_position(size)
+
     def update_view(self):
         self.image.blit(self.button_previous.image, self.button_previous.rect)
         self.image.blit(self.button_next.image, self.button_next.rect)
+
+        option: Option = self.options[self.current_option]
+        self.image.blit(option.text.image, option.text.rect)
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(0, 0, self.image.get_size()[0], self.image.get_size()[1]), 3)
 
     def update(self):
