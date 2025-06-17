@@ -44,7 +44,7 @@ class InBlockText(Text):
 
 class Button(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
-                 func: Callable[[ButtonStatus], None] = None, enabled: bool = True):
+                 func: Callable[[ButtonStatus], None] = None, enabled: bool = True, offset: tuple[int, int] = (0, 0)):
         super().__init__(game, (size_x, size_y), (x, y))
         self.text: InBlockText = text
         self.func: Callable[[ButtonStatus], None] = func
@@ -52,6 +52,7 @@ class Button(Sprite):
         self.last_view: ButtonView = ButtonView.NORMAL
         self.view: ButtonView = ButtonView.NORMAL
         self.enabled: bool = enabled
+        self.offset: tuple[int, int] = offset
 
         text.correct_position((size_x, size_y))
 
@@ -68,8 +69,9 @@ class Button(Sprite):
         ), 3)
 
     def update(self):
-        if (self.rect.x < pg.mouse.get_pos()[0] < self.rect.x + self.image.get_size()[0] and self.rect.y <
-                pg.mouse.get_pos()[1]
+        if (self.rect.x < pg.mouse.get_pos()[0] - self.offset[0] < self.rect.x + self.image.get_size()[
+            0] and self.rect.y <
+                pg.mouse.get_pos()[1] - self.offset[1]
                 < self.rect.y + self.image.get_size()[1] and self.enabled):
             if self.last_view != ButtonView.HOVERED or self.last_view != ButtonView.PRESSED:
                 self.view = ButtonView.HOVERED
