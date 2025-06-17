@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import pygame as pg
 
-from src.sprites import InBlockText, Button
+from src.sprites import InBlockText, Button, ButtonStatus
 
 from src.sprite import Sprite
 
@@ -26,16 +26,17 @@ class ChoiceOfSeveralOptions(Sprite):
 
         self.button_previous: Button = Button(self.game, 0, 0, self.image.get_size()[1], self.image.get_size()[1],
                                               InBlockText(self.game, '<', 16, (255, 255, 255)),
-                                              offset=pos)
+                                              self.on_previous_button_pressed, offset=pos)
         self.button_next: Button = Button(self.game, self.image.get_size()[0] - self.image.get_size()[1], 0,
                                           self.image.get_size()[1], self.image.get_size()[1],
                                           InBlockText(self.game, '>', 16, (255, 255, 255)),
-                                          offset=pos)
+                                          self.on_next_button_pressed, offset=pos)
 
         for option in self.options:
             option.text.correct_position(size)
 
     def update_view(self):
+        self.image.fill((32, 32, 32))
         self.image.blit(self.button_previous.image, self.button_previous.rect)
         self.image.blit(self.button_next.image, self.button_next.rect)
 
@@ -47,3 +48,11 @@ class ChoiceOfSeveralOptions(Sprite):
         self.button_previous.update()
         self.button_next.update()
         self.update_view()
+
+    def on_previous_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.current_option = len(self.options) - 1 if self.current_option == 0 else self.current_option - 1
+
+    def on_next_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.current_option = 0 if self.current_option == len(self.options) - 1 else self.current_option + 1
