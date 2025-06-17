@@ -1,7 +1,3 @@
-"""
-Кнопка
-"""
-
 from typing import TYPE_CHECKING, Callable
 import os
 from enum import Enum
