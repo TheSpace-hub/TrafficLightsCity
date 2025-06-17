@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.state import State
 
-from src.sprites import Button, InBlockText, ButtonStatus
+from src.sprites import Button, InBlockText, ButtonStatus, ChoiceOfSeveralOptions
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -17,6 +17,8 @@ class Settings(State):
                                        InBlockText(self.game, 'Назад', 16,
                                                    (255, 255, 255)),
                                        self.on_back_button_pressed))
+        self.add_sprite('graphics_quality', ChoiceOfSeveralOptions(self.game, (100, 100), (500, 70),
+                                                                   []))
 
     def update(self):
         pass
