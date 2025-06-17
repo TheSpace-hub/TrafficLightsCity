@@ -20,8 +20,8 @@ class Settings(State):
 
         options: list[Option] = [
             Option(InBlockText(self.game, 'Test option 1', 16, (255, 255, 255)), 'Test1'),
-            Option(InBlockText(self.game, 'Test option 2', 16, (255, 255, 255)), 'Test2'),
-            Option(InBlockText(self.game, 'Test option 3', 16, (255, 255, 255)), 'Test3'),
+            Option(InBlockText(self.game, 'Second test option', 16, (255, 255, 255)), 'Test2'),
+            Option(InBlockText(self.game, 'Last option (3)', 16, (255, 255, 255)), 'Test3'),
         ]
         self.add_sprite('graphics_quality', ChoiceOfSeveralOptions(self.game, (100, 100), (500, 70),
                                                                    options))
