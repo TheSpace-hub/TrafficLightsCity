@@ -23,10 +23,13 @@ class Menu(State):
         self.add_sprite('traffic_light_editor', Button(self.game, 510, 620, 900, 70,
                                                        InBlockText(self.game, 'Редактор светофоров', 16,
                                                                    (255, 255, 255))))
-        self.add_sprite('settings', Button(self.game, 510, 700, 900, 70,
+        self.add_sprite('settings', Button(self.game, 510, 700, 445, 70,
                                            InBlockText(self.game, 'Настройки', 16,
                                                        (255, 255, 255)),
                                            self.on_settings_button_pressed))
+        self.add_sprite('quit', Button(self.game, 965, 700, 445, 70,
+                                       InBlockText(self.game, 'Выход', 16,
+                                                   (255, 255, 255))))
 
     def update(self):
         pass
