@@ -130,6 +130,9 @@ class Game:
         self.current_state.enter()
         self.transmitted_data = {}
 
+    def quit(self):
+        self.running = False
+
     @staticmethod
     def configure_logs():
         """

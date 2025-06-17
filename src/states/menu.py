@@ -29,7 +29,8 @@ class Menu(State):
                                            self.on_settings_button_pressed))
         self.add_sprite('quit', Button(self.game, 965, 700, 445, 70,
                                        InBlockText(self.game, 'Выход', 16,
-                                                   (255, 255, 255))))
+                                                   (255, 255, 255)),
+                                       self.on_quit_button_pressed))
 
     def update(self):
         pass
@@ -47,3 +48,7 @@ class Menu(State):
     def on_settings_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Settings')
+
+    def on_quit_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.quit()
