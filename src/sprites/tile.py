@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Self
 from enum import Enum
 import random
-from math import sin, cos, radians, sqrt, ceil, floor
+from math import sin, cos
 
 import pygame as pg
 
