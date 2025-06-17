@@ -19,11 +19,11 @@ class Settings(State):
                                        self.on_back_button_pressed))
 
         options: list[Option] = [
-            Option(InBlockText(self.game, 'Низкая', 16, (255, 255, 255)), 'low'),
-            Option(InBlockText(self.game, 'Средняя', 16, (255, 255, 255)), 'medium'),
-            Option(InBlockText(self.game, 'Высокая', 16, (255, 255, 255)), 'high'),
+            Option(InBlockText(self.game, 'Качество: Низкое', 16, (255, 255, 255)), 'low'),
+            Option(InBlockText(self.game, 'Качество: Среднее', 16, (255, 255, 255)), 'medium'),
+            Option(InBlockText(self.game, 'Качество: Высокое', 16, (255, 255, 255)), 'high'),
         ]
-        self.add_sprite('graphics_quality', ChoiceOfSeveralOptions(self.game, (510, 460), (900, 70),
+        self.add_sprite('graphics_quality', ChoiceOfSeveralOptions(self.game, (710, 460), (500, 70),
                                                                    options))
 
     def update(self):
