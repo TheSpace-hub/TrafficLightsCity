@@ -24,7 +24,7 @@ class Settings(State):
             Option(InBlockText(self.game, 'Качество: Высокое', 16, (255, 255, 255)), 'high'),
         ]
         self.add_sprite('graphics_quality', ChoiceOfSeveralOptions(self.game, (710, 460), (500, 70),
-                                                                   options))
+                                                                   options, self.on_graphics_quality_changed))
 
     def update(self):
         pass
@@ -38,3 +38,6 @@ class Settings(State):
     def on_back_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Menu')
+
+    def on_graphics_quality_changed(self, value: str):
+        print(f'GQ: {value}')

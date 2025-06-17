@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 import pygame as pg
 
 from src.sprites import InBlockText, Button, ButtonStatus
@@ -18,10 +18,11 @@ class Option:
 
 class ChoiceOfSeveralOptions(Sprite):
     def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int], options: list[Option],
-                 enabled: bool = True):
+                 func: Callable[[str], None] = None, enabled: bool = True):
         super().__init__(game, size, pos)
         self.options: list[Option] = options
         self.current_option: int = 0
+        self.func: Callable[[str], None] = func
         self.enabled: bool = enabled
 
         self.button_previous: Button = Button(self.game, 0, 0, self.image.get_size()[1], self.image.get_size()[1],
@@ -52,7 +53,11 @@ class ChoiceOfSeveralOptions(Sprite):
     def on_previous_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.current_option = len(self.options) - 1 if self.current_option == 0 else self.current_option - 1
+            if self.func is not None:
+                self.func(self.options[self.current_option].value)
 
     def on_next_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.current_option = 0 if self.current_option == len(self.options) - 1 else self.current_option + 1
+            if self.func is not None:
+                self.func(self.options[self.current_option].value)
