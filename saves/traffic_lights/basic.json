@@ -30,19 +30,16 @@
   },
   "states": [
     {
-      "time": 20,
       "red": "on",
       "yellow": "off",
       "green": "off"
     },
     {
-      "time": 20,
       "red": "off",
       "yellow": "on",
       "green": "off"
     },
     {
-      "time": 20,
       "red": "off",
       "yellow": "off",
       "green": "on"
