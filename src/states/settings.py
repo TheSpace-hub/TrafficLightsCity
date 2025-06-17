@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
-
+from os import path
+import json
 from src.state import State
 
 from src.sprites import Button, InBlockText, ButtonStatus, ChoiceOfSeveralOptions, Option
@@ -39,5 +40,13 @@ class Settings(State):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Menu')
 
-    def on_graphics_quality_changed(self, value: str):
-        print(f'GQ: {value}')
+    @staticmethod
+    def on_graphics_quality_changed(value: str):
+        settings: dict = {
+            'version': 0.1,
+            'graphic': {
+                'graphics_quality': value
+            }
+        }
+        with open(path.join('saves', 'settings.json'), 'w') as f:
+            f.write(json.dumps(settings))
