@@ -26,6 +26,11 @@ class CreateCity(State):
                                               self.on_create_city_button_pressed
                                               ))
 
+        self.add_sprite('back', Button(self.game, 1710, 1000, 200, 70,
+                                       InBlockText(self.game, 'Назад', 16,
+                                                   (255, 255, 255)),
+                                       self.on_back_button_pressed))
+
     def on_create_city_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             seed_input: Input = self.get_sprite('seed_input')
@@ -42,3 +47,7 @@ class CreateCity(State):
 
     def exit(self):
         pass
+
+    def on_back_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('Menu')
