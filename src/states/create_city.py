@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.state import State
 
-from src.sprites import Button, InBlockText, Input, ButtonStatus
+from src.sprites import Button, InBlockText, Input, ButtonStatus, ChoiceOfSeveralOptions, Option
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -20,7 +20,14 @@ class CreateCity(State):
                                                         16, (128, 128, 128)),
                                             True, 10
                                             ))
-        self.add_sprite('create_city', Button(self.game, 510, 540, 900, 70,
+        field_sizes: list[Option] = [
+            Option(InBlockText(self.game, 'Размер карты: Небольшой', 16, (255, 255, 255)), value='small'),
+            Option(InBlockText(self.game, 'Размер карты: Средний', 16, (255, 255, 255)), value='medium'),
+            Option(InBlockText(self.game, 'Размер карты: Большой', 16, (255, 255, 255)), value='large'),
+        ]
+        self.add_sprite('field_size', ChoiceOfSeveralOptions(self.game, (510, 540), (900, 70),
+                                                             field_sizes))
+        self.add_sprite('create_city', Button(self.game, 510, 620, 900, 70,
                                               InBlockText(self.game, 'Создать новый город',
                                                           16, (255, 255, 255)),
                                               self.on_create_city_button_pressed
