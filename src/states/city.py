@@ -55,12 +55,16 @@ class City(State):
             field.update_view()
 
     def enter(self):
-        field: Field = self.get_sprite('field')
+        field_sizes: dict[str, tuple[int, int]] = {
+            'small': (30, 30),
+            'medium': (50, 50),
+            'large': (80, 80)
+        }
+        field_size = self.game.transmitted_data['field_size']
+        seed = self.game.transmitted_data['seed']
 
-        seed = None
-        if 'seed' in self.game.transmitted_data and type(self.game.transmitted_data['seed']) == int:
-            seed = self.game.transmitted_data['seed']
-        field.generate_field(seed)
+        field: Field = self.get_sprite('field')
+        field.generate_field(seed, field_sizes[field_size])
         field.update_view()
 
     def exit(self):

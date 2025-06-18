@@ -41,10 +41,15 @@ class CreateCity(State):
     def on_create_city_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             seed_input: Input = self.get_sprite('seed_input')
+            field_size: ChoiceOfSeveralOptions = self.get_sprite('field_size')
+
+            context: dict = {
+                'seed': None,
+                'field_size': field_size.options[field_size.current_option].value
+            }
             if seed_input.text.text.isdigit():
-                self.game.change_state('City', {'seed': int(seed_input.text.text)})
-            else:
-                self.game.change_state('City')
+                context['seed'] = int(seed_input.text.text)
+            self.game.change_state('City', context)
 
     def update(self):
         pass

@@ -64,9 +64,9 @@ class Field(Sprite):
     def get_camera_distance(self) -> float:
         return self._camera_distance
 
-    def generate_field(self, seed: int | None = None):
+    def generate_field(self, seed: int | None = None, field_size: tuple[int, int] = (30, 30)):
         self.view_field = {}
-        self.field = MapGenerator((30, 30), seed).generate_map()
+        self.field = MapGenerator(field_size, seed).generate_map()
 
     def _get_number_of_initial_tiles(self) -> int:
         updated_pos: list[tuple[int, int]] = []
