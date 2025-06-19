@@ -20,9 +20,13 @@ class Menu(State):
         self.add_sprite('open_city', Button(self.game, 510, 540, 900, 70,
                                             InBlockText(self.game, 'Открыть город', 16,
                                                         (255, 255, 255))))
-        self.add_sprite('traffic_light_editor', Button(self.game, 510, 620, 900, 70,
+        self.add_sprite('traffic_light_editor', Button(self.game, 510, 620, 445, 70,
                                                        InBlockText(self.game, 'Редактор светофоров', 16,
                                                                    (255, 255, 255))))
+        self.add_sprite('traffic_light_texture_editor', Button(self.game, 965, 620, 445, 70,
+                                                               InBlockText(self.game, 'Редактор текстур', 16,
+                                                                           (255, 255, 255)),
+                                                               self.on_traffic_light_texture_editor_button_pressed))
         self.add_sprite('settings', Button(self.game, 510, 700, 445, 70,
                                            InBlockText(self.game, 'Настройки', 16,
                                                        (255, 255, 255)),
@@ -48,6 +52,10 @@ class Menu(State):
     def on_settings_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Settings')
+
+    def on_traffic_light_texture_editor_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('TrafficLightTextureEditor')
 
     def on_quit_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
