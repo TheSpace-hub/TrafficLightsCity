@@ -1,6 +1,6 @@
-import os.path
 from typing import TYPE_CHECKING
 import pygame as pg
+from pygame import Surface, SRCALPHA
 
 from src.sprite import Sprite
 
@@ -8,37 +8,24 @@ if TYPE_CHECKING:
     from src.game import Game
 
 
-class TextAlign:
-    CENTER = 0
-    LEFT = 1
-    RIGHT = 2
-
-    @classmethod
-    def apply(cls, method: int, text: 'Text'):
-        if method == cls.CENTER:
-            text.rect.x -= text.image.get_size()[0] / 2
-            text.rect.y -= text.image.get_size()[1] / 2
-
-
-class Text(Sprite):
-    def __init__(self, game: 'Game', pos: tuple[int, int], text: str, font_size: int,
-                 color: tuple[int, int, int, int] | tuple[int, int, int],
-                 font_path: str = os.path.join('assets', 'fonts', 'MainFont.ttf'), align: int = TextAlign.CENTER
-                 ):
-        super().__init__(game, (0, 0), pos)
-        self.text: str = text
+class Pixelart(Sprite):
+    def __init__(self, game: 'Game', pixel_size: int):
+        super().__init__(game, (0, 0))
         self.game: 'Game' = game
-        self.font_path: str = font_path
-        self.font_size: int = font_size
-        self.color: tuple[int, int, int, int] | tuple[int, int, int] = color
-        self.align: int = align
+        self.pixel_size: int = pixel_size
+        self.pixelart: tuple[tuple[tuple[int, int], ...]] | None = None
 
         self.update_view()
 
-        TextAlign.apply(align, self)
-
     def update_view(self):
-        self.image = pg.font.Font(self.font_path, self.font_size).render(self.text, True, self.color)
+        self.image = Surface((self.pixel_size * len(self.pixelart[0]), self.pixel_size * len(self.pixelart)), SRCALPHA,
+                             32).convert_alpha()
+        self.rect = self.image.get_rect()
+        for y in range(len(self.pixelart)):
+            for x in range(len(self.pixelart[y])):
+                pg.draw.rect(self.image, self.pixelart[y][x], pg.Rect(
+                    self.pixel_size * x, self.pixel_size * y, self.pixel_size, self.pixel_size
+                ))
 
     def update(self):
         pass
