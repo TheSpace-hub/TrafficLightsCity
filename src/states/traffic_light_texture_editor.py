@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.state import State
 
-from src.sprites import Pixelart
+from src.sprites import Pixelart, Button, InBlockText
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -13,7 +13,10 @@ class TrafficLightTextureEditor(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('pixelatr1', Pixelart(self.game, (100, 100), 10, (((0, 0, 0),),)))
+        self.add_sprite('add_texture_button', Button(self.game, 100, 50, 400, 70, InBlockText(
+            self.game, 'Добавить изображение', 16, (255, 255, 255)
+        )))
+        # self.add_sprite('pixelatr1', Pixelart(self.game, (100, 100), 10, (((0, 0, 0),),)))
 
     def update(self):
         pass
