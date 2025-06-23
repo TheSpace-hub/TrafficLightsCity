@@ -1,10 +1,8 @@
 from typing import TYPE_CHECKING
-from math import pi
-import pygame as pg
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field
+from src.sprites import Pixelart
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -15,7 +13,7 @@ class TrafficLightTextureEditor(State):
         super().__init__(game)
 
     def boot(self):
-        pass
+        self.add_sprite('pixelatr1', Pixelart(self.game, (100, 100), 10, (((0, 0, 0),),)))
 
     def update(self):
         pass

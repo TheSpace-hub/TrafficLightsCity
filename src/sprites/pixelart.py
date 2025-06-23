@@ -9,18 +9,18 @@ if TYPE_CHECKING:
 
 
 class Pixelart(Sprite):
-    def __init__(self, game: 'Game', pixel_size: int):
-        super().__init__(game, (0, 0))
+    def __init__(self, game: 'Game', pos: tuple[int, int], pixel_size: int,
+                 pixelart: tuple[tuple[tuple[int, int, int], ...]]):
+        super().__init__(game, (0, 0), pos)
         self.game: 'Game' = game
         self.pixel_size: int = pixel_size
-        self.pixelart: tuple[tuple[tuple[int, int], ...]] | None = None
+        self.pixelart: tuple[tuple[tuple[int, int, int], ...]] = pixelart
 
         self.update_view()
 
     def update_view(self):
         self.image = Surface((self.pixel_size * len(self.pixelart[0]), self.pixel_size * len(self.pixelart)), SRCALPHA,
                              32).convert_alpha()
-        self.rect = self.image.get_rect()
         for y in range(len(self.pixelart)):
             for x in range(len(self.pixelart[y])):
                 pg.draw.rect(self.image, self.pixelart[y][x], pg.Rect(
