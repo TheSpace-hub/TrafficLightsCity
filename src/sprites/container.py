@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 class Container(Sprite):
     def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int]):
         super().__init__(game, size, pos)
+        self.update_view()
 
     def update_view(self):
         self.image.fill((32, 32, 32))
