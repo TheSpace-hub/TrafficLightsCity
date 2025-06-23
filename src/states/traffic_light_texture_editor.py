@@ -62,15 +62,12 @@ class TrafficLightTextureEditor(State):
         texture_name: str = self.get_sprite('texture_name_input').text.text
         texture: dict = {
             'name': texture_name,
-            'images': []
+            'images': {}
         }
         for i in range(self.current_container):
             pixelart_name_input: Input = self.get_sprite(f'pixelart_name_input_{i}')
             pixelart: Pixelart = self.get_sprite(f'pixelart_{i}')
-            texture['images'].append({
-                'name': pixelart_name_input.text.text,
-                'data': pixelart.pixelart
-            })
+            texture['images'][pixelart_name_input.text.text] = pixelart.pixelart
 
         with open(path.join('saves', 'traffic_lights', 'textures', f'{texture_name}.json'), 'w') as file:
             file.write(json.dumps(texture))
