@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from tkinter import filedialog
 from os import path
 import json
@@ -37,37 +37,37 @@ class TrafficLightTextureEditor(State):
 
     def on_add_image_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
-            file_path: str = filedialog.askopenfilename(
+            file_paths: Literal[""] | tuple[str, ...] = filedialog.askopenfilenames(
                 title="Выберите изображение",
                 filetypes=[("Изображение секции светофора", "*.png"), ("Любой файл", "*.*")]
             )
-            image_name: str = file_path.split('/')[-1:][0].split('.')[0].lower()
-            self.add_sprite(f'container_pixelart_{self.current_container}',
-                            Container(self.game, (100, 210 + 110 * self.current_container), (500, 100)))
-            self.add_sprite(f'pixelart_{self.current_container}',
-                            Pixelart(self.game, (110, 220 + 110 * self.current_container), (80, 80),
-                                     Pixelart.get_pixelart_by_image(file_path)))
-            self.add_sprite(f'pixelart_name_input_{self.current_container}',
-                            Input(self.game, 200, 225 + 110 * self.current_container, 380, 70,
-                                  InBlockText(self.game, image_name, 16, (255, 255, 255)),
-                                  InBlockText(self.game, 'Введите ID картинки', 16, (128, 128, 128)),
-                                  Formatting.NORMALIZED
-                                  ))
-            self.images['pixelart_new'] = image_name
-            self.current_container += 1
+            if file_paths == ():
+                return
+            for file_path in file_paths:
+                image_name: str = file_path.split('/')[-1:][0].split('.')[0].lower()
+                self.add_sprite(f'container_pixelart_{self.current_container}',
+                                Container(self.game, (100, 210 + 110 * self.current_container), (500, 100)))
+                self.add_sprite(f'pixelart_{self.current_container}',
+                                Pixelart(self.game, (110, 220 + 110 * self.current_container), (80, 80),
+                                         Pixelart.get_pixelart_by_image(file_path)))
+                self.add_sprite(f'pixelart_name_input_{self.current_container}',
+                                Input(self.game, 200, 225 + 110 * self.current_container, 380, 70,
+                                      InBlockText(self.game, image_name, 16, (255, 255, 255)),
+                                      InBlockText(self.game, 'Введите ID картинки', 16, (128, 128, 128)),
+                                      Formatting.NORMALIZED
+                                      ))
+                self.images['pixelart_new'] = image_name
+                self.current_container += 1
 
     def on_create_texture_button_pressed(self, status: ButtonStatus):
         if status != ButtonStatus.PRESSED:
             return
         texture_name: str = self.get_sprite('texture_name_input').text.text
-        texture: dict = {
-            'name': texture_name,
-            'images': {}
-        }
+        texture: dict = {}
         for i in range(self.current_container):
             pixelart_name_input: Input = self.get_sprite(f'pixelart_name_input_{i}')
             pixelart: Pixelart = self.get_sprite(f'pixelart_{i}')
-            texture['images'][pixelart_name_input.text.text] = pixelart.pixelart
+            texture[pixelart_name_input.text.text] = pixelart.pixelart
 
         with open(path.join('saves', 'traffic_lights', 'textures', f'{texture_name}.json'), 'w') as file:
             file.write(json.dumps(texture))
