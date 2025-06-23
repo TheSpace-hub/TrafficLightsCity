@@ -1,5 +1,4 @@
 {
-  "name": "basic",
   "url": "http://127.0.0.1/traffic",
   "type": {
     "use": true,
