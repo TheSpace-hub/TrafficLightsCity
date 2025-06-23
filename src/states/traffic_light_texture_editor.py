@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from tkinter import filedialog
+from os import path
+import json
 
 from src.state import State
 
@@ -22,16 +24,16 @@ class TrafficLightTextureEditor(State):
                                                                 (128, 128, 128)),
                                                     Formatting.NORMALIZED
                                                     ))
-        self.add_sprite('add_texture_button', Button(self.game, 100, 130, 400, 70,
-                                                     InBlockText(self.game, 'Добавить изображение', 16,
-                                                                 (255, 255, 255)), self.on_create_world_button_pressed))
+        self.add_sprite('add_image_button', Button(self.game, 100, 130, 400, 70,
+                                                   InBlockText(self.game, 'Добавить изображение', 16,
+                                                               (255, 255, 255)), self.on_add_image_button_pressed))
         self.add_sprite('create_texture_button', Button(self.game, 510, 130, 400, 70,
                                                         InBlockText(self.game, 'Создать текстуру', 16,
                                                                     (255, 255, 255)),
-                                                        self.on_create_world_button_pressed,
+                                                        self.on_create_texture_button_pressed,
                                                         False))
 
-    def on_create_world_button_pressed(self, status: ButtonStatus):
+    def on_add_image_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             file_path: str = filedialog.askopenfilename(
                 title="Выберите изображение",
@@ -51,6 +53,25 @@ class TrafficLightTextureEditor(State):
                                   ))
             self.images['pixelart_new'] = image_name
             self.current_container += 1
+
+    def on_create_texture_button_pressed(self, status: ButtonStatus):
+        if status != ButtonStatus.PRESSED:
+            return
+        texture_name: str = self.get_sprite('texture_name_input').text.text
+        texture: dict = {
+            'name': texture_name,
+            'images': []
+        }
+        for i in range(self.current_container):
+            pixelart_name_input: Input = self.get_sprite(f'pixelart_name_input_{i}')
+            pixelart: Pixelart = self.get_sprite(f'pixelart_{i}')
+            texture['images'].append({
+                'name': pixelart_name_input.text.text,
+                'data': pixelart.pixelart
+            })
+
+        with open(path.join('saves', 'traffic_lights', 'textures', f'{texture_name}.json'), 'w') as file:
+            file.write(json.dumps(texture))
 
     def update(self):
         create_texture_button: Button = self.get_sprite('create_texture_button')
