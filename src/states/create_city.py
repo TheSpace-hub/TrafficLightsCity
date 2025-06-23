@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.state import State
 
-from src.sprites import Button, InBlockText, Input, ButtonStatus, ChoiceOfSeveralOptions, Option
+from src.sprites import Button, InBlockText, Input, ButtonStatus, ChoiceOfSeveralOptions, Option, Formatting
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -18,7 +18,7 @@ class CreateCity(State):
                                                         (255, 255, 255)),
                                             InBlockText(self.game, 'Введите seed или оставьте пустым',
                                                         16, (128, 128, 128)),
-                                            True, 10
+                                            Formatting.ONLY_DIGITS, 10
                                             ))
         field_sizes: list[Option] = [
             Option(InBlockText(self.game, 'Размер карты: Небольшой', 16, (255, 255, 255)), value='small'),

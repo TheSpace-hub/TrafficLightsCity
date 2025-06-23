@@ -16,15 +16,22 @@ class InputStatus(Enum):
     SELECTED = 1
 
 
+class Formatting(Enum):
+    NO_FORMATTING = 0
+    ONLY_DIGITS = 1
+    NORMALIZED = 2
+
+
 class Input(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
-                 placeholder: InBlockText, only_digits: bool = False, limit: int = 0, enabled: bool = True):
+                 placeholder: InBlockText, formatting: Formatting = Formatting.NO_FORMATTING, limit: int = 0,
+                 enabled: bool = True):
         super().__init__(game, (size_x, size_y), (x, y))
         self.text: InBlockText = text
         self.placeholder: InBlockText = placeholder
         self.status: InputStatus = InputStatus.NONE
         self.limit: int = limit
-        self.only_digits = only_digits
+        self.formatting: Formatting = formatting
         self.enabled: bool = enabled
 
         text.correct_position((size_x, size_y))
@@ -61,7 +68,7 @@ class Input(Sprite):
 
         for key in self.game.omitted_buttons:
             if 32 <= key <= 126 and self.enabled and (len(self.text.text) < self.limit or self.limit <= 0):
-                if self.only_digits and not (48 <= key <= 57):
+                if self.formatting == Formatting.ONLY_DIGITS and not (48 <= key <= 57):
                     continue
                 self.text.text += chr(key)
                 self.text.correct_position((self.image.get_size()[0], self.image.get_size()[1]))
