@@ -4,7 +4,7 @@ import pygame as pg
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field
+from src.sprites import Text, TextAlign, Field, TrafficLight
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -16,6 +16,7 @@ class City(State):
         self.a = 0.52
 
     def boot(self):
+        TrafficLight(self.game, 'basic')
         self.add_sprite('field', Field(self.game))
 
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
