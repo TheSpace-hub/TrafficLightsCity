@@ -4,7 +4,11 @@
 
 ## Технологический стек
 
-Рекомендуемая версия Python: 3.12
+| Технология    | Windows                                       | Linux                              |
+|---------------|-----------------------------------------------|------------------------------------|
+| Python: 3.13+ | [Оф. Сайт](https://www.python.org/downloads/) | `sudo apt install python3.13`      |
+| Python: 3.13+ | -                                             | `sudo apt install python3.13-venv` |
+| Tkinter       | -                                             | `sudo apt install python3.13-tk`   |
 
 ## Создание города
 
