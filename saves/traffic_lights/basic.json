@@ -8,7 +8,7 @@
     "red": {
       "pos": {
         "x": 0,
-        "y": 2
+        "y": 0
       },
       "texture": "red_segment"
     },
@@ -22,7 +22,7 @@
     "green": {
       "pos": {
         "x": 0,
-        "y": 0
+        "y": 2
       },
       "texture": "green_segment"
     }
