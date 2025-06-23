@@ -70,6 +70,8 @@ class Input(Sprite):
             if 32 <= key <= 126 and self.enabled and (len(self.text.text) < self.limit or self.limit <= 0):
                 if self.formatting == Formatting.ONLY_DIGITS and not (48 <= key <= 57):
                     continue
+                if self.formatting == Formatting.NORMALIZED and not (97 <= key <= 122 or 48 <= key <= 57):
+                    continue
                 self.text.text += chr(key)
                 self.text.correct_position((self.image.get_size()[0], self.image.get_size()[1]))
                 self.text.update_view()
