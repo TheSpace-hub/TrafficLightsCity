@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 
 class Pixelart(Sprite):
     def __init__(self, game: 'Game', pos: tuple[int, int], pixel_size: int,
-                 pixelart: tuple[tuple[tuple[int, int, int], ...]]):
+                 pixelart: tuple[tuple[tuple[int, int, int, int], ...]]):
         super().__init__(game, (0, 0), pos)
         self.game: 'Game' = game
         self.pixel_size: int = pixel_size
-        self.pixelart: tuple[tuple[tuple[int, int, int], ...]] = pixelart
+        self.pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = pixelart
 
         self.update_view()
 
