@@ -9,6 +9,8 @@
 | Python: 3.13+ | [Оф. Сайт](https://www.python.org/downloads/) | `sudo apt install python3.13`      |
 | Python: 3.13+ | -                                             | `sudo apt install python3.13-venv` |
 | Tkinter       | -                                             | `sudo apt install python3.13-tk`   |
+| Pillow        | `pip install pillow`                          | `pip3 install pillow`              |
+| NumPy         | `pip install numpy`                           | `pip3 install numpy`               |
 
 ## Создание города
 
