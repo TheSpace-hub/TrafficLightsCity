@@ -23,32 +23,32 @@ class TrafficLightSegment:
 class TrafficLightData:
     def __init__(self, tfl_type: str):
         self.tfl_type: str = tfl_type
-        data: dict = self.get_traffic_light_data()
+        data: dict = self._get_traffic_light_data()
 
         self.url: str = data['url']
-        self.type_use: bool = self.get_type_use(data)
-        self.type_value: str = self.get_type_value(data)
-        self.segments: dict[str, TrafficLightSegment] = self.get_segments(data)
-        self.states: list[dict[str, str]] = self.get_states(data)
+        self.type_use: bool = self._get_type_use(data)
+        self.type_value: str = self._get_type_value(data)
+        self.segments: dict[str, TrafficLightSegment] = self._get_segments(data)
+        self.states: list[dict[str, str]] = self._get_states(data)
 
-    def get_traffic_light_data(self) -> dict:
+    def _get_traffic_light_data(self) -> dict:
         with open(path.join('saves', 'traffic_lights', f'{self.tfl_type}.json'), 'r') as file:
             return json.loads(file.read())
 
     @staticmethod
-    def get_url(data: dict) -> str:
+    def _get_url(data: dict) -> str:
         return str(data['url'])
 
     @staticmethod
-    def get_type_use(data: dict) -> bool:
+    def _get_type_use(data: dict) -> bool:
         return bool(data['type']['use'])
 
     @staticmethod
-    def get_type_value(data: dict) -> str:
+    def _get_type_value(data: dict) -> str:
         return str(data['type']['value'])
 
     @staticmethod
-    def get_segments(data: dict) -> dict[str, TrafficLightSegment]:
+    def _get_segments(data: dict) -> dict[str, TrafficLightSegment]:
         segments: dict[str, TrafficLightSegment] = {}
         for name, segment in data['segments'].items():
             segments[name] = TrafficLightSegment(
@@ -58,11 +58,17 @@ class TrafficLightData:
         return segments
 
     @staticmethod
-    def get_states(data: dict) -> list[dict[str, str]]:
+    def _get_states(data: dict) -> list[dict[str, str]]:
         states: list[dict[str, str]] = []
         for state in data['states']:
             states.append(state)
         return states
+
+    def get_size(self) -> tuple[int, int]:
+        size: tuple[int, int] = (1, 1)
+        for segment in self.segments.values():
+            size = (max(size[0], segment.pos[0] + 1), max(size[1], segment.pos[1] + 1))
+        return size
 
     def __str__(self):
         return (f'"url": {self.url}, '
@@ -77,11 +83,13 @@ class TrafficLight(Sprite):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
         self.data = TrafficLightData(tfl_type)
-        print(self.data)
 
         self.update_view()
 
     def update_view(self):
+        pass
+
+    def get_cover(self):
         pass
 
     def update(self):
