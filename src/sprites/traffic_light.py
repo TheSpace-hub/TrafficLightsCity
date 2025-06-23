@@ -13,6 +13,12 @@ class TrafficLightSegment:
         self.pos: tuple[int, int] = pos
         self.texture: str = texture
 
+    def __str__(self):
+        return f'"pos": {self.pos}, "texture": {self.texture}'
+
+    def __repr__(self):
+        return self.__str__()
+
 
 class TrafficLightData:
     def __init__(self, tfl_type: str):
@@ -59,10 +65,9 @@ class TrafficLightData:
         return states
 
     def __str__(self):
-        return (f'"url": {self.url},'
-                f'"type":'
-                f'  "use": {self.type_use},'
-                f'  "value": {self.type_value}'
+        return (f'"url": {self.url}, '
+                f'"use": {self.type_use}, '
+                f'"value": {self.type_value}, '
                 f'"segments": {self.segments},'
                 f'"states": {self.states}')
 
