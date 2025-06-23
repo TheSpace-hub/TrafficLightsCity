@@ -3,7 +3,7 @@ from tkinter import filedialog
 
 from src.state import State
 
-from src.sprites import Pixelart, Button, InBlockText, ButtonStatus, Container
+from src.sprites import Pixelart, Button, InBlockText, ButtonStatus, Container, Input
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -28,9 +28,15 @@ class TrafficLightTextureEditor(State):
             )
             image_name: str = file_path.split('/')[-1:][0].split('.')[0].lower()
             self.add_sprite(f'container_pixelart_{self.current_container}',
-                            Container(self.game, (100, 150), (1000, 300)))
+                            Container(self.game, (100, 150 + 110 * self.current_container), (500, 100)))
             self.add_sprite(f'pixelart_{self.current_container}',
-                            Pixelart(self.game, (100, 150), (300, 300), Pixelart.get_pixelart_by_image(file_path)))
+                            Pixelart(self.game, (110, 160 + 110 * self.current_container), (80, 80),
+                                     Pixelart.get_pixelart_by_image(file_path)))
+            self.add_sprite(f'pixelart_name_input_{self.current_container}',
+                            Input(self.game, 200, 165 + 110 * self.current_container, 380, 70,
+                                  InBlockText(self.game, image_name, 16, (255, 255, 255)),
+                                  InBlockText(self.game, 'Введите название', 16, (255, 255, 255))
+                                  ))
             self.images['pixelart_new'] = image_name
             self.current_container += 1
 
