@@ -5,7 +5,7 @@ import json
 
 from src.state import State
 
-from src.sprites import Pixelart, Button, InBlockText, ButtonStatus, Container, Input, Formatting
+from src.sprites import Pixelart, Button, InBlockText, ButtonStatus, Container, Input, Formatting, Text, TextAlign
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -32,6 +32,8 @@ class TrafficLightTextureEditor(State):
                                                                     (255, 255, 255)),
                                                         self.on_create_texture_button_pressed,
                                                         False))
+        self.add_sprite('create_texture_info', Text(self.game, (610, 205), '',
+                                                    13, (0, 255, 0), align=TextAlign.LEFT))
 
     def on_add_image_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
@@ -72,6 +74,10 @@ class TrafficLightTextureEditor(State):
 
         with open(path.join('saves', 'traffic_lights', 'textures', f'{texture_name}.json'), 'w') as file:
             file.write(json.dumps(texture))
+
+        create_texture_info: Text = self.get_sprite('create_texture_info')
+        create_texture_info.text = 'Текстура создана'
+        create_texture_info.update_view()
 
     def update(self):
         create_texture_button: Button = self.get_sprite('create_texture_button')
