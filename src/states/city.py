@@ -4,7 +4,7 @@ import pygame as pg
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field, TrafficLight
+from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -20,6 +20,11 @@ class City(State):
 
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
+
+        self.add_sprite('dashboard', Button(self.game, 1465, 10, 445, 70,
+                                            InBlockText(self.game, 'Панель', 16,
+                                                        (255, 255, 255)),
+                                            self.on_dashboard_button_pressed))
 
     def update(self):
         field: Field = self.get_sprite('field')
@@ -66,6 +71,10 @@ class City(State):
         field: Field = self.get_sprite('field')
         field.generate_field(seed, field_sizes[field_size])
         field.update_view()
+
+    def on_dashboard_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('Dashboard')
 
     def exit(self):
         pass
