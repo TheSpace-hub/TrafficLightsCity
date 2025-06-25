@@ -57,6 +57,7 @@ class TrafficLightData:
         self.type_value: str = self._get_type_value(data)
         self.segments: dict[str, TrafficLightSegment] = self._get_segments(data)
         self.states: list[dict[str, str]] = self._get_states(data)
+        self.state: int = 0
 
     def _get_traffic_light_data(self) -> dict:
         with open(path.join('saves', 'traffic_lights', f'{self.tfl_type}.json'), 'r') as file:
