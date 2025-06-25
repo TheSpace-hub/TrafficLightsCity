@@ -52,6 +52,12 @@
       "yellow": "off",
       "green": "on",
       "arrow": "off"
+    },
+    {
+      "red": "on",
+      "yellow": "off",
+      "green": "off",
+      "arrow": "on"
     }
   ]
 }
