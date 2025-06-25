@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from os import path
 import json
 import pygame as pg
+from pygame import SRCALPHA
 
 from src.sprites import Pixelart
 from src.sprite import Sprite
@@ -106,14 +107,20 @@ class TrafficLight(Sprite):
         if self.as_cover:
             self.image = self.get_cover()
 
-    def get_cover(self, image_size: tuple[int, int] = (30, 30)) -> pg.Surface:
+    def get_cover(self, image_size: tuple[int, int] = (50, 50)) -> pg.Surface:
+        """
+        Получение обложки светофора для отображения в панели
+        """
         surface: pg.Surface = pg.Surface(
-            (self.data.get_size()[0] * image_size[0], self.data.get_size()[1] * image_size[1]))
+            (self.data.get_size()[0] * image_size[0], self.data.get_size()[1] * image_size[1]), SRCALPHA,
+            32).convert_alpha()
+
         for segment in self.data.segments.values():
             pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
             pixel_size: float = min(image_size[0] / len(pixelart[0]), image_size[1] / len(pixelart[1]))
-            surface.blit(Pixelart(self.game, (0, len(self.data.segments.values()) * 1), image_size,
-                                  pixelart).image, (0, pixel_size * len(pixelart[0])))
+            surface.blit(Pixelart(self.game, (0, 0), image_size,
+                                  pixelart).image, (pixel_size * len(pixelart[0]) * segment.pos[0] + 10,
+                                                    pixel_size * len(pixelart[0]) * segment.pos[1] + 10))
 
         return surface
 
