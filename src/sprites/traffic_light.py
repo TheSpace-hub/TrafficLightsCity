@@ -95,6 +95,12 @@ class TrafficLightData:
 
 
 class TrafficLight(Sprite):
+    """
+    Основной класс светофора.
+    TODO Может быть добавлен на карту города,
+    или на панель.
+    """
+
     def __init__(self, game: 'Game', tfl_type: str):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
