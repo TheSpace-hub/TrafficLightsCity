@@ -12,7 +12,7 @@ class Dashboard(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('tfl', TrafficLight(self.game, 'basic'))
+        self.add_sprite('tfl', TrafficLight(self.game, 'arrow'))
 
     def update(self):
         pass
