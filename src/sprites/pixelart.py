@@ -40,4 +40,4 @@ class Pixelart(Sprite):
             tuple(list(image.getdata())[i * image.size[0]: (i + 1) * image.size[0]])
             for i in range(image.size[1])
         ]
-        return tuple(tuple(row) for row in pixel_rows)
+        return tuple[tuple[tuple[int, int, int, int], ...]](tuple(tuple(row) for row in pixel_rows))
