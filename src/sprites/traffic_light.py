@@ -57,7 +57,20 @@ class TrafficLightData:
         self.type_value: str = self._get_type_value(data)
         self.segments: dict[str, TrafficLightSegment] = self._get_segments(data)
         self.states: list[dict[str, str]] = self._get_states(data)
-        self.state: int = 0
+        self._state: int = 0
+
+        self._update_segments()
+
+    def get_state(self) -> int:
+        return self._state
+
+    def set_state(self, state: int):
+        self._state = state
+        self._update_segments()
+
+    def _update_segments(self):
+        for name, segment in self.segments.items():
+            segment.value = self.states[self._state][name]
 
     def _get_traffic_light_data(self) -> dict:
         with open(path.join('saves', 'traffic_lights', f'{self.tfl_type}.json'), 'r') as file:
