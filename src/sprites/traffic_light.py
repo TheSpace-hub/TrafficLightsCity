@@ -12,6 +12,10 @@ if TYPE_CHECKING:
 
 
 class TrafficLightSegment:
+    """
+    Информация о сегменте светофора, также получение изображения секции из текстуры
+    """
+
     def __init__(self, pos: tuple[int, int], texture: str, value: str | None = None):
         self.pos: tuple[int, int] = pos
         self.texture: str = texture
@@ -21,6 +25,9 @@ class TrafficLightSegment:
         return self._get_texture()[value]
 
     def _get_values(self) -> list[str]:
+        """
+        Получение всех возможных вариаций текстуры светофора
+        """
         return list(self._get_texture().keys())
 
     def _get_texture(self) -> dict:
@@ -37,6 +44,10 @@ class TrafficLightSegment:
 
 
 class TrafficLightData:
+    """
+    Информация о светофоре, основываясь на его типе
+    """
+
     def __init__(self, tfl_type: str):
         self.tfl_type: str = tfl_type
         data: dict = self._get_traffic_light_data()
@@ -81,6 +92,9 @@ class TrafficLightData:
         return states
 
     def get_size(self) -> tuple[int, int]:
+        """
+        Получение размера светофора, где размер одной секции 1x1
+        """
         size: tuple[int, int] = (1, 1)
         for segment in self.segments.values():
             size = (max(size[0], segment.pos[0] + 1), max(size[1], segment.pos[1] + 1))
