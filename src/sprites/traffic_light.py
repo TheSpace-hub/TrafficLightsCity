@@ -1,7 +1,9 @@
-import json
 from typing import TYPE_CHECKING
 from os import path
+import json
+import pygame as pg
 
+from src.sprites import Pixelart
 from src.sprite import Sprite
 
 if TYPE_CHECKING:
@@ -9,12 +11,25 @@ if TYPE_CHECKING:
 
 
 class TrafficLightSegment:
-    def __init__(self, pos: tuple[int, int], texture: str):
+    def __init__(self, pos: tuple[int, int], texture: str, value: str | None = None):
         self.pos: tuple[int, int] = pos
         self.texture: str = texture
+        self.value: str = self._get_values()[0] if value is None else value
+
+    def get_pixelart_by_value(self, value: str) -> tuple[tuple[tuple[int, int, int, int], ...]]:
+        return self._get_texture()[value]
+
+    def _get_values(self) -> list[str]:
+        return list(self._get_texture().keys())
+
+    def _get_texture(self) -> dict:
+        data: dict = {}
+        with open(path.join('saves', 'traffic_lights', 'textures', f'{self.texture}.json')) as file:
+            data = json.loads(file.read())
+        return data
 
     def __str__(self):
-        return f'"pos": {self.pos}, "texture": {self.texture}'
+        return f'"pos": {self.pos}, "texture": {self.texture}, "value": {self.value}"'
 
     def __repr__(self):
         return self.__str__()
@@ -83,14 +98,24 @@ class TrafficLight(Sprite):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
         self.data = TrafficLightData(tfl_type)
+        self.as_cover: bool = True
 
         self.update_view()
 
     def update_view(self):
-        pass
+        if self.as_cover:
+            self.image = self.get_cover()
 
-    def get_cover(self):
-        pass
+    def get_cover(self, image_size: tuple[int, int] = (30, 30)) -> pg.Surface:
+        surface: pg.Surface = pg.Surface(
+            (self.data.get_size()[0] * image_size[0], self.data.get_size()[1] * image_size[1]))
+        for segment in self.data.segments.values():
+            pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
+            pixel_size: float = min(image_size[0] / len(pixelart[0]), image_size[1] / len(pixelart[1]))
+            surface.blit(Pixelart(self.game, (0, len(self.data.segments.values()) * 1), image_size,
+                                  pixelart).image, (0, pixel_size * len(pixelart[0])))
+
+        return surface
 
     def update(self):
         pass

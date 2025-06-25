@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from src.state import State
 
+from src.sprites import TrafficLight
+
 if TYPE_CHECKING:
     from src.game import Game
 
@@ -9,8 +11,9 @@ class Dashboard(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
 
+    # TODO - добавить светофор
     def boot(self):
-        pass
+        self.add_sprite('tfl', TrafficLight(self.game, 'basic'))
 
     def update(self):
         pass
