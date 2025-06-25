@@ -11,7 +11,6 @@ class Dashboard(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
 
-    # TODO - добавить светофор
     def boot(self):
         self.add_sprite('tfl', TrafficLight(self.game, 'basic'))
 
