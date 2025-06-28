@@ -145,8 +145,10 @@ class TrafficLight(Sprite):
         """
         Получение обложки светофора для отображения в панели
         """
-        surface_size: tuple[int, int] = (self.data.get_size()[0] * image_size[0] + self.data.get_size()[0] * 5 + 5,
-                                         self.data.get_size()[1] * image_size[1] + self.data.get_size()[1] * 5 + 5)
+        indentation: int = image_size[0] // 10
+        surface_size: tuple[int, int] = (
+            self.data.get_size()[0] * image_size[0] + self.data.get_size()[0] * indentation + indentation,
+            self.data.get_size()[1] * image_size[1] + self.data.get_size()[1] * indentation + indentation)
         surface: pg.Surface = pg.Surface(surface_size, SRCALPHA, 32).convert_alpha()
 
         surface.blit(Container(self.game, (0, 0), surface_size).image, (0, 0))
@@ -155,8 +157,8 @@ class TrafficLight(Sprite):
             pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
             pixel_size: float = min(image_size[0] / len(pixelart[0]), image_size[1] / len(pixelart[1]))
             surface.blit(Pixelart(self.game, (0, 0), image_size, pixelart).image,
-                         (pixel_size * len(pixelart[0]) * segment.pos[0] + 5 * segment.pos[0] + 5,
-                          pixel_size * len(pixelart[0]) * segment.pos[1] + 5 * segment.pos[1] + 5))
+                         (pixel_size * len(pixelart[0]) * segment.pos[0] + indentation * segment.pos[0] + indentation,
+                          pixel_size * len(pixelart[0]) * segment.pos[1] + indentation * segment.pos[1] + indentation))
 
         return surface
 
