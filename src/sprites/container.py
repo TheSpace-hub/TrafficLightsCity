@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Any
 import pygame as pg
 
 from src.sprite import Sprite
@@ -8,8 +8,10 @@ if TYPE_CHECKING:
 
 
 class Container(Sprite):
-    def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int]):
+    def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int],
+                 placeholder: Callable[[tuple[int, int] | None], pg.Surface] | None = None):
         super().__init__(game, size, pos)
+        self.placeholder: Callable[[tuple[int, int] | None], pg.Surface] | None = placeholder
         self.update_view()
 
     def update_view(self):
@@ -17,6 +19,9 @@ class Container(Sprite):
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
             0, 0, self.image.get_size()[0], self.image.get_size()[1]
         ), 3)
+        if self.placeholder is not None:
+            placeholder: pg.Surface = self.placeholder(self.image.get_size())
+            self.image.blit(placeholder, (0, 0))
 
     def update(self):
         pass
