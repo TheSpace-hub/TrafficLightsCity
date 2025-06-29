@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 class Container(Sprite):
     def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int],
-                 placeholder: Callable[[tuple[int, int] | None], pg.Surface] | None = None):
+                 placeholder: Callable[[], pg.Surface] | None = None):
         super().__init__(game, size, pos)
-        self.placeholder: Callable[[tuple[int, int] | None], pg.Surface] | None = placeholder
+        self.placeholder: Callable[[], pg.Surface] | None = placeholder
         self.update_view()
 
     def update_view(self):
@@ -20,7 +20,7 @@ class Container(Sprite):
             0, 0, self.image.get_size()[0], self.image.get_size()[1]
         ), 3)
         if self.placeholder is not None:
-            placeholder: pg.Surface = self.placeholder(self.image.get_size())
+            placeholder: pg.Surface = self.placeholder()
             self.image.blit(placeholder, (0, 0))
 
     def update(self):
