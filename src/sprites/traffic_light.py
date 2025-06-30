@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
+from math import ceil
 from os import path
 import json
 import pygame as pg
 from pygame import SRCALPHA
 
-from src.sprites import Pixelart, Container
+from src.sprites import Container
 from src.sprite import Sprite
 
 if TYPE_CHECKING:
@@ -29,13 +30,13 @@ class TrafficLightSegment:
         Гарантируется, что изображение будет квадратным
         """
         image: pg.Surface = pg.Surface((size, size), SRCALPHA, 32).convert_alpha()
-        pixel_size: int = size // 16
+        pixel_size: float = size / 16
 
         pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = self.get_pixelart_by_value(value)
         for row in range(len(pixelart)):
             for pixel in range(len(pixelart)):
                 pg.draw.rect(image, pixelart[row][pixel], pg.Rect(
-                    pixel * pixel_size, row * pixel_size, pixel_size, pixel_size
+                    pixel * pixel_size, row * pixel_size, ceil(pixel_size), ceil(pixel_size)
                 ))
 
         return image
@@ -167,7 +168,7 @@ class TrafficLight(Sprite):
             Изображение со светофором заданной высоты
         """
         space: int = round(height / self.data.get_size()[1] * 0.1)
-        segment_size: int = round(height / self.data.get_size()[1])
+        segment_size: int = round(height / self.data.get_size()[1]) - space
 
         surface_size: tuple[int, int] = (round(space + (segment_size + space) * self.data.get_size()[0]), height)
         surface: pg.Surface = pg.Surface(surface_size, SRCALPHA, 32).convert_alpha()
