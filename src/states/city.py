@@ -22,7 +22,7 @@ class City(State):
                                           (255, 255, 255), align=TextAlign.LEFT))
 
         self.add_sprite('dashboard', Button(self.game, 1465, 10, 445, 70,
-                                            InBlockText(self.game, 'Панель', 16,
+                                            InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
 
