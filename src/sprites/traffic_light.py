@@ -176,8 +176,8 @@ class TrafficLight(Sprite):
 
         for segment in self.data.segments.values():
             segment_image = segment.get_image_by_value(segment.value, segment_size)
-            surface.blit(segment_image, (segment_size * segment.pos[0] + space * segment.pos[0],
-                                         segment_size * segment.pos[1] + space * segment.pos[1]))
+            surface.blit(segment_image, (space + segment_size * segment.pos[0] + space * segment.pos[0],
+                                         space + segment_size * segment.pos[1] + space * segment.pos[1]))
 
         return surface
 
