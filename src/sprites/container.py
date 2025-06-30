@@ -21,7 +21,7 @@ class Container(Sprite):
         ), 3)
         if self.placeholder is not None:
             placeholder: pg.Surface = self.placeholder()
-            self.image.blit(placeholder, (0, 0))
+            self.image.blit(placeholder, (3, 3))
 
     def update(self):
         pass
