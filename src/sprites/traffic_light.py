@@ -24,6 +24,22 @@ class TrafficLightSegment:
     def get_pixelart_by_value(self, value: str) -> tuple[tuple[tuple[int, int, int, int], ...]]:
         return self._get_texture()[value]
 
+    def get_image_by_value(self, value: str, size: int) -> pg.Surface:
+        """
+        Гарантируется, что изображение будет квадратным
+        """
+        image: pg.Surface = pg.Surface((size, size), SRCALPHA, 32).convert_alpha()
+        pixel_size: int = size // 16
+
+        pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = self.get_pixelart_by_value(value)
+        for row in range(len(pixelart)):
+            for pixel in range(len(pixelart)):
+                pg.draw.rect(image, pixelart[row][pixel], pg.Rect(
+                    pixel * pixel_size, row * pixel_size, pixel_size, pixel_size
+                ))
+
+        return image
+
     def _get_values(self) -> list[str]:
         """
         Получение всех возможных вариаций текстуры светофора
@@ -48,8 +64,10 @@ class TrafficLightData:
     Информация о светофоре, основываясь на его типе
     """
 
-    def __init__(self, tfl_type: str):
+    def __init__(self, uuid: str, tfl_type: str):
+        self.uuid: str = uuid
         self.tfl_type: str = tfl_type
+
         data: dict = self._get_traffic_light_data()
 
         self.url: str = data['url']
@@ -129,36 +147,36 @@ class TrafficLight(Sprite):
     или на панель.
     """
 
-    def __init__(self, game: 'Game', tfl_type: str):
+    def __init__(self, game: 'Game', uuid: str, tfl_type: str):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
-        self.data = TrafficLightData(tfl_type)
+        self.data = TrafficLightData(uuid, tfl_type)
         self.as_cover: bool = True
 
         self.update_view()
 
     def update_view(self):
-        if self.as_cover:
-            self.image = self.get_cover()
+        pass
 
-    def get_cover(self, image_size: tuple[int, int] = (50, 50)) -> pg.Surface:
+    def get_cover(self, height: int = 100) -> pg.Surface:
         """
         Получение обложки светофора для отображения в панели
+        Arguments:
+            height: Высота изображения
+        Returns:
+            Изображение со светофором заданной высоты
         """
-        indentation: int = image_size[0] // 10
-        surface_size: tuple[int, int] = (
-            self.data.get_size()[0] * image_size[0] + self.data.get_size()[0] * indentation + indentation,
-            self.data.get_size()[1] * image_size[1] + self.data.get_size()[1] * indentation + indentation)
-        surface: pg.Surface = pg.Surface(surface_size, SRCALPHA, 32).convert_alpha()
+        space: int = round(height / self.data.get_size()[1] * 0.1)
+        segment_size: int = round(height / self.data.get_size()[1])
 
-        surface.blit(Container(self.game, (0, 0), surface_size).image, (0, 0))
+        surface_size: tuple[int, int] = (round(space + (segment_size + space) * self.data.get_size()[0]), height)
+        surface: pg.Surface = pg.Surface(surface_size, SRCALPHA, 32).convert_alpha()
+        surface.blit(Container(self.game, (0, 0), (0, 0)).image, (0, 0))
 
         for segment in self.data.segments.values():
-            pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
-            pixel_size: float = min(image_size[0] / len(pixelart[0]), image_size[1] / len(pixelart[1]))
-            surface.blit(Pixelart(self.game, (0, 0), image_size, pixelart).image,
-                         (pixel_size * len(pixelart[0]) * segment.pos[0] + indentation * segment.pos[0] + indentation,
-                          pixel_size * len(pixelart[0]) * segment.pos[1] + indentation * segment.pos[1] + indentation))
+            segment_image = segment.get_image_by_value(segment.value, segment_size)
+            surface.blit(segment_image, (segment_size * segment.pos[0] + space * segment.pos[0],
+                                         segment_size * segment.pos[1] + space * segment.pos[1]))
 
         return surface
 
