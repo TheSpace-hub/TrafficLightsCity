@@ -22,12 +22,20 @@ class Dashboard(State):
         self.add_sprite('traffic_lights_id_text', Text(self.game, (10, 10), 'Список ID светофоров:', 18,
                                                        (255, 255, 255), align=TextAlign.LEFT))
         self._add_traffic_lights_ids()
+        self._add_traffic_lights_images()
 
     def _add_traffic_lights_ids(self):
         for i in range(len(self.traffic_lights)):
-            self.add_sprite(f'traffic_light_{i}_id',
+            traffic_light = self.traffic_lights[i]
+            self.add_sprite(f'traffic_light_{traffic_light.data.uuid}_uuid',
                             Text(self.game, (30, 50 + 30 * i), self.traffic_lights[i].data.uuid,
                                  16, (255, 255, 255), align=TextAlign.LEFT))
+
+    def _add_traffic_lights_images(self):
+        for i in range(len(self.traffic_lights)):
+            traffic_light = self.traffic_lights[i]
+            self.add_sprite(f'traffic_light_{traffic_light.data.uuid}',
+                            Container(self.game, (410 + i * 100, 10), (106, 106), traffic_light.get_cover))
 
     def update(self):
         pass
