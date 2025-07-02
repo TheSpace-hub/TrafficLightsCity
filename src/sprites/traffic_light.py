@@ -164,25 +164,30 @@ class TrafficLight(Sprite):
     def update_view(self):
         pass
 
-    def get_cover(self, height: int = 94) -> pg.Surface:
+    def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
         Получение обложки светофора для отображения в панели
         Arguments:
             height: Высота изображения
+            wight: Укажите ширину изображения, если нужно расположить его по центу. Если значение не указано, то ширина будет наименьшей
         Returns:
             Изображение со светофором заданной высоты
         """
         space: int = round(height / self.data.get_size()[1] * 0.1)
         segment_size: int = round(height / self.data.get_size()[1]) - space
 
-        surface_size: tuple[int, int] = (round(space + (segment_size + space) * self.data.get_size()[0]), height)
+        surface_size: tuple[int, int] = (
+            wight if wight else round(space + (segment_size + space) * self.data.get_size()[0]), height)
         surface: pg.Surface = pg.Surface(surface_size, SRCALPHA, 32).convert_alpha()
         surface.blit(Container(self.game, (0, 0), (0, 0)).image, (0, 0))
 
+        offset_for_centering: int = (wight - round(
+            space + (segment_size + space) * self.data.get_size()[0])) // 2 if wight else 0
         for segment in self.data.segments.values():
             segment_image = segment.get_image_by_value(segment.value, segment_size)
-            surface.blit(segment_image, (space + segment_size * segment.pos[0] + space * segment.pos[0],
-                                         space + segment_size * segment.pos[1] + space * segment.pos[1]))
+            surface.blit(segment_image,
+                         (offset_for_centering + space + segment_size * segment.pos[0] + space * segment.pos[0],
+                          space + segment_size * segment.pos[1] + space * segment.pos[1]))
 
         return surface
 
