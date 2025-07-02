@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from math import ceil
 from os import path
+from pathlib import Path
 import json
 import pygame as pg
 from pygame import SRCALPHA
@@ -86,6 +87,10 @@ class TrafficLightData:
     def set_state(self, state: int):
         self._state = state
         self._update_segments()
+
+    @staticmethod
+    def get_all_types() -> list[str]:
+        return [way.stem for way in Path(path.join('saves', 'traffic_lights')).glob('*.json')]
 
     def _update_segments(self):
         for name, segment in self.segments.items():
