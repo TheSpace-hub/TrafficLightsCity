@@ -4,7 +4,8 @@ import pygame as pg
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus
+from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TrafficLightData, \
+    Container
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -25,6 +26,7 @@ class City(State):
                                             InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
+        self.add_traffic_lights_build_buttons()
 
     def update(self):
         field: Field = self.get_sprite('field')
@@ -58,6 +60,14 @@ class City(State):
                         field.camera_offset[1] + int(
                             direction[key][1] * field.move_speed * field.get_camera_distance()))
             field.update_view()
+
+    def add_traffic_lights_build_buttons(self):
+        traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
+        for i in range(len(traffic_lights)):
+            self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
+                            Button(self.game, 10 + i * 110, 970, 100, 100,
+                                   InBlockText(self.game, '', 0, (0, 0, 0)),
+                                   placeholder=traffic_lights[i].get_cover))
 
     def enter(self):
         field_sizes: dict[str, tuple[int, int]] = {

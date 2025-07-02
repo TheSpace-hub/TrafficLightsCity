@@ -11,10 +11,10 @@ class Dashboard(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
         self.traffic_lights: list[TrafficLight] = [
-            TrafficLight(self.game, 'moscow_1', 'basic'),
-            TrafficLight(self.game, 'moscow_2', 'basic'),
-            TrafficLight(self.game, 'moscow_3', 'arrow'),
-            TrafficLight(self.game, 'moscow_4', 'arrow')
+            TrafficLight(self.game, 'basic', 'moscow_1'),
+            TrafficLight(self.game, 'arrow', 'moscow_2'),
+            TrafficLight(self.game, 'basic', 'moscow_3'),
+            TrafficLight(self.game, 'arrow', 'moscow_4'),
         ]
 
     def boot(self):

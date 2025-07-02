@@ -66,7 +66,7 @@ class TrafficLightData:
     Информация о светофоре, основываясь на его типе
     """
 
-    def __init__(self, uuid: str, tfl_type: str):
+    def __init__(self, tfl_type: str, uuid: str):
         self.uuid: str = uuid
         self.tfl_type: str = tfl_type
 
@@ -153,10 +153,10 @@ class TrafficLight(Sprite):
     или на панель.
     """
 
-    def __init__(self, game: 'Game', uuid: str, tfl_type: str):
+    def __init__(self, game: 'Game', tfl_type: str, uuid: str | None = None):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
-        self.data = TrafficLightData(uuid, tfl_type)
+        self.data = TrafficLightData(tfl_type, uuid)
         self.as_cover: bool = True
 
         self.update_view()

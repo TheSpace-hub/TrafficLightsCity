@@ -44,7 +44,8 @@ class InBlockText(Text):
 
 class Button(Sprite):
     def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
-                 func: Callable[[ButtonStatus], None] = None, enabled: bool = True, offset: tuple[int, int] = (0, 0)):
+                 func: Callable[[ButtonStatus], None] = None, enabled: bool = True, offset: tuple[int, int] = (0, 0),
+                 placeholder: Callable[[], pg.Surface] | None = None):
         super().__init__(game, (size_x, size_y), (x, y))
         self.text: InBlockText = text
         self.func: Callable[[ButtonStatus], None] = func
@@ -53,6 +54,7 @@ class Button(Sprite):
         self.view: ButtonView = ButtonView.NORMAL
         self.enabled: bool = enabled
         self.offset: tuple[int, int] = offset
+        self.placeholder: Callable[[], pg.Surface] | None = placeholder
 
         text.correct_position((size_x, size_y))
 
@@ -67,6 +69,9 @@ class Button(Sprite):
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
             0, 0, self.image.get_size()[0], self.image.get_size()[1]
         ), 3)
+        if self.placeholder is not None:
+            placeholder: pg.Surface = self.placeholder()
+            self.image.blit(placeholder, (3, 3))
 
     def update(self):
         if (self.rect.x < pg.mouse.get_pos()[0] - self.offset[0] < self.rect.x + self.image.get_size()[
