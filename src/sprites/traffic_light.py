@@ -164,7 +164,7 @@ class TrafficLight(Sprite):
     def update_view(self):
         pass
 
-    def get_cover(self, height: int = 100) -> pg.Surface:
+    def get_cover(self, height: int = 94) -> pg.Surface:
         """
         Получение обложки светофора для отображения в панели
         Arguments:
