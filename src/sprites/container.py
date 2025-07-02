@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, Any
+from typing import TYPE_CHECKING, Callable
 import pygame as pg
 
 from src.sprite import Sprite
