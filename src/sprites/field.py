@@ -39,11 +39,38 @@ class Field(Sprite):
             tile = self.view_field[pos]
             self.image.blit(tile.image, self._get_offset_from_coordinates(pos))
 
+            coord = self._get_offset_from_coordinates(
+                self.get_tile_position_by_coordinates(pg.mouse.get_pos())
+            )
+            pg.draw.rect(self.image, (255, 255, 255), pg.Rect(
+                coord[0], coord[1], tile.image.get_size()[0], tile.image.get_size()[1]
+            ), 1)
+
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def get_selected_tile(self, coord: tuple[int, int]) -> tuple[int, int]:
-        return self._get_tile_position_by_coordinates(coord)
+    def get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
+        """
+        Получение координаты тайла на поле по координатам точки на экране
+
+        Решение системы уравнений из (1) и (2):
+        (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
+        (2) k2 = (UxWy - UyWx) / (UxVy - UyVx)
+        Где k1 - кол-во векторов "y" и k2 - кол-во векторов "x"
+
+        Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
+        """
+        wx = coord[0] - self._get_offset_from_coordinates((0, 0))[0]
+        wy = coord[1] - self._get_offset_from_coordinates((0, 0))[1]
+        ux = self._get_zero_vector()[0][0] * 2
+        uy = self._get_zero_vector()[0][1] * 2
+        vx = self._get_zero_vector()[1][0] * 2
+        vy = self._get_zero_vector()[1][1] * 2
+
+        coord = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
+        while self._does_tile_extend_beyond_field(coord):
+            coord = (coord[0], coord[1] + 1)
+        return coord
 
     def change_camera_distance(self, offset: float):
         if not (0.5 <= self._camera_distance + offset <= 2):
@@ -71,13 +98,13 @@ class Field(Sprite):
 
     def _get_number_of_initial_tiles(self) -> int:
         updated_pos: list[tuple[int, int]] = []
-        x, y = self._get_position_of_beginning_of_construction()
+        coord = self._get_position_of_beginning_of_construction()
 
         for delta_y in [1, -1]:
-            y = self._get_position_of_beginning_of_construction()[1]
-            while not self._does_tile_extend_beyond_field(x, y):
-                updated_pos.append((x, y))
-                y += delta_y
+            coord = (coord[0], self._get_position_of_beginning_of_construction()[1])
+            while not self._does_tile_extend_beyond_field(coord):
+                updated_pos.append(coord)
+                coord = (coord[0], coord[1] + delta_y)
 
         return len(updated_pos)
 
@@ -135,35 +162,12 @@ class Field(Sprite):
         return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (coord[0] + coord[1]),
                 self.camera_offset[1] + self._get_half_of_tile_size()[1] * (coord[1] - coord[0]))
 
-    def _get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
-        """
-        Получение координаты тайла на поле по координатам точки на экране
-
-        Решение системы уравнений из (1) и (2):
-        (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
-        (2) k2 = (UxWy - UyWx) / (UxVy - UyVx)
-        Где k1 - кол-во векторов "y" и k2 - кол-во векторов "x"
-
-        Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
-        """
-        wx = coord[0] - self._get_offset_from_coordinates((0, 0))[0]
-        wy = coord[1] - self._get_offset_from_coordinates((0, 0))[1]
-        ux = self._get_zero_vector()[0][0] * 2
-        uy = self._get_zero_vector()[0][1] * 2
-        vx = self._get_zero_vector()[1][0] * 2
-        vy = self._get_zero_vector()[1][1] * 2
-
-        coord = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
-        while self._does_tile_extend_beyond_field(coord):
-            coord = (coord[0], coord[1] + 1)
-        return coord
-
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         """
         Наход координаты тайла с которого стоит начинать строительство карты.
         Оптимальный тайл находится на середине карты.
         """
-        return self._get_tile_position_by_coordinates((960, 540))
+        return self.get_tile_position_by_coordinates((960, 540))
 
     def _get_tile_center_pos(self, x: int, y: int) -> tuple[int, int]:
         return (
