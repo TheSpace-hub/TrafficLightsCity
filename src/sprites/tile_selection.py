@@ -12,7 +12,7 @@ class TileSelection(Sprite):
     def __init__(self, game: 'Game', filed: 'Field'):
         super().__init__(game, (1920, 1080))
         self.field: 'Field' = filed
-        self.update_view()
+        self._visible: bool = False
 
     def update_view(self):
         self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
@@ -23,5 +23,13 @@ class TileSelection(Sprite):
             map(lambda pos: (pos[0] + coord[0], pos[1] + coord[1]), self.field.get_tile_as_polygon()))
         pg.draw.polygon(self.image, (255, 255, 255), polygon, 3)
 
+    def is_visible(self) -> bool:
+        return self._visible
+
+    def set_visible(self):
+        self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
+        self._visible = True
+
     def update(self):
-        self.update_view()
+        if self._visible:
+            self.update_view()
