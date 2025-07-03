@@ -19,9 +19,9 @@ class TileSelection(Sprite):
         coord = self.field.get_offset_from_coordinates(
             self.field.get_tile_position_by_coordinates(pg.mouse.get_pos())
         )
-        pg.draw.rect(self.image, (255, 255, 255), pg.Rect(
-            coord[0], coord[1], self.field.get_half_of_tile_size()[0] * 2, self.field.get_half_of_tile_size()[1] * 2
-        ), 3)
+        polygon: list[tuple[int, int]] = list(
+            map(lambda pos: (pos[0] + coord[0], pos[1] + coord[1]), self.field.get_tile_as_polygon()))
+        pg.draw.polygon(self.image, (255, 255, 255), polygon, 3)
 
     def update(self):
         self.update_view()

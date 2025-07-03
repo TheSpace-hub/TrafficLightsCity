@@ -100,6 +100,14 @@ class Field(Sprite):
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
                                      self.perspective_angle, self._camera_distance)
 
+    def get_tile_as_polygon(self) -> list[tuple[int, int]]:
+        return [
+            (0, self.get_half_of_tile_size()[1]),
+            (self.get_half_of_tile_size()[0], 0),
+            (self.get_half_of_tile_size()[0] * 2, self.get_half_of_tile_size()[1]),
+            (self.get_half_of_tile_size()[0], self.get_half_of_tile_size()[1] * 2)
+        ]
+
     def _get_number_of_initial_tiles(self) -> int:
         updated_pos: list[tuple[int, int]] = []
         coord = self._get_position_of_beginning_of_construction()
