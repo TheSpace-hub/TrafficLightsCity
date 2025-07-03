@@ -5,7 +5,7 @@ import pygame as pg
 from src.state import State
 
 from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TrafficLightData, \
-    Container
+    TileSelection
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -17,7 +17,7 @@ class City(State):
         self.a = 0.52
 
     def boot(self):
-        self.add_sprite('field', Field(self.game))
+        filed: Field = self.add_sprite('field', Field(self.game))
 
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
@@ -26,6 +26,7 @@ class City(State):
                                             InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
+        self.add_sprite('tile_selection', TileSelection(self.game, filed))
         self.add_traffic_lights_build_buttons()
 
     def update(self):

@@ -9,19 +9,19 @@ if TYPE_CHECKING:
 
 
 class TileSelection(Sprite):
-    def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int], filed: 'Field'):
-        super().__init__(game, size, pos)
+    def __init__(self, game: 'Game', filed: 'Field'):
+        super().__init__(game, (1920, 1080))
         self.field: 'Field' = filed
         self.update_view()
 
     def update_view(self):
-        self.image.fill((32, 32, 32))
+        self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
         coord = self.field.get_offset_from_coordinates(
             self.field.get_tile_position_by_coordinates(pg.mouse.get_pos())
         )
         pg.draw.rect(self.image, (255, 255, 255), pg.Rect(
             coord[0], coord[1], self.field.get_half_of_tile_size()[0] * 2, self.field.get_half_of_tile_size()[1] * 2
-        ), 1)
+        ), 3)
 
     def update(self):
-        pass
+        self.update_view()
