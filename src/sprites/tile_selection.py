@@ -26,9 +26,9 @@ class TileSelection(Sprite):
     def is_visible(self) -> bool:
         return self._visible
 
-    def set_visible(self):
+    def set_visible(self, visible: bool):
         self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
-        self._visible = True
+        self._visible = visible
 
     def update(self):
         if self._visible:

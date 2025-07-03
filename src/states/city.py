@@ -42,6 +42,7 @@ class City(State):
             self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
                             Button(self.game, (10 + i * 110, 970), (100, 100),
                                    InBlockText(self.game, '', 0, (0, 0, 0)),
+                                   func=self.on_traffic_light_build_button_pressed,
                                    placeholder=traffic_lights[i].get_cover))
 
     def enter(self):
@@ -60,6 +61,11 @@ class City(State):
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Dashboard')
+
+    def on_traffic_light_build_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            tile_selection: TileSelection = self.get_sprite('tile_selection')
+            tile_selection.set_visible(True)
 
     def movement(self):
         field: Field = self.get_sprite('field')
