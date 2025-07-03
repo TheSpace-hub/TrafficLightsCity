@@ -61,8 +61,12 @@ class City(State):
                             direction[key][1] * field.move_speed * field.get_camera_distance()))
             field.update_view()
 
-    def add_traffic_lights_build_buttons(self):
+    def add_traffic_lights_build_buttons(self, state: int = 0):
         traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
+
+        for t in traffic_lights:
+            t.data.set_state(min(state, len(t.data.states) - 1))
+
         for i in range(len(traffic_lights)):
             self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
                             Button(self.game, 10 + i * 110, 970, 100, 100,
