@@ -37,14 +37,13 @@ class Field(Sprite):
         self._update_tiles()
         for pos in self.view_field.keys():
             tile = self.view_field[pos]
-            self.image.blit(tile.image, self._get_offset_from_coordinates(pos[0], pos[1]))
+            self.image.blit(tile.image, self._get_offset_from_coordinates(pos))
 
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
-    def get_selected_tile(self, mouse_pos: tuple[int, int]) -> tuple[int, int]:
-
-        return 0, 0
+    def get_selected_tile(self, coord: tuple[int, int]) -> tuple[int, int]:
+        return self._get_tile_position_by_coordinates(coord)
 
     def change_camera_distance(self, offset: float):
         if not (0.5 <= self._camera_distance + offset <= 2):
@@ -54,9 +53,7 @@ class Field(Sprite):
 
         self._camera_distance = round(self._camera_distance + offset, 1)
 
-        position_of_zero_tile_after: tuple[int, int] = self._get_offset_from_coordinates(
-            location_of_zero_tile_before[0], location_of_zero_tile_before[1]
-        )
+        position_of_zero_tile_after: tuple[int, int] = self._get_offset_from_coordinates(location_of_zero_tile_before)
 
         deviation: tuple[int, int] = (960 - position_of_zero_tile_after[0],
                                       540 - position_of_zero_tile_after[1])
@@ -89,19 +86,19 @@ class Field(Sprite):
     #  P.S. Можно сделать 2 начальных тайла в правом нижнем и левом верхнем углах
     def _update_tiles(self):
         updated_pos: list[tuple[int, int]] = []
-        x, y = self._get_position_of_beginning_of_construction()
+        coord: tuple[int, int] = self._get_position_of_beginning_of_construction()
 
         for delta_y in [1, -1]:
-            y = self._get_position_of_beginning_of_construction()[1]
-            while not self._does_tile_extend_beyond_field(x, y):
-                updated_pos.append((x, y))
-                x = self._get_position_of_beginning_of_construction()[0]
+            coord = (coord[0], self._get_position_of_beginning_of_construction()[1])
+            while not self._does_tile_extend_beyond_field(coord):
+                updated_pos.append(coord)
+                coord = (self._get_position_of_beginning_of_construction()[0], coord[1])
                 for delta_x in [1, -1]:
-                    while not self._does_tile_extend_beyond_field(x, y):
-                        x += delta_x
-                        updated_pos.append((x, y))
-                    x = self._get_position_of_beginning_of_construction()[0]
-                y += delta_y
+                    while not self._does_tile_extend_beyond_field(coord):
+                        coord = (coord[0] + delta_x, coord[1])
+                        updated_pos.append(coord)
+                    coord = (self._get_position_of_beginning_of_construction()[0], coord[1])
+                coord = (coord[0], coord[1] + delta_y)
 
         updated_field: dict[tuple[int, int], Tile] = {}
         for pos in updated_pos[:]:
@@ -131,12 +128,12 @@ class Field(Sprite):
         xy = -round(self._get_half_of_tile_size()[1] / 2)
         return (xx, xy), (yx, yy)
 
-    def _get_offset_from_coordinates(self, x: int, y: int):
+    def _get_offset_from_coordinates(self, coord: tuple[int, int]):
         """
         Получить координаты на экране в зависимости от координат тайла и смещения камеры
         """
-        return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
-                self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
+        return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (coord[0] + coord[1]),
+                self.camera_offset[1] + self._get_half_of_tile_size()[1] * (coord[1] - coord[0]))
 
     def _get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
         """
@@ -149,17 +146,17 @@ class Field(Sprite):
 
         Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
         """
-        wx = coord[0] - self._get_offset_from_coordinates(0, 0)[0]
-        wy = coord[1] - self._get_offset_from_coordinates(0, 0)[1]
+        wx = coord[0] - self._get_offset_from_coordinates((0, 0))[0]
+        wy = coord[1] - self._get_offset_from_coordinates((0, 0))[1]
         ux = self._get_zero_vector()[0][0] * 2
         uy = self._get_zero_vector()[0][1] * 2
         vx = self._get_zero_vector()[1][0] * 2
         vy = self._get_zero_vector()[1][1] * 2
 
-        x, y = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
-        while self._does_tile_extend_beyond_field(x, y):
-            y += 1
-        return x, y
+        coord = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
+        while self._does_tile_extend_beyond_field(coord):
+            coord = (coord[0], coord[1] + 1)
+        return coord
 
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         """
@@ -168,33 +165,10 @@ class Field(Sprite):
         """
         return self._get_tile_position_by_coordinates((960, 540))
 
-    def _get_position_of_ending_of_construction(self) -> tuple[int, int]:
-        """
-        Решение системы уравнений из (1) и (2):
-        (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
-        (2) k2 = (UxWy - UyWx) / (UxVy - UyVx)
-        Где k1 - кол-во векторов "y" и k2 - кол-во векторов "x"
-
-        Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
-        """
-        wx = self._get_half_of_tile_size()[0] - self._get_offset_from_coordinates(0, 0)[0] - \
-             self._get_half_of_tile_size()[0]
-        wy = self._get_half_of_tile_size()[1] - self._get_offset_from_coordinates(0, 0)[1] - \
-             self._get_half_of_tile_size()[1]
-        ux = self._get_zero_vector()[0][0] * 2
-        uy = self._get_zero_vector()[0][1] * 2
-        vx = self._get_zero_vector()[1][0] * 2
-        vy = self._get_zero_vector()[1][1] * 2
-
-        x, y = round((wx * vy - wy * vx) / (ux * vy - uy * vx)), round((ux * wy - uy * wx) / (ux * vy - uy * vx)) - 1
-        while self._does_tile_extend_beyond_field(x, y):
-            y += 1
-        return x, y
-
     def _get_tile_center_pos(self, x: int, y: int) -> tuple[int, int]:
         return (
-            self._get_offset_from_coordinates(x, y)[0] + self._get_half_of_tile_size()[0],
-            self._get_offset_from_coordinates(x, y)[1] + self._get_half_of_tile_size()[1]
+            self._get_offset_from_coordinates((x, y))[0] + self._get_half_of_tile_size()[0],
+            self._get_offset_from_coordinates((x, y))[1] + self._get_half_of_tile_size()[1]
         )
 
     def _get_half_of_tile_size(self, c_distance: float = None) -> tuple[int, int]:
@@ -204,11 +178,11 @@ class Field(Sprite):
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
                                      self.perspective_angle, camera_distance)
 
-    def _does_tile_extend_beyond_field(self, x: int, y: int) -> bool:
-        return not (self._get_offset_from_coordinates(x, y)[0] < 1920 and self._get_offset_from_coordinates(x, y)[
+    def _does_tile_extend_beyond_field(self, coord: tuple[int, int]) -> bool:
+        return not (self._get_offset_from_coordinates(coord)[0] < 1920 and self._get_offset_from_coordinates(coord)[
             1] < 1080
-                    and self._get_offset_from_coordinates(x, y)[0] + 2 * self._get_half_of_tile_size()[0] > 0 and
-                    self._get_offset_from_coordinates(x, y)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
+                    and self._get_offset_from_coordinates(coord)[0] + 2 * self._get_half_of_tile_size()[0] > 0 and
+                    self._get_offset_from_coordinates(coord)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
 
     def update(self):
         pass
