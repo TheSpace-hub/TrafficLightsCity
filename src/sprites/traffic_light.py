@@ -66,8 +66,8 @@ class TrafficLightData:
     Информация о светофоре, основываясь на его типе
     """
 
-    def __init__(self, tfl_type: str, uuid: str):
-        self.uuid: str = uuid
+    def __init__(self, tfl_type: str, uuid: str | None):
+        self.uuid: str | None = uuid
         self.tfl_type: str = tfl_type
 
         data: dict = self._get_traffic_light_data()
