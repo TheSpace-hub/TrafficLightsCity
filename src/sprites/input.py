@@ -23,10 +23,10 @@ class Formatting(Enum):
 
 
 class Input(Sprite):
-    def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
+    def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int], text: InBlockText,
                  placeholder: InBlockText, formatting: Formatting = Formatting.NO_FORMATTING, limit: int = 0,
                  enabled: bool = True):
-        super().__init__(game, (size_x, size_y), (x, y))
+        super().__init__(game, size, pos)
         self.text: InBlockText = text
         self.placeholder: InBlockText = placeholder
         self.status: InputStatus = InputStatus.NONE
@@ -34,8 +34,8 @@ class Input(Sprite):
         self.formatting: Formatting = formatting
         self.enabled: bool = enabled
 
-        text.correct_position((size_x, size_y))
-        placeholder.correct_position((size_x, size_y))
+        text.correct_position(size)
+        placeholder.correct_position(size)
 
         self.update_view()
 

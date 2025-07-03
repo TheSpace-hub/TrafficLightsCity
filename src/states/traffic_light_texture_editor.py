@@ -18,7 +18,7 @@ class TrafficLightTextureEditor(State):
         self.current_container: int = 0
 
     def boot(self):
-        self.add_sprite('texture_name_input', Input(self.game, 100, 50, 700, 70,
+        self.add_sprite('texture_name_input', Input(self.game, (100, 50), (700, 70),
                                                     InBlockText(self.game, '', 16, (255, 255, 255)),
                                                     InBlockText(self.game, 'Введите ID текстуры', 16,
                                                                 (128, 128, 128)),
@@ -51,7 +51,7 @@ class TrafficLightTextureEditor(State):
                                 Pixelart(self.game, (110, 220 + 110 * self.current_container), (80, 80),
                                          Pixelart.get_pixelart_by_image(file_path)))
                 self.add_sprite(f'pixelart_name_input_{self.current_container}',
-                                Input(self.game, 200, 225 + 110 * self.current_container, 380, 70,
+                                Input(self.game, (200, 225 + 110 * self.current_container), (380, 70),
                                       InBlockText(self.game, image_name, 16, (255, 255, 255)),
                                       InBlockText(self.game, 'Введите ID картинки', 16, (128, 128, 128)),
                                       Formatting.NORMALIZED

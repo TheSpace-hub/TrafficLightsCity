@@ -13,7 +13,7 @@ class CreateCity(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('seed_input', Input(self.game, 510, 460, 900, 70,
+        self.add_sprite('seed_input', Input(self.game, (510, 460), (900, 70),
                                             InBlockText(self.game, '', 16,
                                                         (255, 255, 255)),
                                             InBlockText(self.game, 'Введите seed или оставьте пустым',
