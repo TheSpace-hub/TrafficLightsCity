@@ -36,6 +36,7 @@ class Game:
 
         self.omitted_buttons: list[int] = []
         self.omitted_mouse_buttons: list[int] = []
+        self.is_mouse_move: bool = False
 
         self.running: bool = True
         self.delta_time: float = 0
@@ -54,6 +55,7 @@ class Game:
         while self.running:
             self.omitted_buttons = []
             self.omitted_mouse_buttons = []
+            self.is_mouse_move = False
             self.mouse_offset = (0, 0)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -63,6 +65,7 @@ class Game:
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     self.omitted_mouse_buttons.append(event.button)
                 if event.type == pg.MOUSEMOTION:
+                    self.is_mouse_move = True
                     self.mouse_offset = (pg.mouse.get_pos()[0] - self._previous_mouse_location[0],
                                          pg.mouse.get_pos()[1] - self._previous_mouse_location[1])
                     if self.lock_mouse:
