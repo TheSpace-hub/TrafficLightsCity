@@ -29,6 +29,38 @@ class City(State):
         self.add_traffic_lights_build_buttons()
 
     def update(self):
+        self.movement()
+
+    def add_traffic_lights_build_buttons(self, state: int = 0):
+        traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
+
+        for t in traffic_lights:
+            t.data.set_state(min(state, len(t.data.states) - 1))
+
+        for i in range(len(traffic_lights)):
+            self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
+                            Button(self.game, 10 + i * 110, 970, 100, 100,
+                                   InBlockText(self.game, '', 0, (0, 0, 0)),
+                                   placeholder=traffic_lights[i].get_cover))
+
+    def enter(self):
+        field_sizes: dict[str, tuple[int, int]] = {
+            'small': (30, 30),
+            'medium': (50, 50),
+            'large': (80, 80)
+        }
+        field_size = self.game.transmitted_data['field_size']
+        seed = self.game.transmitted_data['seed']
+
+        field: Field = self.get_sprite('field')
+        field.generate_field(seed, field_sizes[field_size])
+        field.update_view()
+
+    def on_dashboard_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.game.change_state('Dashboard')
+
+    def movement(self):
         field: Field = self.get_sprite('field')
         if pg.key.get_pressed()[pg.K_u]:
             field.perspective_angle = min(field.perspective_angle + 0.1, pi / 4)
@@ -60,35 +92,6 @@ class City(State):
                         field.camera_offset[1] + int(
                             direction[key][1] * field.move_speed * field.get_camera_distance()))
             field.update_view()
-
-    def add_traffic_lights_build_buttons(self, state: int = 0):
-        traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
-
-        for t in traffic_lights:
-            t.data.set_state(min(state, len(t.data.states) - 1))
-
-        for i in range(len(traffic_lights)):
-            self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
-                            Button(self.game, 10 + i * 110, 970, 100, 100,
-                                   InBlockText(self.game, '', 0, (0, 0, 0)),
-                                   placeholder=traffic_lights[i].get_cover))
-
-    def enter(self):
-        field_sizes: dict[str, tuple[int, int]] = {
-            'small': (30, 30),
-            'medium': (50, 50),
-            'large': (80, 80)
-        }
-        field_size = self.game.transmitted_data['field_size']
-        seed = self.game.transmitted_data['seed']
-
-        field: Field = self.get_sprite('field')
-        field.generate_field(seed, field_sizes[field_size])
-        field.update_view()
-
-    def on_dashboard_button_pressed(self, status: ButtonStatus):
-        if status == ButtonStatus.PRESSED:
-            self.game.change_state('Dashboard')
 
     def exit(self):
         pass

@@ -42,6 +42,10 @@ class Field(Sprite):
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
+    def get_selected_tile(self, mouse_pos: tuple[int, int]) -> tuple[int, int]:
+
+        return 0, 0
+
     def change_camera_distance(self, offset: float):
         if not (0.5 <= self._camera_distance + offset <= 2):
             return
@@ -134,10 +138,9 @@ class Field(Sprite):
         return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (x + y),
                 self.camera_offset[1] + self._get_half_of_tile_size()[1] * (y - x))
 
-    def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
+    def _get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
         """
-        Наход координаты тайла с которого стоит начинать строительство карты.
-        Оптимальный тайл находится на середине карты.
+        Получение координаты тайла на поле по координатам точки на экране
 
         Решение системы уравнений из (1) и (2):
         (1) k1 = (WxUy - WyUx) / (UxVy - UyVx)
@@ -146,8 +149,8 @@ class Field(Sprite):
 
         Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
         """
-        wx = 960 - self._get_offset_from_coordinates(0, 0)[0]
-        wy = 540 - self._get_offset_from_coordinates(0, 0)[1]
+        wx = coord[0] - self._get_offset_from_coordinates(0, 0)[0]
+        wy = coord[1] - self._get_offset_from_coordinates(0, 0)[1]
         ux = self._get_zero_vector()[0][0] * 2
         uy = self._get_zero_vector()[0][1] * 2
         vx = self._get_zero_vector()[1][0] * 2
@@ -157,6 +160,13 @@ class Field(Sprite):
         while self._does_tile_extend_beyond_field(x, y):
             y += 1
         return x, y
+
+    def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
+        """
+        Наход координаты тайла с которого стоит начинать строительство карты.
+        Оптимальный тайл находится на середине карты.
+        """
+        return self._get_tile_position_by_coordinates((960, 540))
 
     def _get_position_of_ending_of_construction(self) -> tuple[int, int]:
         """
