@@ -25,11 +25,11 @@ class ChoiceOfSeveralOptions(Sprite):
         self.func: Callable[[str], None] = func
         self.enabled: bool = enabled
 
-        self.button_previous: Button = Button(self.game, 0, 0, self.image.get_size()[1], self.image.get_size()[1],
+        self.button_previous: Button = Button(self.game, (0, 0), (self.image.get_size()[1], self.image.get_size()[1]),
                                               InBlockText(self.game, '<', 16, (255, 255, 255)),
                                               self.on_previous_button_pressed, offset=pos)
-        self.button_next: Button = Button(self.game, self.image.get_size()[0] - self.image.get_size()[1], 0,
-                                          self.image.get_size()[1], self.image.get_size()[1],
+        self.button_next: Button = Button(self.game, (self.image.get_size()[0] - self.image.get_size()[1], 0),
+                                          (self.image.get_size()[1], self.image.get_size()[1]),
                                           InBlockText(self.game, '>', 16, (255, 255, 255)),
                                           self.on_next_button_pressed, offset=pos)
 

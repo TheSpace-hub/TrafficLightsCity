@@ -27,13 +27,13 @@ class CreateCity(State):
         ]
         self.add_sprite('field_size', ChoiceOfSeveralOptions(self.game, (510, 540), (900, 70),
                                                              field_sizes))
-        self.add_sprite('create_city', Button(self.game, 510, 620, 900, 70,
+        self.add_sprite('create_city', Button(self.game, (510, 620), (900, 70),
                                               InBlockText(self.game, 'Создать новый город',
                                                           16, (255, 255, 255)),
                                               self.on_create_city_button_pressed
                                               ))
 
-        self.add_sprite('back', Button(self.game, 1710, 1000, 200, 70,
+        self.add_sprite('back', Button(self.game, (1710, 1000), (200, 70),
                                        InBlockText(self.game, 'Назад', 16,
                                                    (255, 255, 255)),
                                        self.on_back_button_pressed))

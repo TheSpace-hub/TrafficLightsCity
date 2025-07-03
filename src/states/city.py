@@ -22,7 +22,7 @@ class City(State):
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
-        self.add_sprite('dashboard', Button(self.game, 1465, 10, 445, 70,
+        self.add_sprite('dashboard', Button(self.game, (1465, 10), (445, 70),
                                             InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
@@ -40,7 +40,7 @@ class City(State):
 
         for i in range(len(traffic_lights)):
             self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
-                            Button(self.game, 10 + i * 110, 970, 100, 100,
+                            Button(self.game, (10 + i * 110, 970), (100, 100),
                                    InBlockText(self.game, '', 0, (0, 0, 0)),
                                    placeholder=traffic_lights[i].get_cover))
 

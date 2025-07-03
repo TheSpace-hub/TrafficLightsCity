@@ -24,10 +24,10 @@ class TrafficLightTextureEditor(State):
                                                                 (128, 128, 128)),
                                                     Formatting.NORMALIZED
                                                     ))
-        self.add_sprite('add_image_button', Button(self.game, 100, 130, 400, 70,
+        self.add_sprite('add_image_button', Button(self.game, (100, 130), (400, 70),
                                                    InBlockText(self.game, 'Добавить изображение', 16,
                                                                (255, 255, 255)), self.on_add_image_button_pressed))
-        self.add_sprite('create_texture_button', Button(self.game, 510, 130, 400, 70,
+        self.add_sprite('create_texture_button', Button(self.game, (510, 130), (400, 70),
                                                         InBlockText(self.game, 'Создать текстуру', 16,
                                                                     (255, 255, 255)),
                                                         self.on_create_texture_button_pressed,

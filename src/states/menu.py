@@ -13,25 +13,25 @@ class Menu(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('create_city', Button(self.game, 510, 460, 900, 70,
+        self.add_sprite('create_city', Button(self.game, (510, 460), (900, 70),
                                               InBlockText(self.game, 'Создать город', 16,
                                                           (255, 255, 255)),
                                               self.on_create_world_button_pressed))
-        self.add_sprite('open_city', Button(self.game, 510, 540, 900, 70,
+        self.add_sprite('open_city', Button(self.game, (510, 540), (900, 70),
                                             InBlockText(self.game, 'Открыть город', 16,
                                                         (255, 255, 255))))
-        self.add_sprite('traffic_light_editor', Button(self.game, 510, 620, 445, 70,
+        self.add_sprite('traffic_light_editor', Button(self.game, (510, 620), (445, 70),
                                                        InBlockText(self.game, 'Редактор светофоров', 16,
                                                                    (255, 255, 255))))
-        self.add_sprite('traffic_light_texture_editor', Button(self.game, 965, 620, 445, 70,
+        self.add_sprite('traffic_light_texture_editor', Button(self.game, (965, 620), (445, 70),
                                                                InBlockText(self.game, 'Редактор текстур', 16,
                                                                            (255, 255, 255)),
                                                                self.on_traffic_light_texture_editor_button_pressed))
-        self.add_sprite('settings', Button(self.game, 510, 700, 445, 70,
+        self.add_sprite('settings', Button(self.game, (510, 700), (445, 70),
                                            InBlockText(self.game, 'Настройки', 16,
                                                        (255, 255, 255)),
                                            self.on_settings_button_pressed))
-        self.add_sprite('quit', Button(self.game, 965, 700, 445, 70,
+        self.add_sprite('quit', Button(self.game, (965, 700), (445, 70),
                                        InBlockText(self.game, 'Выход', 16,
                                                    (255, 255, 255)),
                                        self.on_quit_button_pressed))

@@ -14,7 +14,7 @@ class Settings(State):
         super().__init__(game)
 
     def boot(self):
-        self.add_sprite('back', Button(self.game, 1710, 1000, 200, 70,
+        self.add_sprite('back', Button(self.game, (1710, 1000), (200, 70),
                                        InBlockText(self.game, 'Назад', 16,
                                                    (255, 255, 255)),
                                        self.on_back_button_pressed))

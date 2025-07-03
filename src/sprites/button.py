@@ -43,10 +43,10 @@ class InBlockText(Text):
 
 
 class Button(Sprite):
-    def __init__(self, game: 'Game', x: int, y: int, size_x: int, size_y: int, text: InBlockText,
+    def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int], text: InBlockText,
                  func: Callable[[ButtonStatus], None] = None, enabled: bool = True, offset: tuple[int, int] = (0, 0),
                  placeholder: Callable[[], pg.Surface] | None = None):
-        super().__init__(game, (size_x, size_y), (x, y))
+        super().__init__(game, size, pos)
         self.text: InBlockText = text
         self.func: Callable[[ButtonStatus], None] = func
         self.last_status: ButtonStatus = ButtonStatus.NONE
@@ -56,7 +56,7 @@ class Button(Sprite):
         self.offset: tuple[int, int] = offset
         self.placeholder: Callable[[], pg.Surface] | None = placeholder
 
-        text.correct_position((size_x, size_y))
+        text.correct_position(size)
 
     def update_view(self):
         if self.view == ButtonView.PRESSED or not self.enabled:
