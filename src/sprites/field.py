@@ -37,9 +37,9 @@ class Field(Sprite):
         self._update_tiles()
         for pos in self.view_field.keys():
             tile = self.view_field[pos]
-            self.image.blit(tile.image, self._get_offset_from_coordinates(pos))
+            self.image.blit(tile.image, self.get_offset_from_coordinates(pos))
 
-            coord = self._get_offset_from_coordinates(
+            coord = self.get_offset_from_coordinates(
                 self.get_tile_position_by_coordinates(pg.mouse.get_pos())
             )
             pg.draw.rect(self.image, (255, 255, 255), pg.Rect(
@@ -60,8 +60,8 @@ class Field(Sprite):
 
         Вектора w - вектор от тайла (0, 0), u - вектор x, v - вектор y
         """
-        wx = coord[0] - self._get_offset_from_coordinates((0, 0))[0]
-        wy = coord[1] - self._get_offset_from_coordinates((0, 0))[1]
+        wx = coord[0] - self.get_offset_from_coordinates((0, 0))[0]
+        wy = coord[1] - self.get_offset_from_coordinates((0, 0))[1]
         ux = self._get_zero_vector()[0][0] * 2
         uy = self._get_zero_vector()[0][1] * 2
         vx = self._get_zero_vector()[1][0] * 2
@@ -80,7 +80,7 @@ class Field(Sprite):
 
         self._camera_distance = round(self._camera_distance + offset, 1)
 
-        position_of_zero_tile_after: tuple[int, int] = self._get_offset_from_coordinates(location_of_zero_tile_before)
+        position_of_zero_tile_after: tuple[int, int] = self.get_offset_from_coordinates(location_of_zero_tile_before)
 
         deviation: tuple[int, int] = (960 - position_of_zero_tile_after[0],
                                       540 - position_of_zero_tile_after[1])
@@ -95,6 +95,13 @@ class Field(Sprite):
     def generate_field(self, seed: int | None = None, field_size: tuple[int, int] = (30, 30)):
         self.view_field = {}
         self.field = MapGenerator(field_size, seed).generate_map()
+
+    def get_offset_from_coordinates(self, coord: tuple[int, int]):
+        """
+        Получить координаты на экране в зависимости от координат тайла и смещения камеры
+        """
+        return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (coord[0] + coord[1]),
+                self.camera_offset[1] + self._get_half_of_tile_size()[1] * (coord[1] - coord[0]))
 
     def _get_number_of_initial_tiles(self) -> int:
         updated_pos: list[tuple[int, int]] = []
@@ -155,13 +162,6 @@ class Field(Sprite):
         xy = -round(self._get_half_of_tile_size()[1] / 2)
         return (xx, xy), (yx, yy)
 
-    def _get_offset_from_coordinates(self, coord: tuple[int, int]):
-        """
-        Получить координаты на экране в зависимости от координат тайла и смещения камеры
-        """
-        return (self.camera_offset[0] + self._get_half_of_tile_size()[0] * (coord[0] + coord[1]),
-                self.camera_offset[1] + self._get_half_of_tile_size()[1] * (coord[1] - coord[0]))
-
     def _get_position_of_beginning_of_construction(self) -> tuple[int, int]:
         """
         Наход координаты тайла с которого стоит начинать строительство карты.
@@ -171,8 +171,8 @@ class Field(Sprite):
 
     def _get_tile_center_pos(self, x: int, y: int) -> tuple[int, int]:
         return (
-            self._get_offset_from_coordinates((x, y))[0] + self._get_half_of_tile_size()[0],
-            self._get_offset_from_coordinates((x, y))[1] + self._get_half_of_tile_size()[1]
+            self.get_offset_from_coordinates((x, y))[0] + self._get_half_of_tile_size()[0],
+            self.get_offset_from_coordinates((x, y))[1] + self._get_half_of_tile_size()[1]
         )
 
     def _get_half_of_tile_size(self, c_distance: float = None) -> tuple[int, int]:
@@ -183,10 +183,10 @@ class Field(Sprite):
                                      self.perspective_angle, camera_distance)
 
     def _does_tile_extend_beyond_field(self, coord: tuple[int, int]) -> bool:
-        return not (self._get_offset_from_coordinates(coord)[0] < 1920 and self._get_offset_from_coordinates(coord)[
+        return not (self.get_offset_from_coordinates(coord)[0] < 1920 and self.get_offset_from_coordinates(coord)[
             1] < 1080
-                    and self._get_offset_from_coordinates(coord)[0] + 2 * self._get_half_of_tile_size()[0] > 0 and
-                    self._get_offset_from_coordinates(coord)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
+                    and self.get_offset_from_coordinates(coord)[0] + 2 * self._get_half_of_tile_size()[0] > 0 and
+                    self.get_offset_from_coordinates(coord)[1] + 2 * self._get_half_of_tile_size()[1] > 0)
 
     def update(self):
         pass
