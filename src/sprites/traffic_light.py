@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING
-from math import ceil
+import pygame as pg
+from typing import TYPE_CHECKING, Optional
+from math import ceil, sin, cos
 from os import path
 from pathlib import Path
 import json
@@ -11,6 +12,7 @@ from src.sprite import Sprite
 
 if TYPE_CHECKING:
     from src.game import Game
+    from src.sprites import Field
 
 
 class TrafficLightSegment:
@@ -153,16 +155,30 @@ class TrafficLight(Sprite):
     или на панель.
     """
 
-    def __init__(self, game: 'Game', tfl_type: str, uuid: str | None = None):
-        super().__init__(game, (0, 0), (0, 0))
+    def __init__(self, game: 'Game', tfl_type: str, uuid: Optional[str] = None, field: Optional['Field'] = None,
+                 pos: tuple[int, int] = (0, 0)):
+        super().__init__(game, (0, 0), pos)
         self.game: 'Game' = game
+        self.field: Optional['Field'] = field
         self.data = TrafficLightData(tfl_type, uuid)
         self.as_cover: bool = True
 
         self.update_view()
 
     def update_view(self):
-        pass
+        if self.field is None:
+            return
+        self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
+
+        start = [100, 100]
+        pg.draw.polygon(self.image, (128, 128, 128), [
+            [start[0], start[1]],
+            [start[0] + self.field.pixel_size * cos(self.field.perspective_angle),
+             start[1] - self.field.pixel_size * sin(self.field.perspective_angle)],
+            [start[0] + 2 * self.field.pixel_size * cos(self.field.perspective_angle), start[1]],
+            [start[0] + self.field.pixel_size * cos(self.field.perspective_angle),
+             start[1] + self.field.pixel_size * sin(self.field.perspective_angle)]
+        ])
 
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
