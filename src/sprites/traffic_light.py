@@ -1,5 +1,4 @@
-from typing import TYPE_CHECKING, Optional
-from math import sin, cos
+from typing import TYPE_CHECKING, Optional, Sequence
 
 import pygame as pg
 from pygame import SRCALPHA
@@ -17,8 +16,7 @@ if TYPE_CHECKING:
 class TrafficLight(Sprite):
     """
     Основной класс светофора.
-    TODO Может быть добавлен на карту города,
-    или на панель.
+    Может быть добавлен на карту города, или на панель.
     """
 
     def __init__(self, game: 'Game', tfl_type: str, uuid: Optional[str] = None, field: Optional['Field'] = None,
@@ -37,14 +35,16 @@ class TrafficLight(Sprite):
         self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
 
         start = [100, 100]
-        pg.draw.polygon(self.image, (128, 128, 128), [
-            [start[0], start[1]],
-            [start[0] + self.field.pixel_size * cos(self.field.perspective_angle),
-             start[1] - self.field.pixel_size * sin(self.field.perspective_angle)],
-            [start[0] + 2 * self.field.pixel_size * cos(self.field.perspective_angle), start[1]],
-            [start[0] + self.field.pixel_size * cos(self.field.perspective_angle),
-             start[1] + self.field.pixel_size * sin(self.field.perspective_angle)]
-        ])
+        half_ts = self.field.get_half_of_tile_size()
+        front_shape: Sequence[tuple[int, int]] = [
+            (half_ts[0] // 2, 0),
+            (0, half_ts[1] // 2),
+            (0, half_ts[1] * 1.5),
+            (half_ts[0] // 2, half_ts[1] * 1)
+        ]
+        for y in range(self.data.get_size()[1]):
+            pg.draw.polygon(self.image, (0, 0, 0),
+                            list(map(lambda p: (start[0] + p[0], start[1] + p[1] + y * half_ts[1]), front_shape)), 3)
 
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
