@@ -36,15 +36,37 @@ class TrafficLight(Sprite):
 
         start = [100, 100]
         half_ts = self.field.get_half_of_tile_size()
-        front_shape: Sequence[tuple[int, int]] = [
-            (half_ts[0] // 2, 0),
-            (0, half_ts[1] // 2),
-            (0, half_ts[1] * 1.5),
-            (half_ts[0] // 2, half_ts[1] * 1)
+        front_shape: Sequence[tuple[float, float]] = [
+            (half_ts[0] * .25, 0),
+            (0, half_ts[1] * .25),
+            (0, half_ts[1] * .75),
+            (half_ts[0] * .25, half_ts[1] * .5)
         ]
-        for y in range(self.data.get_size()[1]):
-            pg.draw.polygon(self.image, (0, 0, 0),
-                            list(map(lambda p: (start[0] + p[0], start[1] + p[1] + y * half_ts[1]), front_shape)), 3)
+
+        displaced_back: Sequence[tuple[float, float]] = list(
+            map(lambda p: (
+                start[0] + p[0] - 5,
+                start[1] + p[1] - 5
+            ), [
+                    (half_ts[0] * .25, 0),
+                    (0, half_ts[1] * .25),
+                    (0,
+                     half_ts[1] * .75 + (self.data.get_size()[1] - 1) * half_ts[1] * .5),
+                    (half_ts[0] * .25,
+                     half_ts[1] * .5 + (self.data.get_size()[1] - 1) *
+                     half_ts[1] * .5)
+                ]))
+
+        pg.draw.polygon(self.image, (0, 0, 0), displaced_back, 3)
+        for y_segment in range(self.data.get_size()[1]):
+            displaced_font: Sequence[tuple[float, float]] = list(
+                map(lambda p: (
+                    start[0] + p[0],
+                    start[1] + p[1] + y_segment * half_ts[1] * .5
+                ), front_shape))
+
+            pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
+            pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
 
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
