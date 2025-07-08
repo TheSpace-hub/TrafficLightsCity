@@ -43,19 +43,20 @@ class TrafficLight(Sprite):
             (half_ts[0] * .25, half_ts[1] * .5)
         ]
 
-        displaced_back: Sequence[tuple[float, float]] = list(
-            map(lambda p: (
-                start[0] + p[0] - 5,
-                start[1] + p[1] - 5
-            ), [
-                    (half_ts[0] * .25, 0),
-                    (0, half_ts[1] * .25),
-                    (0, half_ts[1] * (self.data.get_size()[1] * .5 + .25)),
-                    (5, half_ts[1] * (self.data.get_size()[1] * .5 + .25) + 5),
-                    (half_ts[0] * .25 + 5, 5),
-                ]))
+        for y_segment in range(self.data.get_size()[1]):
+            displaced_back: Sequence[tuple[float, float]] = list(
+                map(lambda p: (
+                    start[0] + p[0] - 5,
+                    start[1] + p[1] - 5 + y_segment * half_ts[1] * .5
+                ), [
+                        (half_ts[0] * .25, 0),
+                        (0, half_ts[1] * .25),
+                        (0, half_ts[1] * 0.75),
+                        (5, half_ts[1] * 0.75 + 5),
+                        (half_ts[0] * .25 + 5, 5),
+                    ]))
+            pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
 
-        pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
         for y_segment in range(self.data.get_size()[1]):
             displaced_font: Sequence[tuple[float, float]] = list(
                 map(lambda p: (
