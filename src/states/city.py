@@ -26,8 +26,10 @@ class City(State):
                                             InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
-        self.add_sprite('test_tfl', TrafficLight(self.game, 'basic', field=filed))
+
         self.add_sprite('tile_selection', TileSelection(self.game, filed))
+        self.add_sprite('test_tfl', TrafficLight(self.game, 'basic', field=filed))
+
         self.add_traffic_lights_build_buttons()
 
     def update(self):
