@@ -50,11 +50,8 @@ class TrafficLight(Sprite):
             ), [
                     (half_ts[0] * .25, 0),
                     (0, half_ts[1] * .25),
-                    (0,
-                     half_ts[1] * .75 + (self.data.get_size()[1] - 1) * half_ts[1] * .5),
-                    (half_ts[0] * .25,
-                     half_ts[1] * .5 + (self.data.get_size()[1] - 1) *
-                     half_ts[1] * .5)
+                    (0, half_ts[1] * (self.data.get_size()[1] * .5 + .25)),
+                    (half_ts[0] * .25, half_ts[1] * self.data.get_size()[1] * .5)
                 ]))
 
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back, 3)
