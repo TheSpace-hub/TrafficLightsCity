@@ -6,7 +6,7 @@ from pygame import SRCALPHA
 from src.sprites import Container
 from src.sprite import Sprite
 
-from src.modules import TrafficLightData
+from src.modules import TrafficLightData, TrafficLightSegment
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -20,7 +20,7 @@ class TrafficLight(Sprite):
     """
 
     def __init__(self, game: 'Game', tfl_type: str, uuid: Optional[str] = None, field: Optional['Field'] = None,
-                 pos: tuple[int, int] = (0, 0)):
+                 pos: tuple[int, int] = (600, 540)):
         super().__init__(game, (0, 0), pos)
         self.game: 'Game' = game
         self.field: Optional['Field'] = field
@@ -30,42 +30,46 @@ class TrafficLight(Sprite):
         self.update_view()
 
     def update_view(self):
+
         if self.field is None:
             return
         self.image = pg.Surface((1920, 1080), pg.SRCALPHA, 32).convert_alpha()
 
-        start = [100, 100]
+        for segment in self.data.segments.values():
+            self._draw_substrate(segment)
+        for segment in self.data.segments.values():
+            self._draw_appearance(segment)
+
+    def _draw_substrate(self, segment: TrafficLightSegment):
         half_ts = self.field.get_half_of_tile_size()
-        front_shape: Sequence[tuple[float, float]] = [
-            (half_ts[0] * .25, 0),
-            (0, half_ts[1] * .25),
-            (0, half_ts[1] * .75),
-            (half_ts[0] * .25, half_ts[1] * .5)
-        ]
+        displaced_back: Sequence[tuple[float, float]] = list(
+            map(lambda p: (
+                self.rect[0] + p[0] - 5,
+                self.rect[1] + p[1] - 5 + segment.pos[1] * half_ts[1] * .5
+            ), [
+                    (half_ts[0] * .25, 0),
+                    (0, half_ts[1] * .25),
+                    (0, half_ts[1] * 0.75),
+                    (5, half_ts[1] * 0.75 + 5),
+                    (half_ts[0] * .25 + 5, 5),
+                ]))
+        pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
 
-        for y_segment in range(self.data.get_size()[1]):
-            displaced_back: Sequence[tuple[float, float]] = list(
-                map(lambda p: (
-                    start[0] + p[0] - 5,
-                    start[1] + p[1] - 5 + y_segment * half_ts[1] * .5
-                ), [
-                        (half_ts[0] * .25, 0),
-                        (0, half_ts[1] * .25),
-                        (0, half_ts[1] * 0.75),
-                        (5, half_ts[1] * 0.75 + 5),
-                        (half_ts[0] * .25 + 5, 5),
-                    ]))
-            pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
+    def _draw_appearance(self, segment: TrafficLightSegment):
+        half_ts = self.field.get_half_of_tile_size()
+        displaced_font: Sequence[tuple[float, float]] = list(
+            map(lambda p: (
+                self.rect[0] + p[0],
+                self.rect[1] + p[1] + segment.pos[1] * half_ts[1] * .5
+            ), [
+                    (half_ts[0] * .25, 0),
+                    (0, half_ts[1] * .25),
+                    (0, half_ts[1] * .75),
+                    (half_ts[0] * .25, half_ts[1] * .5)
+                ]))
 
-        for y_segment in range(self.data.get_size()[1]):
-            displaced_font: Sequence[tuple[float, float]] = list(
-                map(lambda p: (
-                    start[0] + p[0],
-                    start[1] + p[1] + y_segment * half_ts[1] * .5
-                ), front_shape))
-
-            pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
-            pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
+        pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
+        pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
 
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
