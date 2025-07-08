@@ -4,8 +4,8 @@ import pygame as pg
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TrafficLightData, \
-    TileSelection
+from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection
+from src.modules import TrafficLightData
 
 if TYPE_CHECKING:
     from src.game import Game

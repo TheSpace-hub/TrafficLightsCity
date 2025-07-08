@@ -6,5 +6,5 @@ from .field import Field
 from .choice_of_several_options import ChoiceOfSeveralOptions, Option
 from .pixelart import Pixelart
 from .container import Container
-from .traffic_light import TrafficLight, TrafficLightData, TrafficLightSegment
+from .traffic_light import TrafficLight
 from .tile_selection import TileSelection
