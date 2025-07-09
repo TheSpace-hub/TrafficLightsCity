@@ -41,6 +41,10 @@ class Field(Sprite):
             tile = self.view_field[pos]
             self.image.blit(tile.image, self.get_offset_from_coordinates(pos))
 
+        for pos in self.traffic_lights.keys():
+            traffic_light: TrafficLight = self.traffic_lights[pos]
+            self.image.blit(traffic_light.image, self.get_offset_from_coordinates(pos))
+
         if self.debug_view_mode:
             self._draw_zero_vectors()
 
