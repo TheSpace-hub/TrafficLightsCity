@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from math import pi
 import pygame as pg
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
-        self.selected_type_of_traffic_light_creation: str = ''
+        self.selected_type_of_traffic_light_creation: Optional[str] = ''
 
     def boot(self):
         filed: Field = self.add_sprite('field', Field(self.game))
@@ -54,6 +54,7 @@ class City(State):
                             Button(self.game, (10 + (i + 1) * 110, 970), (100, 100),
                                    InBlockText(self.game, '', 0, (0, 0, 0)),
                                    func=self.on_traffic_light_build_button_pressed,
+                                   func_context=traffic_lights[i].data.tfl_type,
                                    placeholder=traffic_lights[i].get_cover))
 
     def enter(self):
@@ -73,19 +74,21 @@ class City(State):
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Dashboard')
 
-    def on_traffic_light_build_button_pressed(self, status: ButtonStatus):
+    def on_traffic_light_build_button_pressed(self, status: ButtonStatus, context: str):
         if status == ButtonStatus.PRESSED:
+            self.selected_type_of_traffic_light_creation = context
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
 
     def on_cansel_build_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
+            self.selected_type_of_traffic_light_creation = None
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(False)
 
     def build_traffic_light(self, pos: tuple[int, int]):
         field: Field = self.get_sprite('field')
-        field.traffic_lights[pos] = TrafficLight(self.game, 'basic', field=field)
+        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation, field=field)
         field.update_view()
 
     def movement(self):
