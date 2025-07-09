@@ -43,6 +43,7 @@ class Field(Sprite):
 
         for pos in self.traffic_lights.keys():
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
+            traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
 
         if self.debug_view_mode:
