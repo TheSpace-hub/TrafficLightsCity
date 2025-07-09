@@ -43,25 +43,31 @@ class TrafficLight(Sprite):
     def _draw_substrate(self, segment: TrafficLightSegment):
         half_ts = self.field.get_half_of_tile_size()
         displaced_back: Sequence[tuple[float, float]] = list(
-            map(lambda p: (p[0], p[1] + segment.pos[1] * half_ts[1] * .5), [
-                (half_ts[0] * .25, 0),
-                (0, half_ts[1] * .25),
-                (0, half_ts[1] * 0.75),
-                (5, half_ts[1] * 0.75 + 5),
-                (half_ts[0] * .25 + 5, 5),
-            ]))
+            map(lambda p: (
+                p[0] + segment.pos[0] * half_ts[0] * .25,
+                p[1] + segment.pos[1] * half_ts[1] * .5 - segment.pos[0] * half_ts[1] * .25
+            ), [
+                    (half_ts[0] * .25, 0),
+                    (0, half_ts[1] * .25),
+                    (0, half_ts[1] * 0.75),
+                    (5, half_ts[1] * 0.75 + 5),
+                    (half_ts[0] * .25 + 5, 5),
+                ]))
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back, 3)
 
     def _draw_appearance(self, segment: TrafficLightSegment):
         half_ts = self.field.get_half_of_tile_size()
         displaced_font: Sequence[tuple[float, float]] = list(
-            map(lambda p: (p[0] + 5, p[1] + 5 + segment.pos[1] * half_ts[1] * .5), [
-                (half_ts[0] * .25, 0),
-                (0, half_ts[1] * .25),
-                (0, half_ts[1] * .75),
-                (half_ts[0] * .25, half_ts[1] * .5)
-            ]))
+            map(lambda p: (
+                p[0] + 5 + segment.pos[0] * half_ts[0] * .25,
+                p[1] + 5 + segment.pos[1] * half_ts[1] * .5 - segment.pos[0] * half_ts[1] * .25
+            ), [
+                    (half_ts[0] * .25, 0),
+                    (0, half_ts[1] * .25),
+                    (0, half_ts[1] * .75),
+                    (half_ts[0] * .25, half_ts[1] * .5)
+                ]))
 
         pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
         pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
