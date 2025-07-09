@@ -51,6 +51,7 @@ class TrafficLight(Sprite):
                 (half_ts[0] * .25 + 5, 5),
             ]))
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
+        pg.draw.polygon(self.image, (0, 0, 0), displaced_back, 3)
 
     def _draw_appearance(self, segment: TrafficLightSegment):
         half_ts = self.field.get_half_of_tile_size()
