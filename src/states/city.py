@@ -41,7 +41,7 @@ class City(State):
     def add_cansel_building_button(self):
         self.add_sprite('cansel_building', Button(self.game, (10, 970), (100, 100),
                                                   InBlockText(self.game, 'стоп', 16, (255, 255, 255)),
-                                                  func=self.on_cansel_build_button_pressed))
+                                                  enabled=False, func=self.on_cansel_build_button_pressed))
 
     def add_traffic_lights_build_buttons(self, state: int = 0):
         traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
@@ -123,6 +123,11 @@ class City(State):
                         field.camera_offset[1] + int(
                             direction[key][1] * field.move_speed * field.get_camera_distance()))
             field.update_view()
+
+        if pg.key.get_pressed()[pg.K_ESCAPE]:
+            self.selected_type_of_traffic_light_creation = None
+            tile_selection: TileSelection = self.get_sprite('tile_selection')
+            tile_selection.set_visible(False)
 
     def exit(self):
         pass
