@@ -8,6 +8,7 @@ from src.modules import MapGenerator
 
 if TYPE_CHECKING:
     from src.game import Game
+    from src.sprites import TrafficLight
 
 
 class Field(Sprite):
@@ -27,6 +28,7 @@ class Field(Sprite):
         self.debug_view_mode: bool = False
 
         self.field: dict[tuple[int, int], TileTexture] = {}
+        self.traffic_lights: dict[tuple[int, int], TrafficLight] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
 
         self.update_view()
