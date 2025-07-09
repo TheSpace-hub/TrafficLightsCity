@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 import pygame as pg
 
 from src.sprite import Sprite
@@ -108,7 +108,7 @@ class Field(Sprite):
             self.get_offset_from_coordinates(coord)[0] + self.get_half_of_tile_size()[0] -
             traffic_light.image.get_size()[0] * .5,
             self.get_offset_from_coordinates(coord)[1] - traffic_light.image.get_size()[1] +
-            self.get_half_of_tile_size()[0] *.5
+            self.get_half_of_tile_size()[0] * .5
         )
 
     def get_half_of_tile_size(self) -> tuple[int, int]:
