@@ -28,7 +28,7 @@ class Field(Sprite):
         self.debug_view_mode: bool = False
 
         self.field: dict[tuple[int, int], TileTexture] = {}
-        self.traffic_lights: dict[tuple[int, int], TrafficLight] = {}
+        self.traffic_lights: dict[tuple[int, int], 'TrafficLight'] = {}
         self.view_field: dict[tuple[int, int], Tile] = {}
 
         self.update_view()
@@ -42,8 +42,8 @@ class Field(Sprite):
             self.image.blit(tile.image, self.get_offset_from_coordinates(pos))
 
         for pos in self.traffic_lights.keys():
-            traffic_light: TrafficLight = self.traffic_lights[pos]
-            self.image.blit(traffic_light.image, self.get_offset_from_coordinates(pos))
+            traffic_light: 'TrafficLight' = self.traffic_lights[pos]
+            self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
 
         if self.debug_view_mode:
             self._draw_zero_vectors()
@@ -95,12 +95,21 @@ class Field(Sprite):
         self.view_field = {}
         self.field = MapGenerator(field_size, seed).generate_map()
 
-    def get_offset_from_coordinates(self, coord: tuple[int, int]):
+    def get_offset_from_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
         """
         Получить координаты на экране в зависимости от координат тайла и смещения камеры
         """
         return (self.camera_offset[0] + self.get_half_of_tile_size()[0] * (coord[0] + coord[1]),
                 self.camera_offset[1] + self.get_half_of_tile_size()[1] * (coord[1] - coord[0]))
+
+    def get_offset_from_coordinates_for_traffic_light(self, coord: tuple[int, int], traffic_light: 'TrafficLight') -> \
+            tuple[int, int]:
+        return (
+            self.get_offset_from_coordinates(coord)[0] + self.get_half_of_tile_size()[0] -
+            traffic_light.image.get_size()[0] * .5,
+            self.get_offset_from_coordinates(coord)[1] - traffic_light.image.get_size()[1] +
+            self.get_half_of_tile_size()[0] *.5
+        )
 
     def get_half_of_tile_size(self) -> tuple[int, int]:
         return Tile.get_half_of_size(self.tile_size, self.pixel_size,
