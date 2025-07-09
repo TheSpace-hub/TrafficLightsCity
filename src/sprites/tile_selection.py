@@ -35,5 +35,5 @@ class TileSelection(Sprite):
     def update(self):
         if self._visible:
             self.update_view()
-            if 1 in self.game.omitted_mouse_buttons:
+            if 1 in self.game.omitted_mouse_buttons and self.func is not None:
                 self.func(self.get_coord())
