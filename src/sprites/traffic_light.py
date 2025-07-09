@@ -25,7 +25,6 @@ class TrafficLight(Sprite):
         self.game: 'Game' = game
         self.field: Optional['Field'] = field
         self.data = TrafficLightData(tfl_type, uuid)
-        self.as_cover: bool = True
 
         self.update_view()
 
