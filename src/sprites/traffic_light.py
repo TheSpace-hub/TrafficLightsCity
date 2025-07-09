@@ -19,11 +19,10 @@ class TrafficLight(Sprite):
     Может быть добавлен на карту города, или на панель.
     """
 
-    def __init__(self, game: 'Game', pos: tuple[int, int], tfl_type: str, uuid: Optional[str] = None,
+    def __init__(self, game: 'Game', tfl_type: str, uuid: Optional[str] = None,
                  field: Optional['Field'] = None):
         super().__init__(game, (0, 0), (0, 0))
         self.game: 'Game' = game
-        self.pos: tuple[int, int] = pos
         self.field: Optional['Field'] = field
         self.data = TrafficLightData(tfl_type, uuid)
         self.as_cover: bool = True
