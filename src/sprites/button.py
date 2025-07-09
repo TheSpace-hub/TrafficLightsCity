@@ -108,7 +108,6 @@ class Button(Sprite):
             return
 
         sig = inspect.signature(self.func)
-        print(status, sig, sig.parameters)
         if len(sig.parameters) == 1:
             self.func(status)
         elif len(sig.parameters) == 2:
