@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
-        self.a = 0.52
         self.selected_type_of_traffic_light_creation: str = ''
 
     def boot(self):
