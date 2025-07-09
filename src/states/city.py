@@ -15,6 +15,7 @@ class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
         self.a = 0.52
+        self.selected_type_of_traffic_light_creation: str = ''
 
     def boot(self):
         filed: Field = self.add_sprite('field', Field(self.game))
@@ -27,7 +28,7 @@ class City(State):
                                                         (255, 255, 255)),
                                             self.on_dashboard_button_pressed))
 
-        self.add_sprite('tile_selection', TileSelection(self.game, filed, None))
+        self.add_sprite('tile_selection', TileSelection(self.game, filed, self.build_traffic_light))
 
         self.add_construction_management_elements_buttons()
 
@@ -82,6 +83,11 @@ class City(State):
         if status == ButtonStatus.PRESSED:
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(False)
+
+    def build_traffic_light(self, pos: tuple[int, int]):
+        field: Field = self.get_sprite('field')
+        field.traffic_lights[pos] = TrafficLight(self.game, 'basic', field=field)
+        field.update_view()
 
     def movement(self):
         field: Field = self.get_sprite('field')
