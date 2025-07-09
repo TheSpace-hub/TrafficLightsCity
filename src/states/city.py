@@ -28,7 +28,7 @@ class City(State):
                                             self.on_dashboard_button_pressed))
 
         self.add_sprite('tile_selection', TileSelection(self.game, filed, None))
-        self.add_sprite('test_tfl', TrafficLight(self.game, (0, 0), 'arrow', field=filed))
+        filed.traffic_lights[(0, 0)] = TrafficLight(self.game, 'arrow', field=filed)
 
         self.add_construction_management_elements_buttons()
 
