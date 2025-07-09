@@ -30,10 +30,19 @@ class City(State):
         self.add_sprite('tile_selection', TileSelection(self.game, filed))
         self.add_sprite('test_tfl', TrafficLight(self.game, 'arrow', field=filed))
 
-        self.add_traffic_lights_build_buttons()
+        self.add_construction_management_elements_buttons()
 
     def update(self):
         self.movement()
+
+    def add_construction_management_elements_buttons(self):
+        self.add_traffic_lights_build_buttons()
+        self.add_cansel_building_button()
+
+    def add_cansel_building_button(self):
+        self.add_sprite('cansel_building', Button(self.game, (10, 970), (100, 100),
+                                                  InBlockText(self.game, 'стоп', 16, (255, 255, 255)),
+                                                  func=self.on_cansel_build_button_pressed))
 
     def add_traffic_lights_build_buttons(self, state: int = 0):
         traffic_lights: list[TrafficLight] = [TrafficLight(self.game, t) for t in TrafficLightData.get_all_types()]
@@ -43,7 +52,7 @@ class City(State):
 
         for i in range(len(traffic_lights)):
             self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
-                            Button(self.game, (10 + i * 110, 970), (100, 100),
+                            Button(self.game, (10 + (i + 1) * 110, 970), (100, 100),
                                    InBlockText(self.game, '', 0, (0, 0, 0)),
                                    func=self.on_traffic_light_build_button_pressed,
                                    placeholder=traffic_lights[i].get_cover))
@@ -69,6 +78,11 @@ class City(State):
         if status == ButtonStatus.PRESSED:
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
+
+    def on_cansel_build_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            tile_selection: TileSelection = self.get_sprite('tile_selection')
+            tile_selection.set_visible(False)
 
     def movement(self):
         field: Field = self.get_sprite('field')
