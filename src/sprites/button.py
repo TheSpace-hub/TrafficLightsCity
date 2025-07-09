@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Optional, Union
 import os
 from enum import Enum
+import inspect
 
 import pygame as pg
 
@@ -44,11 +45,17 @@ class InBlockText(Text):
 
 class Button(Sprite):
     def __init__(self, game: 'Game', pos: tuple[int, int], size: tuple[int, int], text: InBlockText,
-                 func: Callable[[ButtonStatus], None] = None, enabled: bool = True, offset: tuple[int, int] = (0, 0),
-                 placeholder: Callable[[], pg.Surface] | None = None):
+                 func: Optional[
+                     Union[
+                         Callable[[ButtonStatus], None],
+                         Callable[[ButtonStatus, str], None]
+                     ]] = None,
+                 func_context: str = '', enabled: bool = True, offset: tuple[int, int] = (0, 0),
+                 placeholder: Optional[Callable[[], pg.Surface]] = None):
         super().__init__(game, size, pos)
         self.text: InBlockText = text
-        self.func: Callable[[ButtonStatus], None] = func
+        self.func: Optional[Callable[[ButtonStatus], None] | Callable[[ButtonStatus, str], None]] = func
+        self.func_context: str = func_context
         self.last_status: ButtonStatus = ButtonStatus.NONE
         self.last_view: ButtonView = ButtonView.NORMAL
         self.view: ButtonView = ButtonView.NORMAL
@@ -86,14 +93,23 @@ class Button(Sprite):
             if pg.mouse.get_pressed()[0]:
                 self.view = ButtonView.PRESSED
                 self.update_view()
-                if self.func is not None:
-                    self.func(ButtonStatus.HOLD)
+                self._call_func(ButtonStatus.HOLD)
                 self.last_status = ButtonStatus.HOLD
             elif self.last_status == ButtonStatus.HOLD:
-                if self.func is not None:
-                    self.func(ButtonStatus.PRESSED)
+                self._call_func(ButtonStatus.PRESSED)
                 self.last_status = ButtonStatus.NONE
         else:
             self.view = ButtonView.NORMAL
             self.update_view()
             self.last_status = ButtonStatus.NONE
+
+    def _call_func(self, status: ButtonStatus):
+        if self.func is None:
+            return
+
+        sig = inspect.signature(self.func)
+        print(status, sig, sig.parameters)
+        if len(sig.parameters) == 1:
+            self.func(status)
+        elif len(sig.parameters) == 2:
+            self.func(status, self.func_context)
