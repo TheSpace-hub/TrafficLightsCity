@@ -32,13 +32,12 @@ class TrafficLight(Sprite):
     def update_view(self):
         if self.field is None:
             return
-
-        # Костыль, который нужно исправить
-        size: tuple[float, float] = (0, 0)
-        for segment in self.data.segments.values():
-            size = (max(size[0], self._draw_appearance(segment)[0], size[0]),
-                    max(self._draw_appearance(segment)[1], size[1]))
-        self.image = pg.Surface(size, pg.SRCALPHA, 32).convert_alpha()
+        half_ts = self.field.get_half_of_tile_size()
+        self.image = pg.Surface((
+            half_ts[0] * .25 + 5 + (self.data.get_size()[0] - 1) * half_ts[0] * .25,
+            half_ts[1] * .75 + 5 + (self.data.get_size()[1] - 1) * half_ts[1] * .5
+        ),
+            pg.SRCALPHA, 32).convert_alpha()
 
         for segment in self.data.segments.values():
             self._draw_substrate(segment)
@@ -61,17 +60,7 @@ class TrafficLight(Sprite):
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back)
         pg.draw.polygon(self.image, (0, 0, 0), displaced_back, 3)
 
-    def _draw_appearance(self, segment: TrafficLightSegment) -> tuple[float, float]:
-        """
-        Отрисовка обложки для светофора, на которой размещены изображения.
-
-        В качестве возвращает максимальный размер, которого достиг светофор
-
-        TODO - исправить костыль. Максимальный размер должен быть расчитан иначе
-        """
-
-        max_size: tuple[float, float] = (0, 0)
-
+    def _draw_appearance(self, segment: TrafficLightSegment):
         half_ts = self.field.get_half_of_tile_size()
         displaced_font: Sequence[tuple[float, float]] = list(
             map(lambda p: (
@@ -84,14 +73,8 @@ class TrafficLight(Sprite):
                     (half_ts[0] * .25, half_ts[1] * .5)
                 ]))
 
-        # Костыль, который нужно исправить
-        for pos in displaced_font:
-            max_size = (max(max_size[0], pos[0]), max(max_size[1], pos[1]))
-
         pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
         pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
-
-        return max_size
 
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
