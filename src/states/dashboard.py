@@ -10,12 +10,7 @@ if TYPE_CHECKING:
 class Dashboard(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
-        self.traffic_lights: list[TrafficLight] = [
-            TrafficLight(self.game, 'basic', 'moscow_1'),
-            TrafficLight(self.game, 'arrow', 'moscow_2'),
-            TrafficLight(self.game, 'basic', 'moscow_3'),
-            TrafficLight(self.game, 'arrow', 'moscow_4'),
-        ]
+        self.traffic_lights: list[TrafficLight] = []
 
     def boot(self):
         self.add_sprite('traffic_lights_id_container', Container(self.game, (0, 0), (400, 1080)))
@@ -41,7 +36,10 @@ class Dashboard(State):
         pass
 
     def enter(self):
-        pass
+        self.traffic_lights: list['TrafficLight'] = self.game.transmitted_data['traffic_lights']
+        print(list(map(lambda t: t.data.uuid, self.traffic_lights)))
+        self._add_traffic_lights_ids()
+        self._add_traffic_lights_images()
 
     def exit(self):
         pass

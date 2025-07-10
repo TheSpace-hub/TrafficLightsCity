@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 from math import pi
 import pygame as pg
+from random import randint
 
 from src.state import State
 
@@ -72,7 +73,10 @@ class City(State):
 
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
-            self.game.change_state('Dashboard')
+            field: Field = self.get_sprite('field')
+            self.game.change_state('Dashboard', {
+                'traffic_lights': list(field.traffic_lights.values())
+            })
 
     def on_traffic_light_build_button_pressed(self, status: ButtonStatus, context: str):
         if status == ButtonStatus.PRESSED:
@@ -88,7 +92,8 @@ class City(State):
 
     def build_traffic_light(self, pos: tuple[int, int]):
         field: Field = self.get_sprite('field')
-        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation, field=field)
+        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation,
+                                                 str(randint(0, 99999)), field=field)
         field.update_view()
 
     def movement(self):
