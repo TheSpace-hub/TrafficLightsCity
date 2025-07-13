@@ -19,10 +19,12 @@ class Menu(State):
                                               self.on_create_world_button_pressed))
         self.add_sprite('open_city', Button(self.game, (510, 540), (900, 70),
                                             InBlockText(self.game, 'Открыть город', 16,
-                                                        (255, 255, 255))))
+                                                        (255, 255, 255)),
+                                            enabled=False))
         self.add_sprite('traffic_light_editor', Button(self.game, (510, 620), (445, 70),
                                                        InBlockText(self.game, 'Редактор светофоров', 16,
-                                                                   (255, 255, 255))))
+                                                                   (255, 255, 255)),
+                                                       enabled=False))
         self.add_sprite('traffic_light_texture_editor', Button(self.game, (965, 620), (445, 70),
                                                                InBlockText(self.game, 'Редактор текстур', 16,
                                                                            (255, 255, 255)),
