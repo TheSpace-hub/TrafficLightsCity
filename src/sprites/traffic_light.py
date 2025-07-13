@@ -75,6 +75,28 @@ class TrafficLight(Sprite):
         pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
         pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
 
+        self._draw_appearance_pixelart(segment)
+
+    def _draw_appearance_pixelart(self, segment: TrafficLightSegment):
+        pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
+        half_ts = self.field.get_half_of_tile_size()
+
+        for y, row in enumerate(pixelart):
+            for x, color in enumerate(row):
+                displaced: Sequence[tuple[float, float]] = list(
+                    map(lambda p: (
+                        p[0] + 5 + segment.pos[0] * half_ts[0] * .25 + x * half_ts[0] * .25 / 16,
+                        p[1] + 5 + segment.pos[1] * half_ts[1] * .5 - segment.pos[0] * half_ts[1] * .25 + half_ts[1] * .25 - x * half_ts[1] * .25 / 16 + y * half_ts[1] * .5 / 16
+                    ), [
+                            (half_ts[0] * .25 / 16, 0),
+                            (0, half_ts[1] * .25 / 16),
+                            (0, half_ts[1] * .75 / 16),
+                            (half_ts[0] * .25 / 16, half_ts[1] * .5 / 16)
+                        ]))
+                if color[3] == 0:
+                    color = (128, 128, 128)
+                pg.draw.polygon(self.image, color, displaced)
+
     def get_cover(self, height: int = 94, wight: int | None = 94) -> pg.Surface:
         """
         Получение обложки светофора для отображения в панели
