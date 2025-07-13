@@ -30,6 +30,9 @@ class State(ABC):
             return self.sprites[uuid]
         return None
 
+    def get_sprites(self) -> dict[str, T]:
+        return self.sprites
+
     def add_sprite(self, uuid: str, obj: T) -> T:
         self.sprites[uuid] = obj
         return obj
