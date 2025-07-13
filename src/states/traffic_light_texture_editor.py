@@ -18,6 +18,10 @@ class TrafficLightTextureEditor(State):
         self.current_container: int = 0
 
     def boot(self):
+        self.add_sprite('back', Button(self.game, (1710, 1000), (200, 70),
+                                       InBlockText(self.game, 'Назад', 16,
+                                                   (255, 255, 255)),
+                                       self.on_back_button_pressed))
         self.add_sprite('texture_name_input', Input(self.game, (100, 50), (700, 70),
                                                     InBlockText(self.game, '', 16, (255, 255, 255)),
                                                     InBlockText(self.game, 'Введите ID текстуры', 16,
@@ -30,8 +34,7 @@ class TrafficLightTextureEditor(State):
         self.add_sprite('create_texture_button', Button(self.game, (510, 130), (400, 70),
                                                         InBlockText(self.game, 'Создать текстуру', 16,
                                                                     (255, 255, 255)),
-                                                        self.on_create_texture_button_pressed,
-                                                        False))
+                                                        self.on_create_texture_button_pressed, enabled=False))
         self.add_sprite('create_texture_info', Text(self.game, (610, 205), '',
                                                     13, (0, 255, 0), align=TextAlign.LEFT))
 
@@ -90,6 +93,15 @@ class TrafficLightTextureEditor(State):
                 return False
             used_ids.append(pixelart_name_input.text.text)
         return self.current_container > 0 and texture_name_input.text.text != ''
+
+    def on_back_button_pressed(self, status: ButtonStatus):
+        if status == ButtonStatus.PRESSED:
+            self.images: dict[str, str] = {}
+            self.current_container: int = 0
+            for uuid, sprite in self.get_sprites().copy().items():
+                if 'pixelart' in uuid:
+                    self.remove_sprite(uuid)
+            self.game.change_state('Menu')
 
     def enter(self):
         pass
