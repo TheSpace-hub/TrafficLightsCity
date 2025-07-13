@@ -86,7 +86,7 @@ class TrafficLight(Sprite):
                 displaced: Sequence[tuple[float, float]] = list(
                     map(lambda p: (
                         p[0] + 5 + half_ts[0] * ((16 * segment.pos[0] + x) / 64),
-                        p[1] + 5 + segment.pos[1] * half_ts[1] * .5 - segment.pos[0] * half_ts[1] * .25 + half_ts[1] * .25 - x * half_ts[1] * .25 / 16 + y * half_ts[1] * .5 / 16
+                        p[1] + 5 + half_ts[1] * .5 * (segment.pos[1] - segment.pos[0] * .5 + .5 + (2 * y - x) / 32)
                     ), [
                             (half_ts[0] * .25 / 16, 0),
                             (0, half_ts[1] * .25 / 16),
