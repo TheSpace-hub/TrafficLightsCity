@@ -33,6 +33,10 @@ class State(ABC):
     def get_sprites(self) -> dict[str, T]:
         return self.sprites
 
+    def remove_sprite(self, uuid):
+        if uuid in self.sprites.keys():
+            del self.sprites[uuid]
+
     def add_sprite(self, uuid: str, obj: T) -> T:
         self.sprites[uuid] = obj
         return obj
