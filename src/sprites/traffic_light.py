@@ -28,7 +28,6 @@ class TrafficLight(Sprite):
 
         self.update_view()
 
-    # TODO - ограничение по высоте задаётся по сегменту (0; 0). Сегменты, например (0; 1) будут обрезаны
     def update_view(self):
         if self.field is None:
             return
