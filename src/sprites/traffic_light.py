@@ -73,9 +73,8 @@ class TrafficLight(Sprite):
                 ]))
 
         pg.draw.polygon(self.image, (128, 128, 128), displaced_font)
-        pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
-
         self._draw_appearance_pixelart(segment)
+        pg.draw.polygon(self.image, (0, 0, 0), displaced_font, 3)
 
     def _draw_appearance_pixelart(self, segment: TrafficLightSegment):
         pixelart: tuple[tuple[tuple[int, int, int, int], ...]] = segment.get_pixelart_by_value(segment.value)
