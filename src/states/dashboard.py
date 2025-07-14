@@ -30,6 +30,7 @@ class Dashboard(State):
     def _add_traffic_lights_images(self, traffic_lights_data: list[TrafficLightData]):
         for i, data in enumerate(traffic_lights_data):
             traffic_light = TrafficLight(self.game, data.tfl_type, data.uuid)
+            traffic_light.data.set_state(data.get_state())
             self.add_sprite(f'traffic_light_{data.uuid}',
                             Container(self.game, (410 + i * 100, 10), (106, 106), traffic_light.get_cover))
 
