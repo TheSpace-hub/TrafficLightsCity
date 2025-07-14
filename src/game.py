@@ -5,6 +5,7 @@
 import os
 import logging
 from typing import Any
+import time
 
 from colorlog import ColoredFormatter
 
@@ -13,6 +14,7 @@ from pygame import Surface
 from pygame.time import Clock
 
 from src.state import State
+from src.modules import Pinger
 
 from src.states import *  # Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
 
@@ -44,6 +46,10 @@ class Game:
         self.lock_mouse: bool = False
         self._previous_mouse_location: tuple[int, int] = (0, 0)
         self.mouse_offset: tuple[int, int] = (0, 0)
+
+        self.pinger: Pinger = Pinger()
+        self.last_ping_time: int = 0
+
         pg.display.set_caption('Город светофоров')
 
         self.init_states()
@@ -73,6 +79,10 @@ class Game:
                     else:
                         self._previous_mouse_location = pg.mouse.get_pos()
             self.delta_time = self.clock.tick(60) / 1000
+
+            if time.time() - self.last_ping_time >= 1:
+                self.pinger.ping()
+                self.last_ping_time = time.time()
 
             self.update()
 
