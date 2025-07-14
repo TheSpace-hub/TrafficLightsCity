@@ -13,12 +13,12 @@ class Pinger:
         self.port: int = port
         self.traffic_lights: list['TrafficLightData'] = []
         self.current_time: int = 0
+        self.running: bool = False
 
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights.append(traffic_light)
 
     def ping(self) -> dict[str, tuple[int, dict]]:
-        print('ping')
         responses: dict[str, tuple[int, dict]] = {}
         for traffic_light in self.traffic_lights:
             responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)

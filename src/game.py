@@ -80,7 +80,7 @@ class Game:
                         self._previous_mouse_location = pg.mouse.get_pos()
             self.delta_time = self.clock.tick(60) / 1000
 
-            if time.time() - self.last_ping_time >= 1:
+            if time.time() - self.last_ping_time >= 1 and self.pinger.running:
                 self.pinger.ping()
                 self.last_ping_time = time.time()
 
