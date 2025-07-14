@@ -32,9 +32,9 @@ class Pinger:
             'data': json.dumps({
                 'uuid': str(traffic_light.uuid),
                 'current_time': traffic_light.current_time,
-                'current_state': traffic_light.get_state()
+                'current_state': traffic_light.get_state() + 1
             })
         })
         traffic_light.current_time += 1
-        traffic_light.set_state(int(json.loads(response.content)['next_state']))
+        traffic_light.set_state(int(json.loads(response.content)['next_state']) - 1)
         return response.status_code, json.loads(response.content)
