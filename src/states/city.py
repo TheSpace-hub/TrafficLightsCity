@@ -100,6 +100,8 @@ class City(State):
 
     def build_traffic_light(self, pos: tuple[int, int]):
         field: Field = self.get_sprite('field')
+        if not field.can_build_traffic_light(pos):
+            return
         uuid: str = str(randint(0, 99999))
         field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation,
                                                  uuid, field=field)

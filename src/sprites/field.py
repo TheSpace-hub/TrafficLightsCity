@@ -50,6 +50,11 @@ class Field(Sprite):
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
 
+    def can_build_traffic_light(self, pos: tuple[int, int]) -> bool:
+        if pos not in self.field:
+            return False
+        return self.field[pos] == TileTexture.ASPHALT
+
     def get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
         """
         Получение координаты тайла на поле по координатам точки на экране
