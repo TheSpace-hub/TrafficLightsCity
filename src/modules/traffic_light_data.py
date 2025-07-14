@@ -71,6 +71,7 @@ class TrafficLightData:
         self.type_value: str = self._get_type_value(data)
         self.segments: dict[str, TrafficLightSegment] = self._get_segments(data)
         self.states: list[dict[str, str]] = self._get_states(data)
+        self.current_time: int = 0
         self._state: int = 0
 
         self._update_segments()
