@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Optional
 from math import pi
 import pygame as pg
 from random import randint
+import time
 
 from src.state import State
 
@@ -16,6 +17,7 @@ class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
         self.selected_type_of_traffic_light_creation: Optional[str] = ''
+        self.traffic_lights_uuids: list[str] = []
 
     def boot(self):
         filed: Field = self.add_sprite('field', Field(self.game))
@@ -34,6 +36,12 @@ class City(State):
 
     def update(self):
         self.movement()
+        self.pinging()
+
+    def pinging(self):
+        if time.time() - self.game.last_ping_time >= .1 and self.game.pinger.running:
+            self.game.pinger.ping()
+            self.game.last_ping_time = time.time()
 
     def add_construction_management_elements_buttons(self):
         self.add_traffic_lights_build_buttons()
@@ -70,6 +78,7 @@ class City(State):
         field: Field = self.get_sprite('field')
         field.generate_field(seed, field_sizes[field_size])
         field.update_view()
+        self.game.pinger.running = True
 
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
@@ -94,8 +103,10 @@ class City(State):
                                                  uuid, field=field)
         field.update_view()
 
-        self.game.pinger.traffic_lights_data.append(
-            TrafficLightData(self.selected_type_of_traffic_light_creation, uuid))
+        data = TrafficLightData(self.selected_type_of_traffic_light_creation, uuid)
+
+        self.game.pinger.traffic_lights_data.append(data)
+        field.traffic_lights[pos].data = data
 
     def movement(self):
         field: Field = self.get_sprite('field')
@@ -136,4 +147,4 @@ class City(State):
             tile_selection.set_visible(False)
 
     def exit(self):
-        pass
+        self.game.pinger.running = False
