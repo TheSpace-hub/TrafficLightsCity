@@ -1,3 +1,9 @@
+from src.pinger import Checker
+
+checker = Checker()
+
+
+@checker('basic')
 def check_basic(request: dict, response: dict) -> tuple[bool, str | None]:
     """
     Пример проверки запроса на светофор и ответа.
