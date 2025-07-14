@@ -11,16 +11,16 @@ class Pinger:
     def __init__(self, host: str = '127.0.0.1', port: int = 8081):
         self.host: str = host
         self.port: int = port
-        self.traffic_lights: list['TrafficLightData'] = []
+        self.traffic_lights_data: list['TrafficLightData'] = []
         self.current_time: int = 0
         self.running: bool = False
 
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
-        self.traffic_lights.append(traffic_light)
+        self.traffic_lights_data.append(traffic_light)
 
     def ping(self) -> dict[str, tuple[int, dict]]:
         responses: dict[str, tuple[int, dict]] = {}
-        for traffic_light in self.traffic_lights:
+        for traffic_light in self.traffic_lights_data:
             responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)
 
         self.current_time += 1
