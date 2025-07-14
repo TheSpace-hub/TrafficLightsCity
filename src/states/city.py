@@ -73,10 +73,7 @@ class City(State):
 
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         if status == ButtonStatus.PRESSED:
-            field: Field = self.get_sprite('field')
-            self.game.change_state('Dashboard', {
-                'traffic_lights': list(field.traffic_lights.values())
-            })
+            self.game.change_state('Dashboard')
 
     def on_traffic_light_build_button_pressed(self, status: ButtonStatus, context: str):
         if status == ButtonStatus.PRESSED:
