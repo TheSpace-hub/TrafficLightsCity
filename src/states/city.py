@@ -134,7 +134,7 @@ class City(State):
             "yeysk", "komsomolsknaamure", "nizhnevartovsk", "novyurengoy",
             "magadan", "norilsk", "salekhard", "surgut", "khanty-mansiysk",
             "yuzhnosakhalinsk", "vorkuta", "nadym", "gubkinsky", "murmansk",
-            "severomorsk", "arzamas", "arzamas"
+            "severomorsk", "arzamas", "arzamas", "ivanteevka"
         ]
         contains: bool = True
         uuid = f'{choice(cities)}_{randint(0, 999)}'
