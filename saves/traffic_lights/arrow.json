@@ -42,7 +42,25 @@
       "arrow": "off"
     },
     {
-      "red": "off",
+      "red": "on",
+      "yellow": "off",
+      "green": "off",
+      "arrow": "on"
+    },
+    {
+      "red": "on",
+      "yellow": "off",
+      "green": "off",
+      "arrow": "on"
+    },
+    {
+      "red": "on",
+      "yellow": "off",
+      "green": "off",
+      "arrow": "off"
+    },
+    {
+      "red": "on",
       "yellow": "on",
       "green": "off",
       "arrow": "off"
@@ -54,10 +72,10 @@
       "arrow": "off"
     },
     {
-      "red": "on",
-      "yellow": "off",
+      "red": "off",
+      "yellow": "on",
       "green": "off",
-      "arrow": "on"
+      "arrow": "off"
     }
   ]
 }
