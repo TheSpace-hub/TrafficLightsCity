@@ -80,6 +80,8 @@ class TrafficLightData:
         return self._state
 
     def set_state(self, state: int):
+        if state != self._state:
+            self.current_time = 0
         self._state = state
         self._update_segments()
 
