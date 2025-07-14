@@ -15,6 +15,7 @@ class Pinger:
         self.traffic_lights.append(traffic_light)
 
     def ping(self) -> dict[str, tuple[int, dict]]:
+        print('ping')
         responses: dict[str, tuple[int, dict]] = {}
         for traffic_light in self.traffic_lights:
             responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)
