@@ -92,9 +92,13 @@ class City(State):
 
     def build_traffic_light(self, pos: tuple[int, int]):
         field: Field = self.get_sprite('field')
+        uuid: str = str(randint(0, 99999))
         field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation,
-                                                 str(randint(0, 99999)), field=field)
+                                                 uuid, field=field)
         field.update_view()
+
+        self.game.pinger.traffic_lights_data.append(
+            TrafficLightData(self.selected_type_of_traffic_light_creation, uuid))
 
     def movement(self):
         field: Field = self.get_sprite('field')
