@@ -31,9 +31,10 @@ class Pinger:
             'type': str(traffic_light.type_value),
             'data': json.dumps({
                 'uuid': str(traffic_light.uuid),
-                'current_time': self.current_time,
+                'current_time': traffic_light.current_time,
                 'current_state': traffic_light.get_state()
             })
         })
+        traffic_light.current_time += 1
         traffic_light.set_state(int(json.loads(response.content)['next_state']))
         return response.status_code, json.loads(response.content)
