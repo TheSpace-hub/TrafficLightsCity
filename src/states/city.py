@@ -137,13 +137,13 @@ class City(State):
             "severomorsk", "arzamas", "arzamas", "ivanteevka"
         ]
         contains: bool = True
-        uuid = f'{choice(cities)}_{randint(0, 999)}'
+        uuid = f'{choice(cities)}_{randint(1, 999)}'
         while contains:
             contains: bool = False
             for traffic_light in self.game.pinger.traffic_lights_data:
                 if traffic_light.uuid == uuid:
                     contains = True
-                    uuid = f'{choice(cities)}_{randint(0, 999)}'
+                    uuid = f'{choice(cities)}_{randint(1, 999)}'
                     break
 
         return uuid
