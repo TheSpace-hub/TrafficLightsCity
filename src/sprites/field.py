@@ -40,14 +40,15 @@ class Field(Sprite):
         for pos in self.view_field.keys():
             tile = self.view_field[pos]
             self.image.blit(tile.image, self.get_offset_from_coordinates(pos))
+        self.update_traffic_light_view()
+        if self.debug_view_mode:
+            self._draw_zero_vectors()
 
+    def update_traffic_light_view(self):
         for pos in self.traffic_lights.keys():
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
-
-        if self.debug_view_mode:
-            self._draw_zero_vectors()
 
     def get_tile_position_by_coordinates(self, coord: tuple[int, int]) -> tuple[int, int]:
         """

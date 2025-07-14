@@ -17,7 +17,6 @@ class City(State):
     def __init__(self, game: 'Game'):
         super().__init__(game)
         self.selected_type_of_traffic_light_creation: Optional[str] = ''
-        self.traffic_lights_uuids: list[str] = []
 
     def boot(self):
         filed: Field = self.add_sprite('field', Field(self.game))
@@ -42,6 +41,9 @@ class City(State):
         if time.time() - self.game.last_ping_time >= .1 and self.game.pinger.running:
             self.game.pinger.ping()
             self.game.last_ping_time = time.time()
+
+            field: Field = self.get_sprite('field')
+            field.update_traffic_light_view()
 
     def add_construction_management_elements_buttons(self):
         self.add_traffic_lights_build_buttons()
