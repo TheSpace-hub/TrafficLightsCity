@@ -1,17 +1,20 @@
+from typing import TYPE_CHECKING
 import json
 
 import requests
-from src.modules import TrafficLightData
+
+if TYPE_CHECKING:
+    from src.modules import TrafficLightData
 
 
 class Pinger:
     def __init__(self, host: str = '127.0.0.1', port: int = 8081):
         self.host: str = host
         self.port: int = port
-        self.traffic_lights: list[TrafficLightData] = []
+        self.traffic_lights: list['TrafficLightData'] = []
         self.current_time: int = 0
 
-    def add_traffic_light(self, traffic_light: TrafficLightData):
+    def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights.append(traffic_light)
 
     def ping(self) -> dict[str, tuple[int, dict]]:
@@ -23,7 +26,7 @@ class Pinger:
         self.current_time += 1
         return responses
 
-    def _ping_traffic_light(self, traffic_light: TrafficLightData) -> tuple[int, dict]:
+    def _ping_traffic_light(self, traffic_light: 'TrafficLightData') -> tuple[int, dict]:
         response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
             'type': str(traffic_light.type_value),
             'data': json.dumps({
