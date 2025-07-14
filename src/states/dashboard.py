@@ -37,9 +37,11 @@ class Dashboard(State):
 
     def enter(self):
         self.traffic_lights: list['TrafficLight'] = self.game.transmitted_data['traffic_lights']
-        print(list(map(lambda t: t.data.uuid, self.traffic_lights)))
+        self.game.pinger.traffic_lights = list(map(lambda t: t.data, self.traffic_lights))
         self._add_traffic_lights_ids()
         self._add_traffic_lights_images()
 
+        self.game.pinger.running = True
+
     def exit(self):
-        pass
+        self.game.pinger.running = False
