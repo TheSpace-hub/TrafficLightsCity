@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING
 import pygame as pg
 
 from src.sprite import Sprite
