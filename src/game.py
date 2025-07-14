@@ -5,7 +5,6 @@
 import os
 import logging
 from typing import Any
-import time
 
 from colorlog import ColoredFormatter
 
@@ -79,10 +78,6 @@ class Game:
                     else:
                         self._previous_mouse_location = pg.mouse.get_pos()
             self.delta_time = self.clock.tick(60) / 1000
-
-            if time.time() - self.last_ping_time >= 1 and self.pinger.running:
-                self.pinger.ping()
-                self.last_ping_time = time.time()
 
             self.update()
 
