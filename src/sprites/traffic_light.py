@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Optional, Sequence
+from enum import Enum
 
 import pygame as pg
 from pygame import SRCALPHA
@@ -11,6 +12,16 @@ from src.modules import TrafficLightData, TrafficLightSegment
 if TYPE_CHECKING:
     from src.game import Game
     from src.sprites import Field
+
+
+class NoteLevel(Enum):
+    ATTENTION = 0
+
+
+class Note:
+    def __init__(self):
+        self.level: Optional[NoteLevel] = None
+        self.note: Optional[str] = None
 
 
 class TrafficLight(Sprite):
