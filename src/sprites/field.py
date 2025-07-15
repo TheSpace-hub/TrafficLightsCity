@@ -123,8 +123,9 @@ class Field(Sprite):
     def get_offset_from_coordinates_for_traffic_lights_note(self, coord: tuple[int, int], traffic_light: 'TrafficLight',
                                                             note_size: tuple[int, int]) -> tuple[int, int]:
         traffic_light_pos: tuple[int, int] = self.get_offset_from_coordinates_for_traffic_light(coord, traffic_light)
+
         return (
-            traffic_light_pos[0],
+            traffic_light_pos[0] + (traffic_light.image.get_size()[0] - 50) / 2,
             traffic_light_pos[1] - note_size[1] - 10
         )
 
