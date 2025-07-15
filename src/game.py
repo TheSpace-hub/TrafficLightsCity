@@ -107,10 +107,13 @@ class Game:
             self.mouse_offset = (0, 0)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
+                    logging.info('Выход из программы нажатием на внешнюю кнопку выхода')
                     self.running = False
                 elif event.type == pg.KEYDOWN:
+                    logging.debug('Нажатие на клавишу %s', event.key)
                     self.omitted_buttons.append(event.key)
                 elif event.type == pg.MOUSEBUTTONDOWN:
+                    logging.debug('Нажатие на клавишу мыши %s', event.button)
                     self.omitted_mouse_buttons.append(event.button)
                 if event.type == pg.MOUSEMOTION:
                     self.is_mouse_move = True
@@ -155,6 +158,7 @@ class Game:
     def init_states(self):
         """Инициализировать сцены по умолчанию.
         """
+        logging.info('Инициализация всех сцен')
         for state in State.__subclasses__():
             self.register_state(state)
 
@@ -167,6 +171,7 @@ class Game:
         Note:
             Вызывает функцию boot().
         """
+        logging.info('Инициализация сцены %s', state.__name__)
         self.states[str(state.__name__)] = state(self)
         self.states[str(state.__name__)].boot()
 
