@@ -68,9 +68,6 @@ class State(ABC):
 
         Args:
             uuid: Уникальный идентификатор спрайта для удаления
-
-        Note:
-            Не вызывает ошибку, если спрайт не существует
         """
         if uuid in self.sprites:
             del self.sprites[uuid]
