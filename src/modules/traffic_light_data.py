@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from enum import Enum
@@ -18,8 +19,21 @@ class NoteLevel(Enum):
 
 class Note:
     def __init__(self):
-        self.level: Optional[NoteLevel] = NoteLevel.ATTENTION
+        self._level: Optional[NoteLevel] = NoteLevel.ATTENTION
         self.note: Optional[str] = None
+
+    def set_level(self, level: Optional[NoteLevel | int]):
+        if type(level) == NoteLevel:
+            self._level = level
+        elif type(level) == int:
+            self._level = NoteLevel(level)
+        elif level is None:
+            self._level = None
+        else:
+            logging.warning('Невозможно установить уровень записки: "%s"', level)
+
+    def get_level(self) -> Optional[NoteLevel]:
+        return self._level
 
     def get_cover(self, size: tuple[int, int]) -> pg.Surface:
         paths: dict[NoteLevel, str] = {
