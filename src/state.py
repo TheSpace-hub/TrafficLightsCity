@@ -5,6 +5,7 @@
 - Управляет коллекцией спрайтов сцены
 - Обеспечивает жизненный цикл сцены (инициализация, обновление, переход)
 """
+import logging
 from typing import TYPE_CHECKING, TypeVar, Optional
 from abc import ABC, abstractmethod
 
@@ -50,6 +51,8 @@ class State(ABC):
         """
         if uuid in self.sprites:
             return self.sprites[uuid]
+
+        logging.warning('Попытка получения несуществующего спрайта "%s"', uuid)
         return None
 
     def get_sprites(self) -> dict[str, SpriteT]:
@@ -71,6 +74,8 @@ class State(ABC):
         """
         if uuid in self.sprites:
             del self.sprites[uuid]
+        else:
+            logging.warning('Попытка удаления несуществующего спрайта "%s"', uuid)
 
     def add_sprite(self, uuid: str, obj: SpriteT) -> SpriteT:
         """Добавляет новый спрайт на сцену.
@@ -85,6 +90,9 @@ class State(ABC):
         Raises:
             ValueError: Если спрайт с таким uuid уже существует
         """
+        if uuid in self.sprites:
+            logging.error('Попытка добавить спрайт с существующим uuid "%s"', uuid)
+            raise ValueError
         self.sprites[uuid] = obj
         return obj
 
