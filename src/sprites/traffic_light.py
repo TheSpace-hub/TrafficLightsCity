@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING, Optional, Sequence
-from enum import Enum
-from os import path
-from math import ceil
 
 import pygame as pg
 from pygame import SRCALPHA
 
-from src.sprites import Container, Pixelart
+from src.sprites import Container
 from src.sprite import Sprite
 
 from src.modules import TrafficLightData, TrafficLightSegment
@@ -14,34 +11,6 @@ from src.modules import TrafficLightData, TrafficLightSegment
 if TYPE_CHECKING:
     from src.game import Game
     from src.sprites import Field
-
-
-class NoteLevel(Enum):
-    ATTENTION = 0
-
-
-class Note:
-    def __init__(self):
-        self.level: Optional[NoteLevel] = NoteLevel.ATTENTION
-        self.note: Optional[str] = None
-
-    def get_cover(self, size: tuple[int, int]) -> pg.Surface:
-        paths: dict[NoteLevel, str] = {
-            NoteLevel.ATTENTION: path.join('assets', 'images', 'attention.png')
-        }
-
-        pixel_size: tuple[float, float] = (size[0] / 16, size[1] / 16)
-
-        surface: pg.Surface = pg.Surface(size, SRCALPHA, 32).convert_alpha()
-
-        pixelart = Pixelart.get_pixelart_by_image(paths[self.level])
-        for y in range(len(pixelart)):
-            for x in range(len(pixelart[y])):
-                pg.draw.rect(surface, pixelart[y][x], pg.Rect(
-                    pixel_size[0] * x, pixel_size[1] * y, ceil(pixel_size[0]), ceil(pixel_size[1])
-                ))
-
-        return surface
 
 
 class TrafficLight(Sprite):
@@ -56,7 +25,6 @@ class TrafficLight(Sprite):
         self.game: 'Game' = game
         self.field: Optional['Field'] = field
         self.data = TrafficLightData(tfl_type, uuid)
-        self.note: Note = Note()
 
         self.update_view()
 
