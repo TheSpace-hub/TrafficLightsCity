@@ -49,7 +49,8 @@ class Field(Sprite):
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
-            self.image.blit(traffic_light.note.get_cover((50, 50)), self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
+            self.image.blit(traffic_light.note.get_cover((50, 50)),
+                            self.get_offset_from_coordinates_for_traffic_lights_note(pos, traffic_light, (50, 50)))
 
     def can_build_traffic_light(self, pos: tuple[int, int]) -> bool:
         if pos not in self.field:
@@ -117,6 +118,14 @@ class Field(Sprite):
             traffic_light.image.get_size()[0] * .5,
             self.get_offset_from_coordinates(coord)[1] - traffic_light.image.get_size()[1] +
             self.get_half_of_tile_size()[0] * .5
+        )
+
+    def get_offset_from_coordinates_for_traffic_lights_note(self, coord: tuple[int, int], traffic_light: 'TrafficLight',
+                                                            note_size: tuple[int, int]) -> tuple[int, int]:
+        traffic_light_pos: tuple[int, int] = self.get_offset_from_coordinates_for_traffic_light(coord, traffic_light)
+        return (
+            traffic_light_pos[0],
+            traffic_light_pos[1] - note_size[1] - 10
         )
 
     def get_half_of_tile_size(self) -> tuple[int, int]:
