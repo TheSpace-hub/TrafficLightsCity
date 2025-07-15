@@ -49,6 +49,7 @@ class Field(Sprite):
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
+            self.image.blit(traffic_light.note.get_cover((50, 50)), self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
 
     def can_build_traffic_light(self, pos: tuple[int, int]) -> bool:
         if pos not in self.field:
