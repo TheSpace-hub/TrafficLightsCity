@@ -43,7 +43,7 @@ class City(State):
             self.game.last_ping_time = time.time()
 
             field: Field = self.get_sprite('field')
-            field.update_traffic_light_view()
+            field.update_view()
 
     def add_construction_management_elements_buttons(self):
         self.add_traffic_lights_build_buttons()
