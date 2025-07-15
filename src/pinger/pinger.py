@@ -19,21 +19,20 @@ class Pinger:
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights_data.append(traffic_light)
 
-    def ping(self) -> dict[str, tuple[int, dict]]:
+    def ping(self):
         try:
             requests.get(f'http://{self.host}:{self.port}/traffic')
         except requests.exceptions.ConnectionError:
             logging.warning('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
                             f'http://{self.host}:{self.port}/traffic')
-            return {}
+
         responses: dict[str, tuple[int, dict]] = {}
         for traffic_light in self.traffic_lights_data:
             responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)
 
         self.current_time += 1
-        return responses
 
-    def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[int, dict]:
+    def _ping_traffic_light(self, data: 'TrafficLightData'):
         """Пинг отдельного светофора.
         Args:
             data: Данные светофора
