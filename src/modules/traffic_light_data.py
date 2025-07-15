@@ -15,11 +15,12 @@ from src.sprites.pixelart import Pixelart
 
 class NoteLevel(Enum):
     ATTENTION = 0
+    WAIT = 1
 
 
 class Note:
     def __init__(self):
-        self._level: Optional[NoteLevel] = NoteLevel.ATTENTION
+        self._level: Optional[NoteLevel] = NoteLevel.WAIT
         self.note: Optional[str] = None
 
     def set_level(self, level: Optional[NoteLevel | int]):
@@ -36,8 +37,11 @@ class Note:
         return self._level
 
     def get_cover(self, size: tuple[int, int]) -> pg.Surface:
+        if self.get_level() is None:
+            return pg.Surface((0, 0))
         paths: dict[NoteLevel, str] = {
-            NoteLevel.ATTENTION: path.join('assets', 'images', 'attention.png')
+            NoteLevel.ATTENTION: path.join('assets', 'images', 'attention.png'),
+            NoteLevel.WAIT: path.join('assets', 'images', 'wait.png'),
         }
 
         pixel_size: tuple[float, float] = (size[0] / 16, size[1] / 16)
