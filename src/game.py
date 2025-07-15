@@ -218,6 +218,7 @@ class Game:
     def quit(self):
         """Завершение игрового цикла
         """
+        logging.info('Выход из программы')
         self.running = False
 
     @staticmethod
