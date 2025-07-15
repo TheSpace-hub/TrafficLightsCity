@@ -13,30 +13,19 @@ class Pinger:
         self.host: str = host
         self.port: int = port
         self.traffic_lights_data: list['TrafficLightData'] = []
-        self.current_time: int = 0
         self.running: bool = False
 
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights_data.append(traffic_light)
 
     def ping(self):
-        try:
-            requests.get(f'http://{self.host}:{self.port}/traffic')
-        except requests.exceptions.ConnectionError:
-            logging.warning('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
-                            f'http://{self.host}:{self.port}/traffic')
-
-        responses: dict[str, tuple[int, dict]] = {}
         for traffic_light in self.traffic_lights_data:
-            responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)
-
-        self.current_time += 1
+            self._ping_traffic_light(traffic_light)
 
     def _ping_traffic_light(self, data: 'TrafficLightData'):
         """Пинг отдельного светофора.
         Args:
             data: Данные светофора
-
         """
         try:
             response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
@@ -47,10 +36,10 @@ class Pinger:
                     'current_state': data.get_state() + 1
                 })
             })
+            data.current_time += 1
+            data.set_state(int(json.loads(response.content)['next_state']) - 1)
+            data.note.set_level(None)
         except requests.exceptions.ConnectionError:
             logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s). Учтено как 500-ка',
                          f'http://{self.host}:{self.port}/traffic')
-            return 500, {}
-        data.current_time += 1
-        data.set_state(int(json.loads(response.content)['next_state']) - 1)
-        return response.status_code, json.loads(response.content)
+            data.note.set_level(0)
