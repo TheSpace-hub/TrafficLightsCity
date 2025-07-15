@@ -86,13 +86,10 @@ class State(ABC):
 
         Returns:
             Добавленный спрайт (тот же, что и в параметре obj)
-
-        Raises:
-            ValueError: Если спрайт с таким uuid уже существует
         """
         if uuid in self.sprites:
             logging.error('Попытка добавить спрайт с существующим uuid "%s"', uuid)
-            raise ValueError
+
         self.sprites[uuid] = obj
         return obj
 
