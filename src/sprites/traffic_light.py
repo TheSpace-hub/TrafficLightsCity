@@ -36,6 +36,7 @@ class TrafficLight(Sprite):
         self.game: 'Game' = game
         self.field: Optional['Field'] = field
         self.data = TrafficLightData(tfl_type, uuid)
+        self.note: Note = Note()
 
         self.update_view()
 
