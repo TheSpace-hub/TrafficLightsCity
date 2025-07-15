@@ -29,7 +29,7 @@ from src.state import State
 from src.pinger import Pinger
 
 # Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
-from src.states import * # pylint: disable=wildcard-import
+from src.states import *  # pylint: disable=wildcard-import
 
 StateT = TypeVar('StateT', bound=State)
 
@@ -227,12 +227,6 @@ class Game:
         log_format = '[%(asctime)s][%(levelname)s] %(message)s'
         date_format = '%Y-%m-%d %H:%M:%S'
 
-        logging.basicConfig(
-            level=logging.INFO,
-            format=log_format,
-            datefmt=date_format
-        )
-
         handlers = [
             logging.FileHandler(
                 os.path.join('logs', 'server.stderr'),
@@ -242,6 +236,9 @@ class Game:
         ]
 
         logging.basicConfig(
+            level=logging.INFO,
+            format=log_format,
+            datefmt=date_format,
             handlers=handlers
         )
 
