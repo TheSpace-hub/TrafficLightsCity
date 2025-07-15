@@ -24,7 +24,8 @@ class Pinger:
             requests.get(f'http://{self.host}:{self.port}/traffic')
         except requests.exceptions.ConnectionError:
             logging.warning('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
-                         f'http://{self.host}:{self.port}/traffic')
+                            f'http://{self.host}:{self.port}/traffic')
+            return {}
         responses: dict[str, tuple[int, dict]] = {}
         for traffic_light in self.traffic_lights_data:
             responses[traffic_light.uuid] = self._ping_traffic_light(traffic_light)
@@ -49,7 +50,7 @@ class Pinger:
             })
         except requests.exceptions.ConnectionError:
             logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s). Учтено как 500-ка',
-                            f'http://{self.host}:{self.port}/traffic')
+                         f'http://{self.host}:{self.port}/traffic')
             return 500, {}
         data.current_time += 1
         data.set_state(int(json.loads(response.content)['next_state']) - 1)
