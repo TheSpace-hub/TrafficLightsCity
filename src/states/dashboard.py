@@ -35,7 +35,7 @@ class Dashboard(State):
                             Container(self.game, (410 + i * 100, 10), (106, 106), traffic_light.get_cover))
 
     def update(self):
-        if time.time() - self.game.last_ping_time >= .1 and self.game.pinger.running:
+        if time.time() - self.game.last_ping_time >= 1 and self.game.pinger.running:
             self.game.pinger.ping()
             for uuid in self.traffic_lights_uuids:
                 self.remove_sprite(f'traffic_light_{uuid}')
