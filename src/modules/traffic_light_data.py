@@ -44,7 +44,7 @@ class Note:
 
         surface: pg.Surface = pg.Surface(size, SRCALPHA, 32).convert_alpha()
 
-        pixelart = Pixelart.get_pixelart_by_image(paths[self.level])
+        pixelart = Pixelart.get_pixelart_by_image(paths[self.get_level()])
         for y in range(len(pixelart)):
             for x in range(len(pixelart[y])):
                 pg.draw.rect(surface, pixelart[y][x], pg.Rect(
