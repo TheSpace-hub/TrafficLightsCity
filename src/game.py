@@ -28,7 +28,8 @@ from pygame.time import Clock
 from src.state import State
 from src.pinger import Pinger
 
-from src.states import *  # Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
+# Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
+from src.states import * # pylint: disable=wildcard-import
 
 StateT = TypeVar('StateT', bound=State)
 
@@ -147,7 +148,8 @@ class Game:
         y_factor = pg.display.get_window_size()[1] / 1080
         self.screen.fill((32, 32, 32))
         for sprite in self.current_state.sprites.values():
-            self.screen.blit(sprite.image, pg.Rect(sprite.rect.x * x_factor, sprite.rect.y * y_factor, 0, 0))
+            self.screen.blit(sprite.image,
+                             pg.Rect(sprite.rect.x * x_factor, sprite.rect.y * y_factor, 0, 0))
         pg.display.flip()
 
     def init_states(self):
@@ -222,7 +224,7 @@ class Game:
         os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
         logging.getLogger('werkzeug').disabled = True
 
-        log_format = f'[%(asctime)s][%(levelname)s] %(message)s'
+        log_format = '[%(asctime)s][%(levelname)s] %(message)s'
         date_format = '%Y-%m-%d %H:%M:%S'
 
         logging.basicConfig(
