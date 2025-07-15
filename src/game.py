@@ -110,7 +110,7 @@ class Game:
                     logging.debug('Выход из программы нажатием на внешнюю кнопку выхода')
                     self.running = False
                 elif event.type == pg.KEYDOWN:
-                    logging.debug('Нажатие на клавишу %s', event.key)
+                    logging.debug('Нажатие на клавишу "%s"', chr(event.key))
                     self.omitted_buttons.append(event.key)
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     logging.debug('Нажатие на клавишу мыши %s', event.button)
