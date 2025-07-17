@@ -14,10 +14,17 @@ if TYPE_CHECKING:
 
 
 class Intro(State):
+    """Класс интро.
+    """
     def __init__(self, game: 'Game'):
         super().__init__(game)
 
     def boot(self):
+        """Добавление основных спрайтов:
+         - Имя.
+         - Подсказка как продолжить.
+         - Авторство.
+        """
         self.add_sprite('name',
                         Text(self.game, (960, 540), 'Город светофоров',
                              48, (255, 255, 255)))
@@ -26,6 +33,11 @@ class Intro(State):
                              18, (200, 200, 200)))
 
     def update(self):
+        """Обновление каждый кадр.
+
+        Изменение яркости текста.
+        Переход в меню при нажатии клавиши.
+        """
         tip: Text = self.get_sprite('tip')
 
         color: tuple[int, int, int] = tuple[int, int, int]([int(155 - (sin(time.time() * 2) * 100))] * 3)
