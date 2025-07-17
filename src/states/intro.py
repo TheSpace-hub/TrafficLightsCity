@@ -7,7 +7,7 @@ import time
 
 from src.state import State
 
-from src.sprites import Text
+from src.sprites import Text, TextAlign
 
 if TYPE_CHECKING:
     from src.game import Game
@@ -31,6 +31,9 @@ class Intro(State):
         self.add_sprite('tip',
                         Text(self.game, (960, 600), 'Нажмите любую клавишу чтобы продолжить',
                              18, (200, 200, 200)))
+        self.add_sprite('author',
+                        Text(self.game, (10, 10), 'Автор: TheSpace // @rocketstage',
+                             18, (255, 255, 255), align=TextAlign.LEFT))
 
     def update(self):
         """Обновление каждый кадр.
