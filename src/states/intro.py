@@ -28,8 +28,7 @@ class Intro(State):
     def update(self):
         tip: Text = self.get_sprite('tip')
 
-        color: tuple[int, int, int] = (int(155 - (sin(time.time() * 2) * 100)), int(155 - sin(time.time() * 2) * 100),
-                                       int(155 - sin(time.time() * 2) * 100))
+        color: tuple[int, int, int] = tuple[int, int, int]([int(155 - (sin(time.time() * 2) * 100))] * 3)
 
         tip.color = color
         tip.update_view()
