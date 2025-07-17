@@ -1,3 +1,5 @@
+"""Модуль создания города.
+"""
 from typing import TYPE_CHECKING
 
 from src.state import State
@@ -9,10 +11,20 @@ if TYPE_CHECKING:
 
 
 class CreateCity(State):
+    """Класс сцены с настройками создания города.
+    """
+
     def __init__(self, game: 'Game'):
+        """Создание сцены.
+
+        Args:
+            game (Game): Экземпляр игры
+        """
         super().__init__(game)
 
     def boot(self):
+        """Инициализация сцены.
+        """
         self.add_sprite('seed_input', Input(self.game, (510, 460), (900, 70),
                                             InBlockText(self.game, '', 16,
                                                         (255, 255, 255)),
@@ -39,6 +51,10 @@ class CreateCity(State):
                                        self.on_back_button_pressed))
 
     def on_create_city_button_pressed(self, status: ButtonStatus):
+        """Действие при нажатии на кнопку создания города.
+
+        Переключается на сцену "City" и передаёт введённые данные.
+        """
         if status == ButtonStatus.PRESSED:
             seed_input: Input = self.get_sprite('seed_input')
             field_size: ChoiceOfSeveralOptions = self.get_sprite('field_size')
@@ -61,5 +77,7 @@ class CreateCity(State):
         pass
 
     def on_back_button_pressed(self, status: ButtonStatus):
+        """Переход обратно в меню.
+        """
         if status == ButtonStatus.PRESSED:
             self.game.change_state('Menu')
