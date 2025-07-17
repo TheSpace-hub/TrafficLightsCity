@@ -33,7 +33,7 @@ class City(State):
         self.selected_type_of_traffic_light_creation: Optional[str] = ''
 
     def boot(self):
-        """Инициализация сцены
+        """Инициализация сцены.
         """
         filed: Field = self.add_sprite('field', Field(self.game))
 
