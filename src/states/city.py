@@ -60,7 +60,7 @@ class City(State):
     def pinging(self):
         """Пинг каждую секунду.
         """
-        if time.time() - self.game.last_ping_time >= .1 and self.game.pinger.running:
+        if time.time() - self.game.last_ping_time >= 1 and self.game.pinger.running:
             self.game.pinger.ping()
             self.game.last_ping_time = time.time()
 
