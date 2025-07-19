@@ -18,5 +18,4 @@ def check_basic(request: dict, response: dict) -> tuple[bool, str | None]:
             - str | None: Описание ошибки (Используйте None для отсутствия параметра)
     """
 
-    print(f'Req: {request}; Res: {response}')
     return False, 'Тестовая ошибка'
