@@ -34,14 +34,12 @@ class Pinger:
                                 data.uuid, result[1])
                 data.note.set_level(0)
 
-
     def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[bool, str] | None:
         """Пинг отдельного светофора.
         Args:
             data: Данные светофора
         """
         try:
-
             response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
                 'type': str(data.type_value),
                 'data': json.dumps({
