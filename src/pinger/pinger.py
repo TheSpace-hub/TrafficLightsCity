@@ -28,8 +28,13 @@ class Pinger:
                               data.uuid, data.tfl_type)
                 data.note.set_level(3)
             elif result[0]:
-                logging.info('Проверка светофора %s прошла успешно.', data.uuid)
+                logging.info('Проверка светофора %s прошла успешно.',
+                             data.uuid)
                 data.note.set_level(None)
+            elif not result[0] and result[1] == 'Сервер недоступен':
+                logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
+                             f'http://{self.host}:{self.port}/traffic')
+                data.note.set_level(2)
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
                                 data.uuid, result[1])
@@ -69,7 +74,4 @@ class Pinger:
                 }
             }, json.loads(response.content))
         except requests.exceptions.ConnectionError:
-            logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
-                         f'http://{self.host}:{self.port}/traffic')
-            data.note.set_level(2)
             return False, 'Сервер недоступен'
