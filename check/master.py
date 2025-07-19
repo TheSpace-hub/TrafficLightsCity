@@ -17,4 +17,6 @@ def check_basic(request: dict, response: dict) -> tuple[bool, str | None]:
             - bool: Результат проверки (True — успех, False — ошибка).
             - str | None: Описание ошибки (Используйте None для отсутствия параметра)
     """
+
+    print(f'Req: {request}; Res: {response}')
     return True, ''
