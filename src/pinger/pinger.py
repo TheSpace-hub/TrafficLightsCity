@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 import json
 import requests
 
@@ -29,15 +29,22 @@ class Pinger:
                 data.note.set_level(3)
             elif result[0]:
                 logging.info('Проверка светофора %s прошла успешно.', data.uuid)
+                data.note.set_level(None)
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
                                 data.uuid, result[1])
                 data.note.set_level(0)
 
-    def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[bool, str] | None:
+    def _ping_traffic_light(self, data: 'TrafficLightData') -> Optional[tuple[bool, str]]:
         """Пинг отдельного светофора.
         Args:
             data: Данные светофора
+
+        Returns:
+            Optional[tuple[bool, str]]:
+                - Если проверка пройдена, возвращает кортеж (True, "Успех")
+                - Если проверка не пройдена, возвращает (False, "Причина ошибки")
+                - Если проверка невозможна, возвращает None
         """
         try:
             response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
@@ -62,7 +69,7 @@ class Pinger:
                 }
             }, json.loads(response.content))
         except requests.exceptions.ConnectionError:
-            logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s). Учтено как 500-ка',
+            logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
                          f'http://{self.host}:{self.port}/traffic')
             data.note.set_level(2)
             return False, 'Сервер недоступен'
