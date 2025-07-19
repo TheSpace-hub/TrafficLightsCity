@@ -43,7 +43,8 @@ class City(State):
         self.add_sprite('dashboard', Button(self.game, (1465, 10), (445, 70),
                                             InBlockText(self.game, 'Панель Управ.', 16,
                                                         (255, 255, 255)),
-                                            self.on_dashboard_button_pressed))
+                                            self.on_dashboard_button_pressed,
+                                            enabled=False))
 
         self.add_sprite('tile_selection', TileSelection(self.game, filed, self.build_traffic_light))
 
