@@ -1,8 +1,9 @@
 import logging
 from typing import TYPE_CHECKING
 import json
-
 import requests
+
+from src.pinger.checker import Checker
 
 if TYPE_CHECKING:
     from src.modules import TrafficLightData
@@ -14,6 +15,7 @@ class Pinger:
         self.port: int = port
         self.traffic_lights_data: list['TrafficLightData'] = []
         self.running: bool = False
+        self.checker = Checker()
 
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights_data.append(traffic_light)
