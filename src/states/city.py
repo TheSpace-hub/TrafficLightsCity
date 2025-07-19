@@ -77,9 +77,9 @@ class City(State):
     def add_cansel_building_button(self):
         """Добавление кнопки отмены строительства.
         """
-        self.add_sprite('cansel_building', Button(self.game, (10, 970), (100, 100),
-                                                  InBlockText(self.game, 'стоп', 16, (255, 255, 255)),
-                                                  enabled=False, func=self.on_cansel_build_button_pressed))
+        self.add_sprite('info_about_traffic_light', Button(self.game, (10, 970), (100, 100),
+                                                           InBlockText(self.game, 'ИНФО', 16, (255, 255, 255)),
+                                                           func=self.on_cansel_build_button_pressed))
 
     def add_traffic_lights_build_buttons(self):
         """Добавление кнопок всех типов светофоров.
