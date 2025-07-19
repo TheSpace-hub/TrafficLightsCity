@@ -10,9 +10,7 @@ if TYPE_CHECKING:
 
 
 class Pinger:
-    def __init__(self, host: str = '127.0.0.1', port: int = 8081):
-        self.host: str = host
-        self.port: int = port
+    def __init__(self):
         self.traffic_lights_data: list['TrafficLightData'] = []
         self.running: bool = False
         self.checker = Checker()
@@ -33,7 +31,7 @@ class Pinger:
                 data.note.set_level(None)
             elif not result[0] and result[1] == 'Сервер недоступен':
                 logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
-                             f'http://{self.host}:{self.port}/traffic')
+                             data.url)
                 data.note.set_level(2)
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
@@ -52,7 +50,7 @@ class Pinger:
                 - Если проверка невозможна, возвращает None
         """
         try:
-            response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
+            response = requests.get(data.url, params={
                 'type': str(data.type_value),
                 'data': json.dumps({
                     'uuid': str(data.uuid),
