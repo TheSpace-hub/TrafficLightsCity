@@ -26,11 +26,13 @@ class Pinger:
             if result is None:
                 logging.error('Не удалось выполнить проверку светофора %s типа %s.',
                               data.uuid, data.tfl_type)
+                data.note.set_level(3)
             elif result[0]:
                 logging.info('Проверка светофора %s прошла успешно.', data.uuid)
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
                                 data.uuid, result[1])
+                data.note.set_level(0)
 
 
     def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[bool, str] | None:
@@ -64,5 +66,5 @@ class Pinger:
         except requests.exceptions.ConnectionError:
             logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s). Учтено как 500-ка',
                          f'http://{self.host}:{self.port}/traffic')
-            data.note.set_level(0)
+            data.note.set_level(2)
             return False, 'Сервер недоступен'
