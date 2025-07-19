@@ -28,8 +28,9 @@ from pygame.time import Clock
 from src.state import State
 from src.pinger import Pinger
 
-# Импорт НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
+# Импорты НЕ УДАЛЯТЬ. Нужен чтобы все дочерние классы State были инициализированны
 from src.states import *  # pylint: disable=wildcard-import
+from check import master
 
 StateT = TypeVar('StateT', bound=State)
 
