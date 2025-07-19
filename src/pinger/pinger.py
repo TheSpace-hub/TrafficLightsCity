@@ -40,7 +40,7 @@ class Pinger:
                 })
             })
 
-            self.checker.check(str(data.type_value), {
+            self.checker.check(data.tfl_type, {
                 'type': str(data.type_value),
                 'data': {
                     'uuid': str(data.uuid),
