@@ -13,35 +13,52 @@ from pygame import SRCALPHA
 from src.sprites.pixelart import Pixelart
 
 
-class NoteLevel(Enum):
-    ATTENTION = 0
-    WAIT = 1
+class NoteType(Enum):
+    EXCLAMATION_ERROR = 0
+    WAIT_MARK = 1
+    CLOUD_ERROR = 2
+    QUESTION_ERROR = 3
 
 
 class Note:
     def __init__(self):
-        self._level: Optional[NoteLevel] = NoteLevel.WAIT
+        self._level: Optional[NoteType] = NoteType.WAIT_MARK
         self.note: Optional[str] = None
 
-    def set_level(self, level: Optional[NoteLevel | int]):
-        if type(level) == NoteLevel:
+    def set_level(self, level: Optional[NoteType | int]):
+        """Установить или удалить записку для светофора.
+
+        Args:
+            level: Записка для светофора.
+
+        Note:
+            Возможные записки:
+
+            - EXCLAMATION_ERROR (0): Ошибка в работе светофора.
+            - WAIT_MARK (1): Подключение к облаку.
+            - CLOUD_ERROR (2): Ошибка подключения к облаку.
+            - QUESTION_ERROR (3): Ошибка невозможности проверки светофора на работоспособность.
+        """
+        if type(level) == NoteType:
             self._level = level
         elif type(level) == int:
-            self._level = NoteLevel(level)
+            self._level = NoteType(level)
         elif level is None:
             self._level = None
         else:
             logging.warning('Невозможно установить уровень записки: "%s"', level)
 
-    def get_level(self) -> Optional[NoteLevel]:
+    def get_level(self) -> Optional[NoteType]:
         return self._level
 
     def get_cover(self, size: tuple[int, int]) -> pg.Surface:
         if self.get_level() is None:
             return pg.Surface((0, 0))
-        paths: dict[NoteLevel, str] = {
-            NoteLevel.ATTENTION: path.join('assets', 'images', 'attention.png'),
-            NoteLevel.WAIT: path.join('assets', 'images', 'wait.png'),
+        paths: dict[NoteType, str] = {
+            NoteType.EXCLAMATION_ERROR: path.join('assets', 'images', 'exclamation_error.png'),
+            NoteType.WAIT_MARK: path.join('assets', 'images', 'wait_mark.png'),
+            NoteType.CLOUD_ERROR: path.join('assets', 'images', 'cloud_error.png'),
+            NoteType.QUESTION_ERROR: path.join('assets', 'images', 'question_error.png'),
         }
 
         pixel_size: tuple[float, float] = (size[0] / 16, size[1] / 16)
