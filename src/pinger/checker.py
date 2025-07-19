@@ -3,13 +3,15 @@ from typing import Callable, Self
 
 class Checker:
     _instance: Self = None
+    functions: dict[str, Callable[[dict, dict], tuple[bool, str]]] = {}
 
     def __init__(self):
-        self.functions: dict[str, Callable[[dict, dict], tuple[bool, str]]] = {}
+        pass
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._instance.functions = {}
         return cls._instance
 
     def __call__(self, tfl_type):
