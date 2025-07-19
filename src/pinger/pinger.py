@@ -30,6 +30,7 @@ class Pinger:
             data: Данные светофора
         """
         try:
+
             response = requests.get(f'http://{self.host}:{self.port}/traffic', params={
                 'type': str(data.type_value),
                 'data': json.dumps({
@@ -38,6 +39,16 @@ class Pinger:
                     'current_state': data.get_state() + 1
                 })
             })
+
+            self.checker.check(str(data.type_value), {
+                'type': str(data.type_value),
+                'data': {
+                    'uuid': str(data.uuid),
+                    'current_time': data.current_time,
+                    'current_state': data.get_state() + 1
+                }
+            }, json.loads(response.content))
+
             data.current_time += 1
             data.set_state(int(json.loads(response.content)['next_state']) - 1)
             data.note.set_level(None)
