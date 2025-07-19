@@ -19,4 +19,4 @@ def check_basic(request: dict, response: dict) -> tuple[bool, str | None]:
     """
 
     print(f'Req: {request}; Res: {response}')
-    return True, ''
+    return False, 'Тестовая ошибка'
