@@ -21,16 +21,17 @@ class Pinger:
         self.traffic_lights_data.append(traffic_light)
 
     def ping(self):
-        for traffic_light in self.traffic_lights_data:
-            result: tuple[bool, str] | None = self._ping_traffic_light(traffic_light)
+        for data in self.traffic_lights_data:
+            result: tuple[bool, str] | None = self._ping_traffic_light(data)
             if result is None:
                 logging.error('Не удалось выполнить проверку светофора %s типа %s.',
-                              traffic_light.uuid, traffic_light.tfl_type)
+                              data.uuid, data.tfl_type)
             elif result[0]:
-                logging.info('Проверка светофора %s прошла успешно.', traffic_light.uuid)
+                logging.info('Проверка светофора %s прошла успешно.', data.uuid)
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
-                                traffic_light.uuid, result[1])
+                                data.uuid, result[1])
+
 
     def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[bool, str] | None:
         """Пинг отдельного светофора.
