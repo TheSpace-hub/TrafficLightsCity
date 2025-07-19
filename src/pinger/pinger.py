@@ -22,9 +22,17 @@ class Pinger:
 
     def ping(self):
         for traffic_light in self.traffic_lights_data:
-            self._ping_traffic_light(traffic_light)
+            result: tuple[bool, str] | None = self._ping_traffic_light(traffic_light)
+            if result is None:
+                logging.error('Не удалось выполнить проверку светофора %s типа %s.',
+                              traffic_light.uuid, traffic_light.tfl_type)
+            elif result[0]:
+                logging.info('Проверка светофора %s прошла успешно.', traffic_light.uuid)
+            elif not result[0]:
+                logging.warning('Проверка светофора %s привела к ошибке "%s".',
+                                traffic_light.uuid, result[1])
 
-    def _ping_traffic_light(self, data: 'TrafficLightData'):
+    def _ping_traffic_light(self, data: 'TrafficLightData') -> tuple[bool, str] | None:
         """Пинг отдельного светофора.
         Args:
             data: Данные светофора
@@ -40,7 +48,11 @@ class Pinger:
                 })
             })
 
-            self.checker.check(data.tfl_type, {
+            data.current_time += 1
+            data.set_state(int(json.loads(response.content)['next_state']) - 1)
+            data.note.set_level(None)
+
+            return self.checker.check(data.tfl_type, {
                 'type': str(data.type_value),
                 'data': {
                     'uuid': str(data.uuid),
@@ -48,11 +60,8 @@ class Pinger:
                     'current_state': data.get_state() + 1
                 }
             }, json.loads(response.content))
-
-            data.current_time += 1
-            data.set_state(int(json.loads(response.content)['next_state']) - 1)
-            data.note.set_level(None)
         except requests.exceptions.ConnectionError:
             logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s). Учтено как 500-ка',
                          f'http://{self.host}:{self.port}/traffic')
             data.note.set_level(0)
+            return False, 'Сервер недоступен'
