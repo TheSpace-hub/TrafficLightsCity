@@ -45,5 +45,3 @@ class Jumper(Sprite):
         if self.index < sqrt(2):
             self.update_view()
             self.index += .05
-        else:
-            del self
