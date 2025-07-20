@@ -9,3 +9,4 @@ from .container import Container
 from .traffic_light import TrafficLight
 from .tile_selection import TileSelection
 from .traffic_light_info import TrafficLightInfo
+from .city_info import CityInfo

@@ -9,7 +9,7 @@ import time
 from src.state import State
 
 from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection, \
-    TrafficLightInfo
+    TrafficLightInfo, CityInfo
 from src.modules import TrafficLightData
 
 if TYPE_CHECKING:
@@ -45,13 +45,12 @@ class City(State):
         """
         filed: Field = self.add_sprite('field', Field(self.game))
 
-        self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
-                                          (255, 255, 255), align=TextAlign.LEFT))
-
         self.add_sprite('tile_selection', TileSelection(self.game, filed, self.apply_selector))
         self.add_sprite('traffic_light_info', TrafficLightInfo(self.game))
 
         self.add_construction_management_elements_buttons()
+
+        self.add_sprite('city_info', CityInfo(self.game, 'N-sk'))
 
     def update(self):
         """Обновление сцены.
@@ -70,18 +69,6 @@ class City(State):
 
             field: Field = self.get_sprite('field')
             field.update_view()
-
-    def add_city_info(self):
-        """Добавление основной информации о городе.
-
-        Note:
-            Будет добавлена информация:
-
-            - UUID города.
-            - Информация о лёгких авариях.
-            - Информация о тяжёлых авариях.
-            - Информация об очень тяжёлых авариях.
-        """
 
     def add_construction_management_elements_buttons(self):
         """Добавление кнопок, отвечающих за строительство.
