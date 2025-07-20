@@ -56,7 +56,7 @@ class Text(Sprite):
             if pg.font.Font(self.font_path, self.font_size).render(line + ' ' + word, True, (0, 0, 0)).get_size()[
                 0] > self.max_wight:
                 lines.append(line[:])
-                line = ' '
+                line = ''
             line += ' ' + word
 
         if line != '':
