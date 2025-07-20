@@ -32,7 +32,7 @@ class Jumper(Sprite):
                     self.pixelart[y][x][0],
                     self.pixelart[y][x][1],
                     self.pixelart[y][x][2],
-                    min(self.pixelart[y][x][3], alpha)
+                    max(min(self.pixelart[y][x][3], alpha), 0)
                 )
                 pg.draw.rect(surface, color, pg.Rect(
                     pixel_size * x, pixel_size * y, ceil(pixel_size), ceil(pixel_size)
