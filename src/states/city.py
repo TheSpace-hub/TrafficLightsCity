@@ -53,7 +53,7 @@ class City(State):
 
         self.add_sprite('city_info', CityInfo(self.game, 'N-sk'))
 
-        jumpers_group: JumpersGroup = self.add_sprite('jumpers_group', JumpersGroup(self.game))
+        self.add_sprite('jumpers_group', JumpersGroup(self.game))
 
     def update(self):
         """Обновление сцены.
