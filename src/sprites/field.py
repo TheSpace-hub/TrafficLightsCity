@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 import pygame as pg
 
 from src.sprite import Sprite
@@ -140,6 +140,20 @@ class Field(Sprite):
             (self.get_half_of_tile_size()[0] * 2, self.get_half_of_tile_size()[1]),
             (self.get_half_of_tile_size()[0], self.get_half_of_tile_size()[1] * 2)
         ]
+
+    def get_traffic_light_pos_by_uuid(self, uuid: str) -> Optional[tuple[int, int]]:
+        """Получение координат светофора по uuid.
+
+        Args:
+            uuid: UUID светофора.
+
+        Returns:
+            Optional[tuple[int, int]]: Если светофор существует, то вернётся кортеж с координатами, иначе None.
+        """
+        for coord, traffic_light in self.traffic_lights.items():
+            if traffic_light.data.uuid == uuid:
+                return coord
+        return None
 
     def _get_number_of_initial_tiles(self) -> int:
         updated_pos: list[tuple[int, int]] = []
