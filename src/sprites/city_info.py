@@ -17,7 +17,7 @@ class CityInfo(Sprite):
         super().__init__(game, (400, 800), (10, 10))
         self.game: 'Game' = game
         self.city_name: str = city_name
-        self.deaths: int = 0
+        self.deaths: int = deaths
 
         self.update_view()
 
