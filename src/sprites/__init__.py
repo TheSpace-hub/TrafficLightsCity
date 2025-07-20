@@ -11,3 +11,4 @@ from .tile_selection import TileSelection
 from .traffic_light_info import TrafficLightInfo
 from .city_info import CityInfo
 from .jumper import Jumper
+from .jumpers_group import JumpersGroup

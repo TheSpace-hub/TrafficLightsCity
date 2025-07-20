@@ -8,8 +8,8 @@ import time
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection, \
-    TrafficLightInfo, CityInfo
+from src.sprites import Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection, \
+    TrafficLightInfo, CityInfo, JumpersGroup
 from src.modules import TrafficLightData
 
 if TYPE_CHECKING:
@@ -51,6 +51,8 @@ class City(State):
         self.add_construction_management_elements_buttons()
 
         self.add_sprite('city_info', CityInfo(self.game, 'N-sk'))
+
+        jumpers_group: JumpersGroup = self.add_sprite('jumpers_group', JumpersGroup(self.game))
 
     def update(self):
         """Обновление сцены.
