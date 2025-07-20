@@ -18,6 +18,7 @@ class NoteType(Enum):
     WAIT_MARK = 1
     CLOUD_ERROR = 2
     QUESTION_ERROR = 3
+    OK = 4
 
 
 class Note:
@@ -29,7 +30,7 @@ class Note:
         """Установить или удалить записку для светофора.
 
         Args:
-            level: Записка для светофора.
+            level: Тип записки для светофора.
 
         Note:
             Возможные записки:
@@ -52,20 +53,31 @@ class Note:
         return self._level
 
     def get_cover(self, size: tuple[int, int]) -> pg.Surface:
-        if self.get_level() is None:
+        return self.get_cover_by_level(size, self.get_level())
+
+    @staticmethod
+    def get_cover_by_level(size: tuple[int, int], icon_level: Optional[int]) -> pg.Surface:
+        """Получение иконки записки.
+
+        Args:
+            size: Размер иконки в пикселях
+            icon_level: Уровень записки для светофора
+        """
+        if icon_level is None:
             return pg.Surface((0, 0))
         paths: dict[NoteType, str] = {
             NoteType.EXCLAMATION_ERROR: path.join('assets', 'images', 'exclamation_error.png'),
             NoteType.WAIT_MARK: path.join('assets', 'images', 'wait_mark.png'),
             NoteType.CLOUD_ERROR: path.join('assets', 'images', 'cloud_error.png'),
             NoteType.QUESTION_ERROR: path.join('assets', 'images', 'question_error.png'),
+            NoteType.OK: path.join('assets', 'images', 'ok_mark.png'),
         }
 
         pixel_size: tuple[float, float] = (size[0] / 16, size[1] / 16)
 
         surface: pg.Surface = pg.Surface(size, SRCALPHA, 32).convert_alpha()
 
-        pixelart = Pixelart.get_pixelart_by_image(paths[self.get_level()])
+        pixelart = Pixelart.get_pixelart_by_image(paths[NoteType(icon_level)])
         for y in range(len(pixelart)):
             for x in range(len(pixelart[y])):
                 pg.draw.rect(surface, pixelart[y][x], pg.Rect(
