@@ -1,6 +1,6 @@
 """Модуль сцены города.
 """
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Callable
 from math import pi
 import pygame as pg
 from random import randint, choice
@@ -8,7 +8,8 @@ import time
 
 from src.state import State
 
-from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection
+from src.sprites import Text, TextAlign, Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection, \
+    TrafficLightInfo
 from src.modules import TrafficLightData
 
 if TYPE_CHECKING:
@@ -37,7 +38,7 @@ class City(State):
             game (Game): Экземпляр игры
         """
         super().__init__(game)
-        self.selected_type_of_selector: tuple[Optional[SelectorType], Optional[str]] = (None, None)
+        self.selected_type_of_selector: tuple[Optional[int], Optional[str]] = (None, None)
 
     def boot(self):
         """Инициализация сцены.
@@ -53,7 +54,9 @@ class City(State):
                                             self.on_dashboard_button_pressed,
                                             enabled=False))
 
-        self.add_sprite('tile_selection', TileSelection(self.game, filed, self.build_traffic_light))
+        self.add_sprite('traffic_light_info', TrafficLightInfo(self.game))
+
+        self.add_sprite('tile_selection', TileSelection(self.game, filed, self.apply_selector))
 
         self.add_construction_management_elements_buttons()
 
@@ -135,15 +138,30 @@ class City(State):
         """Действие при нажатии на кнопку отмены строительства.
         """
         if status == ButtonStatus.PRESSED:
-            self.selected_type_of_selector = (None, None)
+            self.selected_type_of_selector = (SelectorType.GET_INFO, None)
             tile_selection: TileSelection = self.get_sprite('tile_selection')
-            tile_selection.set_visible(False)
+            tile_selection.set_visible(True)
+
+    def apply_selector(self, pos: tuple[int, int]):
+        actions: dict[int, Callable[[tuple[int, int]], None]] = {
+            SelectorType.BUILD: self.build_traffic_light,
+            SelectorType.GET_INFO: self.show_traffic_light_info,
+        }
+        actions[self.selected_type_of_selector[0]](pos)
+
+    def show_traffic_light_info(self, pos: tuple[int, int]):
+        """Отображение информации о светофоре.
+
+        Args:
+            pos: Позиция тайла на поле.
+        """
+        print(f'Get info {pos}')
 
     def build_traffic_light(self, pos: tuple[int, int]):
         """Постройка светофора на поле.
 
         Args:
-            pos: Координаты
+            pos: Координаты тала на поле.
         """
         field: Field = self.get_sprite('field')
         if not field.can_build_traffic_light(pos):
