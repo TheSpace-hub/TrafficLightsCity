@@ -68,22 +68,28 @@ class City(State):
         """
         if time.time() - self.game.last_ping_time >= 1 and self.game.pinger.running:
             jumpers_group: 'JumpersGroup' = self.get_sprite('jumpers_group')
+            city_info: 'CityInfo' = self.get_sprite('city_info')
             field: Field = self.get_sprite('field')
 
             for uuid, result in self.game.pinger.ping().items():
-                if not result[0]:
-                    pos: tuple[int, int] = field.get_offset_from_coordinates(field.get_traffic_light_pos_by_uuid(uuid))
-                    pos = (
-                        int(pos[0] + field.get_half_of_tile_size()[0] + choice([1, -1]) * field.get_half_of_tile_size()[
+                if result is not None and not result[0]:
+                    pos: Optional[tuple[int, int]] = field.get_traffic_light_pos_by_uuid(uuid)
+                    if pos is None:
+                        continue
+                    offset = field.get_offset_from_coordinates(pos)
+                    offset = (
+                        int(offset[0] + field.get_half_of_tile_size()[0] + choice([1, -1]) * field.get_half_of_tile_size()[
                             0] / 2),
-                        pos[1] - 30,
+                        offset[1] - 30,
                     )
                     jumpers_group.add_jumper(
-                        Jumper(self.game, pos, (30, 30),
+                        Jumper(self.game, offset, (30, 30),
                                Pixelart.get_pixelart_by_image(
                                    path.join('assets', 'images', 'coffin.png')
                                ))
                     )
+                    city_info.deaths += 1
+            city_info.update_view()
             self.game.last_ping_time = time.time()
 
             field.update_view()
