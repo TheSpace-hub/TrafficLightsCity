@@ -18,9 +18,11 @@ class Pinger:
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights_data.append(traffic_light)
 
-    def ping(self):
+    def ping(self) -> dict[str, Optional[tuple[bool, str]]]:
+        results: dict[str, Optional[tuple[bool, str]]] = {}
         for data in self.traffic_lights_data:
-            result: tuple[bool, str] | None = self._ping_traffic_light(data)
+            result: Optional[tuple[bool, str]] = self._ping_traffic_light(data)
+            results[data.uuid] = result
             if result is None:
                 logging.error('Не удалось выполнить проверку светофора %s типа %s.',
                               data.uuid, data.tfl_type)
@@ -40,6 +42,7 @@ class Pinger:
                                 data.uuid, result[1])
                 data.note.set_level(0)
                 data.note.note = result[1]
+        return results
 
     def _ping_traffic_light(self, data: 'TrafficLightData') -> Optional[tuple[bool, str]]:
         """Пинг отдельного светофора.
