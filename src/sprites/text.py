@@ -60,7 +60,6 @@ class Text(Sprite):
                 lines.append(line[:])
                 line = ''
             line += ' ' + word
-            print(word)
 
         if line != '':
             lines.append(line)
