@@ -47,7 +47,9 @@ class Text(Sprite):
                 (0, line * self._get_line_height()))
 
     def _get_lines(self) -> list[str]:
-        if self.max_wight is None:
+        if self.text is None:
+            return []
+        elif self.max_wight is None:
             return [self.text]
 
         lines: list[str] = []
@@ -58,6 +60,7 @@ class Text(Sprite):
                 lines.append(line[:])
                 line = ''
             line += ' ' + word
+            print(word)
 
         if line != '':
             lines.append(line)
