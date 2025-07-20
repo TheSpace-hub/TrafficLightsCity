@@ -29,6 +29,8 @@ class CityInfo(Sprite):
 
         self.image.blit(Text(self.game, (0, 0), f'Город: {self.city_name}', 16,
                              (255, 255, 255), align=TextAlign.LEFT).image, (10, 10))
+        self.image.blit(Text(self.game, (0, 0), f'Смерти: {self.deaths}', 16,
+                             (255, 255, 255), align=TextAlign.LEFT).image, (10, 35))
 
     def update(self):
         pass
