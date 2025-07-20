@@ -15,12 +15,19 @@ if TYPE_CHECKING:
     from src.game import Game
 
 
+class SelectorType:
+    """Тип селектора, который он может принимать.
+    """
+    BUILD = 0
+    GET_INFO = 1
+
+
 class City(State):
     """Сцена города.
 
     Attributes:
-        selected_type_of_traffic_light_creation (Optional[str]): При нажатии на кнопку строительства
-            светофора здесь, сохраняется информация о нажатой кнопке
+        selected_type_of_selector: При нажатии на кнопку строительства
+            светофора здесь, сохраняется информация о выбранном для строительства светофоре.
     """
 
     def __init__(self, game: 'Game'):
@@ -30,7 +37,7 @@ class City(State):
             game (Game): Экземпляр игры
         """
         super().__init__(game)
-        self.selected_type_of_traffic_light_creation: Optional[str] = ''
+        self.selected_type_of_selector: tuple[Optional[SelectorType], Optional[str]] = (None, None)
 
     def boot(self):
         """Инициализация сцены.
@@ -72,14 +79,14 @@ class City(State):
         """Добавление кнопок, отвечающих за строительство.
         """
         self.add_traffic_lights_build_buttons()
-        self.add_cansel_building_button()
+        self.add_info_about_traffic_light_button()
 
-    def add_cansel_building_button(self):
+    def add_info_about_traffic_light_button(self):
         """Добавление кнопки отмены строительства.
         """
         self.add_sprite('info_about_traffic_light', Button(self.game, (10, 970), (100, 100),
                                                            InBlockText(self.game, 'ИНФО', 16, (255, 255, 255)),
-                                                           func=self.on_cansel_build_button_pressed))
+                                                           func=self.on_info_about_traffic_light_button_pressed))
 
     def add_traffic_lights_build_buttons(self):
         """Добавление кнопок всех типов светофоров.
@@ -120,15 +127,15 @@ class City(State):
         """Выбор светофора при нажатии на кнопку постройки светофора.
         """
         if status == ButtonStatus.PRESSED:
-            self.selected_type_of_traffic_light_creation = context
+            self.selected_type_of_selector = (SelectorType.BUILD, context)
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
 
-    def on_cansel_build_button_pressed(self, status: ButtonStatus):
+    def on_info_about_traffic_light_button_pressed(self, status: ButtonStatus):
         """Действие при нажатии на кнопку отмены строительства.
         """
         if status == ButtonStatus.PRESSED:
-            self.selected_type_of_traffic_light_creation = None
+            self.selected_type_of_selector = (None, None)
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(False)
 
@@ -142,11 +149,11 @@ class City(State):
         if not field.can_build_traffic_light(pos):
             return
         uuid: str = self.generate_uuid()
-        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_traffic_light_creation,
+        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_selector[1],
                                                  uuid, field=field)
         field.update_view()
 
-        data = TrafficLightData(self.selected_type_of_traffic_light_creation, uuid)
+        data = TrafficLightData(self.selected_type_of_selector[1], uuid)
 
         self.game.pinger.traffic_lights_data.append(data)
         field.traffic_lights[pos].data = data
@@ -225,7 +232,7 @@ class City(State):
             field.update_view()
 
         if pg.key.get_pressed()[pg.K_ESCAPE]:
-            self.selected_type_of_traffic_light_creation = None
+            self.selected_type_of_selector = (None, None)
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(False)
 
