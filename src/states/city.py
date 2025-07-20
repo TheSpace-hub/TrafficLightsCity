@@ -71,6 +71,18 @@ class City(State):
             field: Field = self.get_sprite('field')
             field.update_view()
 
+    def add_city_info(self):
+        """Добавление основной информации о городе.
+
+        Note:
+            Будет добавлена информация:
+
+            - UUID города.
+            - Информация о лёгких авариях.
+            - Информация о тяжёлых авариях.
+            - Информация об очень тяжёлых авариях.
+        """
+
     def add_construction_management_elements_buttons(self):
         """Добавление кнопок, отвечающих за строительство.
         """
