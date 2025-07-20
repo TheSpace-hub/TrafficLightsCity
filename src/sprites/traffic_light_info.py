@@ -1,40 +1,33 @@
 from typing import TYPE_CHECKING, Optional
+import pygame as pg
+from pygame import SRCALPHA
 
-from src.sprites import Container
+from src.sprite import Sprite
 
 if TYPE_CHECKING:
     from src.game import Game
     from src.modules import TrafficLightData
 
 
-class TrafficLightInfo(Container):
+class TrafficLightInfo(Sprite):
     """Класс для отображения подробной информации о светофоре.
     """
 
     def __init__(self, game: 'Game'):
-        super().__init__(game, (300, 800), (30, 30))
+        super().__init__(game, (400, 800), (1510, 10))
         self.game: 'Game' = game
         self.data: Optional['TrafficLightData'] = None
 
         self.update_view()
 
     def update_view(self):
-        super().update_view()
-
-    def show_data(self, data: 'TrafficLightData'):
-        """Отобразить данные о светофоре.
-
-        Args:
-            data: Данные о светофоре.
-        """
-        self.data = data
-        self.update_view()
-
-    def close(self):
-        """Закрыть информацию о текущем светофоре.
-        """
-        self.data = None
-        self.update_view()
+        if self.data is None:
+            self.image = pg.Surface(self.image.get_size(), SRCALPHA, 32).convert_alpha()
+            return
+        self.image.fill((32, 32, 32))
+        pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
+            0, 0, self.image.get_size()[0], self.image.get_size()[1]
+        ), 3)
 
     def update(self):
         pass

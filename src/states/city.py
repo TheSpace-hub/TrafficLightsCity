@@ -48,15 +48,8 @@ class City(State):
         self.add_sprite('city_name', Text(self.game, (10, 10), 'City.01', 16,
                                           (255, 255, 255), align=TextAlign.LEFT))
 
-        self.add_sprite('dashboard', Button(self.game, (1465, 10), (445, 70),
-                                            InBlockText(self.game, 'Панель Управ.', 16,
-                                                        (255, 255, 255)),
-                                            self.on_dashboard_button_pressed,
-                                            enabled=False))
-
-        self.add_sprite('traffic_light_info', TrafficLightInfo(self.game))
-
         self.add_sprite('tile_selection', TileSelection(self.game, filed, self.apply_selector))
+        self.add_sprite('traffic_light_info', TrafficLightInfo(self.game))
 
         self.add_construction_management_elements_buttons()
 
@@ -155,7 +148,13 @@ class City(State):
         Args:
             pos: Позиция тайла на поле.
         """
-        print(f'Get info {pos}')
+        field: Field = self.get_sprite('field')
+        if pos not in field.traffic_lights:
+            return
+
+        traffic_light_info: 'TrafficLightInfo' = self.get_sprite('traffic_light_info')
+        traffic_light_info.data = field.traffic_lights[pos].data
+        traffic_light_info.update_view()
 
     def build_traffic_light(self, pos: tuple[int, int]):
         """Постройка светофора на поле.
