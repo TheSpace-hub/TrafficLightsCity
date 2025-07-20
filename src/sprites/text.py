@@ -44,10 +44,25 @@ class Text(Sprite):
         for line, text in enumerate(self._get_lines()):
             self.image.blit(
                 pg.font.Font(self.font_path, self.font_size).render(text, True, self.color),
-                (0, line))
+                (0, line * self._get_line_height()))
 
     def _get_lines(self) -> list[str]:
-        return [self.text]
+        if self.max_wight is None:
+            return [self.text]
+
+        lines: list[str] = []
+        line: str = ''
+        for word in self.text.split():
+            if pg.font.Font(self.font_path, self.font_size).render(line + ' ' + word, True, (0, 0, 0)).get_size()[
+                0] > self.max_wight:
+                lines.append(line[:])
+                line = ' '
+            line += ' ' + word
+
+        if line != '':
+            lines.append(line)
+
+        return lines
 
     def _get_line_height(self) -> int:
         return pg.font.Font(self.font_path, self.font_size).render('#', True, (0, 0, 0)).get_size()[1]
