@@ -5,11 +5,12 @@ from math import pi
 import pygame as pg
 from random import randint, choice
 import time
+from os import path
 
 from src.state import State
 
 from src.sprites import Field, TrafficLight, Button, InBlockText, ButtonStatus, TileSelection, \
-    TrafficLightInfo, CityInfo, JumpersGroup
+    TrafficLightInfo, CityInfo, JumpersGroup, Jumper, Pixelart
 from src.modules import TrafficLightData
 
 if TYPE_CHECKING:
@@ -66,10 +67,20 @@ class City(State):
         """Пинг каждую секунду.
         """
         if time.time() - self.game.last_ping_time >= 1 and self.game.pinger.running:
-            self.game.pinger.ping()
+            jumpers_group: 'JumpersGroup' = self.get_sprite('jumpers_group')
+            field: Field = self.get_sprite('field')
+
+            for uuid, result in self.game.pinger.ping().items():
+                if not result[0]:
+                    pos: tuple[int, int] = field.get_traffic_light_pos_by_uuid(uuid)
+                    jumpers_group.add_jumper(
+                        Jumper(self.game, field.get_offset_from_coordinates(pos), (30, 30),
+                               Pixelart.get_pixelart_by_image(
+                                   path.join('assets', 'images', 'coffin.png')
+                               ))
+                    )
             self.game.last_ping_time = time.time()
 
-            field: Field = self.get_sprite('field')
             field.update_view()
 
     def add_construction_management_elements_buttons(self):
