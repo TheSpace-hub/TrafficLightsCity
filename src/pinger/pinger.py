@@ -25,7 +25,7 @@ class Pinger:
                 logging.error('Не удалось выполнить проверку светофора %s типа %s.',
                               data.uuid, data.tfl_type)
                 data.note.set_level(3)
-                data.note.note = 'Не удалось выполнить проверку светофора типа ' + data.tfl_type
+                data.note.note = f'Не удалось выполнить проверку светофора типа {data.tfl_type}.'
             elif result[0]:
                 logging.info('Проверка светофора %s прошла успешно.',
                              data.uuid)
