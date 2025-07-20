@@ -32,6 +32,7 @@ class Pinger:
                 logging.info('Проверка светофора %s прошла успешно.',
                              data.uuid)
                 data.note.set_level(None)
+                data.note.note = None
             elif not result[0] and result[1] == 'Сервер недоступен':
                 logging.info('Не удалось соединиться с сервисом. (GET-запрос на url: %s).',
                              data.url)
