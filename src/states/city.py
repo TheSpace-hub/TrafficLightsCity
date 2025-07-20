@@ -72,9 +72,14 @@ class City(State):
 
             for uuid, result in self.game.pinger.ping().items():
                 if not result[0]:
-                    pos: tuple[int, int] = field.get_traffic_light_pos_by_uuid(uuid)
+                    pos: tuple[int, int] = field.get_offset_from_coordinates(field.get_traffic_light_pos_by_uuid(uuid))
+                    pos = (
+                        int(pos[0] + field.get_half_of_tile_size()[0] + choice([1, -1]) * field.get_half_of_tile_size()[
+                            0] / 2),
+                        pos[1] - 30,
+                    )
                     jumpers_group.add_jumper(
-                        Jumper(self.game, field.get_offset_from_coordinates(pos), (30, 30),
+                        Jumper(self.game, pos, (30, 30),
                                Pixelart.get_pixelart_by_image(
                                    path.join('assets', 'images', 'coffin.png')
                                ))
