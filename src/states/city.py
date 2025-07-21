@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING, Optional, Callable
 from math import pi
 import pygame as pg
-from random import randint, choice
+from random import randint, choice, uniform
 import time
 from os import path
 
@@ -78,8 +78,8 @@ class City(State):
                         continue
                     offset = field.get_offset_from_coordinates(pos)
                     offset = (
-                        int(offset[0] + field.get_half_of_tile_size()[0] + choice([1, -1]) * field.get_half_of_tile_size()[
-                            0] / 2),
+                        int(offset[0] + field.get_half_of_tile_size()[0] + uniform(-1, 1) *
+                            field.get_half_of_tile_size()[0] / 2 - 15),
                         offset[1] - 30,
                     )
                     jumpers_group.add_jumper(
