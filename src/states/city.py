@@ -188,7 +188,7 @@ class City(State):
         field: Field = self.get_sprite('field')
         if not field.can_build_traffic_light(pos):
             return
-        uuid: str = self.generate_uuid()
+        uuid: str = self.generate_uuid_for_traffic_light()
         field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_selector[1],
                                                  uuid, field=field)
         field.update_view()
@@ -198,7 +198,7 @@ class City(State):
         self.game.pinger.traffic_lights_data.append(data)
         field.traffic_lights[pos].data = data
 
-    def generate_uuid(self) -> str:
+    def generate_uuid_for_traffic_light(self) -> str:
         """Создание более интересного уникального uuid для светофора.
         """
         cities: list[str] = [
