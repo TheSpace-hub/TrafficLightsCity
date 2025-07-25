@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 import pygame as pg
-from pygame import SRCALPHA
 
 from src.sprites import Text, TextAlign
 from src.sprite import Sprite
