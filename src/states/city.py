@@ -58,9 +58,9 @@ class City(State):
 
         self.add_sprite('city_info', CityInfo(self.game, self.name))
 
-        self.add_sprite('save_map_button', Button(self.game, (10, 120), (400, 50),
-                                                  InBlockText(self.game, 'Сохранить карту', 16, (255, 255, 255)),
-                                                  self.on_save_map_button_pressed
+        self.add_sprite('save_city_button', Button(self.game, (10, 120), (400, 50),
+                                                  InBlockText(self.game, 'Сохранить город', 16, (255, 255, 255)),
+                                                  self.on_save_city_button_pressed
                                                   ))
 
         self.add_sprite('jumpers_group', JumpersGroup(self.game))
@@ -188,7 +188,7 @@ class City(State):
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
 
-    def on_save_map_button_pressed(self, status: ButtonStatus):
+    def on_save_city_button_pressed(self, status: ButtonStatus):
         if status != ButtonStatus.PRESSED:
             return
 
@@ -205,7 +205,7 @@ class City(State):
                 if traffic_light.data.tfl_type == tfl_type:
                     city['traffic_lights'][tfl_type].append(pos)
 
-        with open(path.join('saves', 'maps', f'{self.name}.json'), 'w') as file:
+        with open(path.join('saves', 'cities', f'{self.name}.json'), 'w') as file:
             file.write(json.dumps(city))
 
     def apply_selector(self, pos: tuple[int, int]):
@@ -272,7 +272,7 @@ class City(State):
     def generate_uuid_for_traffic_light(self) -> str:
         """Создание более интересного уникального uuid для светофора.
         """
-        cities: list[str] = [
+        name: list[str] = [
             "quantumbeacon", "synthwave", "neongrid", "cybernode", "optiflow", "pulsecore",
             "nanosignal", "axiomx", "vortexlight", "datastream", "binarystar", "logicgate",
             "photongate", "cipher9", "nexus7", "echomirage", "silentobserver", "voidmarker",
@@ -297,13 +297,13 @@ class City(State):
             "frostbite", "emberglow", "stormchaser"
         ]
         contains: bool = True
-        uuid = f'{choice(cities)}_{randint(1, 999)}'
+        uuid = f'{choice(name)}_{randint(1, 999)}'
         while contains:
             contains: bool = False
             for traffic_light in self.game.pinger.traffic_lights_data:
                 if traffic_light.uuid == uuid:
                     contains = True
-                    uuid = f'{choice(cities)}_{randint(1, 999)}'
+                    uuid = f'{choice(name)}_{randint(1, 999)}'
                     break
 
         return uuid
@@ -336,7 +336,7 @@ class City(State):
             "severomorsk", "arzamas", "arzamas", "ivanteevka"
         ]
         uuid = choice(cities)
-        while f'{uuid}.json' in [file for file in listdir(path.join('saves', 'maps')) if file.endswith('.json')]:
+        while f'{uuid}.json' in [file for file in listdir(path.join('saves', 'cities')) if file.endswith('.json')]:
             uuid = choice(cities)
 
         return uuid

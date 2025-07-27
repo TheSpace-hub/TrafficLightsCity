@@ -42,7 +42,7 @@ class OpenCity(State):
     def create_open_city_choice(self):
         """Создание строки для выбора города.
         """
-        cities: list[str] = [file for file in listdir(path.join('saves', 'maps')) if file.endswith('.json')]
+        cities: list[str] = [file for file in listdir(path.join('saves', 'cities')) if file.endswith('.json')]
         options: list[Option] = []
         for city in cities:
             options.append(
