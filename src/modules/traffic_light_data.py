@@ -168,6 +168,11 @@ class TrafficLightData:
 
     @staticmethod
     def get_all_types() -> list[str]:
+        """Получение всех типов светофоров.
+
+        Returns:
+            list[str]: Список светофоров.
+        """
         return [way.stem for way in Path(path.join('saves', 'traffic_lights')).glob('*.json')]
 
     def _update_segments(self):
