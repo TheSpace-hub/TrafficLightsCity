@@ -20,6 +20,14 @@ class CityInfo(Sprite):
 
         self.update_view()
 
+    def update_info(self, deaths: int):
+        """Обновление информации.
+
+        Args:
+            deaths: Кол-во смертей в городе.
+        """
+        self.deaths = deaths
+
     def update_view(self):
         self.image.fill((32, 32, 32))
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
