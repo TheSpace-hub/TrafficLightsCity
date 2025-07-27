@@ -13,7 +13,7 @@ class CityInfo(Sprite):
     """
 
     def __init__(self, game: 'Game', city_name: str, deaths: int = 0):
-        super().__init__(game, (400, 800), (10, 10))
+        super().__init__(game, (400, 100), (10, 10))
         self.game: 'Game' = game
         self.city_name: str = city_name
         self.deaths: int = deaths
