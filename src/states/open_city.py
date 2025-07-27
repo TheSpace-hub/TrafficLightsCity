@@ -1,5 +1,6 @@
 """Модуль открытия города.
 """
+import json
 from typing import TYPE_CHECKING
 from os import path, listdir
 
@@ -32,7 +33,8 @@ class OpenCity(State):
         self.create_open_city_choice()
 
         self.add_sprite('open_city', Button(self.game, (510, 620), (900, 70),
-                                            InBlockText(self.game, 'Открыть город', 16, (255, 255, 255))))
+                                            InBlockText(self.game, 'Открыть город', 16, (255, 255, 255)),
+                                            self.on_open_city_button_pressed))
 
         self.add_sprite('back', Button(self.game, (1710, 1000), (200, 70),
                                        InBlockText(self.game, 'Назад', 16,
@@ -58,6 +60,14 @@ class OpenCity(State):
     def on_open_city_button_pressed(self, status: ButtonStatus, context: str):
         """Действие при нажатии на одну из кнопок для открытия города.
         """
+        if status != ButtonStatus.PRESSED:
+            return
+
+        choice: ChoiceOfSeveralOptions = self.get_sprite('choice_city')
+        city: str = choice.options[choice.current_option].value
+
+        with open(path.join('saves', 'cities', city)) as file:
+            self.game.change_state('City', json.loads(file.read()))
 
     def update(self):
         pass
