@@ -5,7 +5,7 @@ from math import pi
 import pygame as pg
 from random import randint, choice, uniform
 import time
-from os import path
+from os import path, listdir
 
 from src.state import State
 
@@ -51,7 +51,7 @@ class City(State):
 
         self.add_construction_management_elements_buttons()
 
-        self.add_sprite('city_info', CityInfo(self.game, 'N-sk'))
+        self.add_sprite('city_info', CityInfo(self.game, self.generate_uuid_for_city()))
 
         self.add_sprite('jumpers_group', JumpersGroup(self.game))
 
@@ -233,6 +233,39 @@ class City(State):
                     contains = True
                     uuid = f'{choice(cities)}_{randint(1, 999)}'
                     break
+
+        return uuid
+
+    @staticmethod
+    def generate_uuid_for_city() -> str:
+        """Создание уникального названия для города.
+        """
+        cities: list[str] = [
+            "moscow", "saintpetersburg", "novosibirsk", "yekaterinburg", "kazan",
+            "nizhnynovgorod", "chelyabinsk", "samara", "omsk", "rostovondon",
+            "ufa", "krasnoyarsk", "perm", "voronezh", "volgograd", "krasnodar",
+            "saratov", "tyumen", "tolyatti", "izhevsk", "barnaul", "ulyanovsk",
+            "irkutsk", "khabarovsk", "yaroslavl", "vladivostok", "makhachkala",
+            "tomsk", "orenburg", "kemerovo", "novokuznetsk", "ryazan", "astrakhan",
+            "naberezhnyechelny", "penza", "lipetsk", "kirov", "cheboksary",
+            "tula", "kaliningrad", "balashikha", "kursk", "stavropol", "sochi",
+            "ivanovo", "tver", "bryansk", "belgorod", "arzamas", "vladimir",
+            "chita", "grozny", "kaluga", "smolensk", "volzhsky", "murmansks",
+            "vladikavkaz", "saransk", "yakutsk", "sterlitamak", "orsk", "severodvinsk",
+            "novorossiysk", "nizhnekamsk", "shakhty", "dzerzhinsk", "engels",
+            "biysk", "prokopyevsk", "rybinsk", "balakovo", "armavir", "lobnya",
+            "seversk", "mezhdurechensk", "kamenskuralsky", "miass", "elektrostal",
+            "zlatoust", "serpukhov", "kopeyk", "almetyevsk", "odintsovo", "korolyov",
+            "lyubertsy", "kovrov", "novouralsk", "khasavyurt", "pyatigorsk",
+            "serov", "arzamas", "berezniki", "kislovodsk", "anapa", "gelendzhik",
+            "yeysk", "komsomolsknaamure", "nizhnevartovsk", "novyurengoy",
+            "magadan", "norilsk", "salekhard", "surgut", "khanty-mansiysk",
+            "yuzhnosakhalinsk", "vorkuta", "nadym", "gubkinsky", "murmansk",
+            "severomorsk", "arzamas", "arzamas", "ivanteevka"
+        ]
+        uuid = choice(cities)
+        while f'{uuid}.tflc' in [file for file in listdir(path.join('saves', 'maps')) if file.endswith('.txt')]:
+            uuid = choice(cities)
 
         return uuid
 
