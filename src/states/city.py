@@ -336,7 +336,7 @@ class City(State):
             "severomorsk", "arzamas", "arzamas", "ivanteevka"
         ]
         uuid = choice(cities)
-        while f'{uuid}.tflc' in [file for file in listdir(path.join('saves', 'maps')) if file.endswith('.txt')]:
+        while f'{uuid}.json' in [file for file in listdir(path.join('saves', 'maps')) if file.endswith('.txt')]:
             uuid = choice(cities)
 
         return uuid
