@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 class Intro(State):
     """Класс интро.
     """
+
     def __init__(self, game: 'Game'):
         super().__init__(game)
 
@@ -31,9 +32,6 @@ class Intro(State):
         self.add_sprite('tip',
                         Text(self.game, (960, 600), 'Нажмите любую клавишу чтобы продолжить',
                              18, (200, 200, 200)))
-        self.add_sprite('author',
-                        Text(self.game, (10, 10), 'Автор: TheSpace // @rocketstage',
-                             18, (255, 255, 255), align=TextAlign.LEFT))
 
     def update(self):
         """Обновление каждый кадр.
