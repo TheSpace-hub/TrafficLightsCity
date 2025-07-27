@@ -31,13 +31,16 @@ class TrafficLightInfo(Sprite):
         ), 3)
 
         pg.draw.rect(self.image, (78, 78, 78), pg.Rect(
-            20, 160, self.image.get_size()[0] - 40, 3
+            20, 180, self.image.get_size()[0] - 40, 3
         ))
 
         note_level: int = 4 if self.data.note.get_level() is None else self.data.note.get_level()
         self.image.blit(self.data.note.get_cover_by_level((100, 100), note_level), (150, 30))
+
+        uuid_text = Text(self.game, (200, 155), self.data.uuid, 16, (255, 255, 255))
+        self.image.blit(uuid_text.image, uuid_text.rect)
         self.image.blit(Text(self.game, (0, 0), self.data.note.note, 16, (255, 255, 255),
-                             align=TextAlign.LEFT, max_wight=340).image, (30, 180))
+                             align=TextAlign.LEFT, max_wight=340).image, (30, 200))
 
     def update(self):
         pass
