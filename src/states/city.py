@@ -6,7 +6,7 @@ from math import pi
 import pygame as pg
 from random import randint, choice, uniform
 import time
-from os import path, listdir
+from os import path
 
 from src.state import State
 
@@ -41,7 +41,7 @@ class City(State):
             game (Game): Экземпляр игры
         """
         super().__init__(game)
-        self.selected_type_of_selector: tuple[Optional[int], Optional[str]] = (None, None)
+        self.selected_type_of_selector: tuple[Optional[SelectorType | int], Optional[str]] = (None, None)
         self.name: str = ''
         self.deaths: int = 0
         self.seed: int = 0
@@ -156,6 +156,10 @@ class City(State):
         field.update_view()
         self.game.pinger.running = True
 
+        for tfl_type in self.game.transmitted_data['traffic_lights']:
+            for pos in self.game.transmitted_data['traffic_lights'][tfl_type]:
+                self.build_traffic_light(pos, tfl_type)
+
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         """Переход на сцену при нажатии на кнопку "Панель управления".
         """
@@ -209,7 +213,7 @@ class City(State):
 
     def apply_selector(self, pos: tuple[int, int]):
         actions: dict[int, Callable[[tuple[int, int]], None]] = {
-            SelectorType.BUILD: self.build_traffic_light,
+            SelectorType.BUILD: self.build_traffic_light_by_selector,
             SelectorType.GET_INFO: self.show_traffic_light_info,
             SelectorType.REMOVE: self.remove_traffic_light,
         }
@@ -229,22 +233,25 @@ class City(State):
         traffic_light_info.data = field.traffic_lights[pos].data
         traffic_light_info.update_view()
 
-    def build_traffic_light(self, pos: tuple[int, int]):
-        """Постройка светофора на поле.
+    def build_traffic_light_by_selector(self, pos: tuple[int, int]):
+        """Постройка светофора на поле. Берёт данные из селектора.
 
         Args:
             pos: Координаты тала на поле.
         """
+        self.build_traffic_light(pos, self.selected_type_of_selector[1])
+
+    def build_traffic_light(self, pos: tuple[int, int], tfl_type: str):
         field: Field = self.get_sprite('field')
         if not field.can_build_traffic_light(pos) or pos in field.traffic_lights:
             return
 
         uuid: str = self.generate_uuid_for_traffic_light()
-        field.traffic_lights[pos] = TrafficLight(self.game, self.selected_type_of_selector[1],
+        field.traffic_lights[pos] = TrafficLight(self.game, tfl_type,
                                                  uuid, field=field)
         field.update_view()
 
-        data = TrafficLightData(self.selected_type_of_selector[1], uuid)
+        data = TrafficLightData(tfl_type, uuid)
 
         self.game.pinger.traffic_lights_data.append(data)
         field.traffic_lights[pos].data = data
