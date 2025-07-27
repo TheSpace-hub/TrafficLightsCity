@@ -1,5 +1,6 @@
 """Модуль сцены города.
 """
+import json
 from typing import TYPE_CHECKING, Optional, Callable
 from math import pi
 import pygame as pg
@@ -41,6 +42,9 @@ class City(State):
         """
         super().__init__(game)
         self.selected_type_of_selector: tuple[Optional[int], Optional[str]] = (None, None)
+        self.name: str = self.generate_uuid_for_city()
+        self.deaths: int = 0
+        self.seed: int = 0
 
     def boot(self):
         """Инициализация сцены.
@@ -52,7 +56,12 @@ class City(State):
 
         self.add_construction_management_elements_buttons()
 
-        self.add_sprite('city_info', CityInfo(self.game, self.generate_uuid_for_city()))
+        self.add_sprite('city_info', CityInfo(self.game, self.name))
+
+        self.add_sprite('save_map_button', Button(self.game, (10, 120), (400, 50),
+                                                  InBlockText(self.game, 'Сохранить карту', 16, (255, 255, 255)),
+                                                  self.on_save_map_button_pressed
+                                                  ))
 
         self.add_sprite('jumpers_group', JumpersGroup(self.game))
 
@@ -89,7 +98,8 @@ class City(State):
                                    path.join('assets', 'images', 'coffin.png')
                                ))
                     )
-                    city_info.deaths += 1
+                    self.deaths += 1
+            city_info.update_info(self.deaths)
             city_info.update_view()
             self.game.last_ping_time = time.time()
 
@@ -138,10 +148,13 @@ class City(State):
             'large': (80, 80)
         }
         field_size = self.game.transmitted_data['field_size']
-        seed = self.game.transmitted_data['seed']
+        self.seed = self.game.transmitted_data['seed']
+
+        if self.seed is None:
+            self.seed = randint(0, 9999999999)
 
         field: Field = self.get_sprite('field')
-        field.generate_field(seed, field_sizes[field_size])
+        field.generate_field(self.seed, field_sizes[field_size])
         field.update_view()
         self.game.pinger.running = True
 
@@ -174,6 +187,26 @@ class City(State):
             self.selected_type_of_selector = (SelectorType.REMOVE, None)
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
+
+    def on_save_map_button_pressed(self, status: ButtonStatus):
+        if status != ButtonStatus.PRESSED:
+            return
+
+        city: dict = {
+            'name': self.name,
+            'deaths': self.deaths,
+            'seed': self.seed,
+            'traffic_lights': {}
+        }
+        field: Field = self.get_sprite('field')
+        for tfl_type in TrafficLightData.get_all_types():
+            city['traffic_lights'][tfl_type] = []
+            for pos, traffic_light in field.traffic_lights.items():
+                if traffic_light.data.tfl_type == tfl_type:
+                    city['traffic_lights'][tfl_type].append(pos)
+
+        with open(path.join('saves', 'maps', f'{self.name}.json'), 'w') as file:
+            file.write(json.dumps(city))
 
     def apply_selector(self, pos: tuple[int, int]):
         actions: dict[int, Callable[[tuple[int, int]], None]] = {
