@@ -42,9 +42,10 @@ class City(State):
         """
         super().__init__(game)
         self.selected_type_of_selector: tuple[Optional[int], Optional[str]] = (None, None)
-        self.name: str = self.generate_uuid_for_city()
+        self.name: str = ''
         self.deaths: int = 0
         self.seed: int = 0
+        self.size: tuple[int, int] = (0, 0)
 
     def boot(self):
         """Инициализация сцены.
@@ -59,9 +60,9 @@ class City(State):
         self.add_sprite('city_info', CityInfo(self.game, self.name))
 
         self.add_sprite('save_city_button', Button(self.game, (10, 120), (400, 50),
-                                                  InBlockText(self.game, 'Сохранить город', 16, (255, 255, 255)),
-                                                  self.on_save_city_button_pressed
-                                                  ))
+                                                   InBlockText(self.game, 'Сохранить город', 16, (255, 255, 255)),
+                                                   self.on_save_city_button_pressed
+                                                   ))
 
         self.add_sprite('jumpers_group', JumpersGroup(self.game))
 
@@ -142,19 +143,16 @@ class City(State):
     def enter(self):
         """Передача сида и размера карты при заходе.
         """
-        field_sizes: dict[str, tuple[int, int]] = {
-            'small': (30, 30),
-            'medium': (50, 50),
-            'large': (80, 80)
-        }
-        field_size = self.game.transmitted_data['field_size']
+        self.name = str(self.game.transmitted_data['name'])
+        self.size = tuple[int, int](self.game.transmitted_data['size'])
+        self.deaths = int(self.game.transmitted_data['deaths'])
         self.seed = self.game.transmitted_data['seed']
 
         if self.seed is None:
             self.seed = randint(0, 9999999999)
 
         field: Field = self.get_sprite('field')
-        field.generate_field(self.seed, field_sizes[field_size])
+        field.generate_field(self.seed, self.size)
         field.update_view()
         self.game.pinger.running = True
 
@@ -192,13 +190,14 @@ class City(State):
         if status != ButtonStatus.PRESSED:
             return
 
+        field: Field = self.get_sprite('field')
         city: dict = {
             'name': self.name,
             'deaths': self.deaths,
             'seed': self.seed,
+            'size': self.size,
             'traffic_lights': {}
         }
-        field: Field = self.get_sprite('field')
         for tfl_type in TrafficLightData.get_all_types():
             city['traffic_lights'][tfl_type] = []
             for pos, traffic_light in field.traffic_lights.items():
@@ -305,39 +304,6 @@ class City(State):
                     contains = True
                     uuid = f'{choice(name)}_{randint(1, 999)}'
                     break
-
-        return uuid
-
-    @staticmethod
-    def generate_uuid_for_city() -> str:
-        """Создание уникального названия для города.
-        """
-        cities: list[str] = [
-            "moscow", "saintpetersburg", "novosibirsk", "yekaterinburg", "kazan",
-            "nizhnynovgorod", "chelyabinsk", "samara", "omsk", "rostovondon",
-            "ufa", "krasnoyarsk", "perm", "voronezh", "volgograd", "krasnodar",
-            "saratov", "tyumen", "tolyatti", "izhevsk", "barnaul", "ulyanovsk",
-            "irkutsk", "khabarovsk", "yaroslavl", "vladivostok", "makhachkala",
-            "tomsk", "orenburg", "kemerovo", "novokuznetsk", "ryazan", "astrakhan",
-            "naberezhnyechelny", "penza", "lipetsk", "kirov", "cheboksary",
-            "tula", "kaliningrad", "balashikha", "kursk", "stavropol", "sochi",
-            "ivanovo", "tver", "bryansk", "belgorod", "arzamas", "vladimir",
-            "chita", "grozny", "kaluga", "smolensk", "volzhsky", "murmansks",
-            "vladikavkaz", "saransk", "yakutsk", "sterlitamak", "orsk", "severodvinsk",
-            "novorossiysk", "nizhnekamsk", "shakhty", "dzerzhinsk", "engels",
-            "biysk", "prokopyevsk", "rybinsk", "balakovo", "armavir", "lobnya",
-            "seversk", "mezhdurechensk", "kamenskuralsky", "miass", "elektrostal",
-            "zlatoust", "serpukhov", "kopeyk", "almetyevsk", "odintsovo", "korolyov",
-            "lyubertsy", "kovrov", "novouralsk", "khasavyurt", "pyatigorsk",
-            "serov", "arzamas", "berezniki", "kislovodsk", "anapa", "gelendzhik",
-            "yeysk", "komsomolsknaamure", "nizhnevartovsk", "novyurengoy",
-            "magadan", "norilsk", "salekhard", "surgut", "khanty-mansiysk",
-            "yuzhnosakhalinsk", "vorkuta", "nadym", "gubkinsky", "murmansk",
-            "severomorsk", "arzamas", "arzamas", "ivanteevka"
-        ]
-        uuid = choice(cities)
-        while f'{uuid}.json' in [file for file in listdir(path.join('saves', 'cities')) if file.endswith('.json')]:
-            uuid = choice(cities)
 
         return uuid
 

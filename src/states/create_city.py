@@ -1,6 +1,8 @@
 """Модуль создания города.
 """
 from typing import TYPE_CHECKING
+from random import choice
+from os import path, listdir
 
 from src.state import State
 
@@ -59,13 +61,55 @@ class CreateCity(State):
             seed_input: Input = self.get_sprite('seed_input')
             field_size: ChoiceOfSeveralOptions = self.get_sprite('field_size')
 
+            field_sizes: dict[str, tuple[int, int]] = {
+                'small': (30, 30),
+                'medium': (50, 50),
+                'large': (80, 80)
+            }
+
             context: dict = {
+                'name': self.generate_uuid_for_city(),
+                'deaths': 0,
                 'seed': None,
-                'field_size': field_size.options[field_size.current_option].value
+                'size': field_sizes[field_size.options[field_size.current_option].value],
+                'traffic_lights': []
             }
             if seed_input.text.text.isdigit():
                 context['seed'] = int(seed_input.text.text)
             self.game.change_state('City', context)
+
+    @staticmethod
+    def generate_uuid_for_city() -> str:
+        """Создание уникального названия для города.
+        """
+        cities: list[str] = [
+            "moscow", "saintpetersburg", "novosibirsk", "yekaterinburg", "kazan",
+            "nizhnynovgorod", "chelyabinsk", "samara", "omsk", "rostovondon",
+            "ufa", "krasnoyarsk", "perm", "voronezh", "volgograd", "krasnodar",
+            "saratov", "tyumen", "tolyatti", "izhevsk", "barnaul", "ulyanovsk",
+            "irkutsk", "khabarovsk", "yaroslavl", "vladivostok", "makhachkala",
+            "tomsk", "orenburg", "kemerovo", "novokuznetsk", "ryazan", "astrakhan",
+            "naberezhnyechelny", "penza", "lipetsk", "kirov", "cheboksary",
+            "tula", "kaliningrad", "balashikha", "kursk", "stavropol", "sochi",
+            "ivanovo", "tver", "bryansk", "belgorod", "arzamas", "vladimir",
+            "chita", "grozny", "kaluga", "smolensk", "volzhsky", "murmansks",
+            "vladikavkaz", "saransk", "yakutsk", "sterlitamak", "orsk", "severodvinsk",
+            "novorossiysk", "nizhnekamsk", "shakhty", "dzerzhinsk", "engels",
+            "biysk", "prokopyevsk", "rybinsk", "balakovo", "armavir", "lobnya",
+            "seversk", "mezhdurechensk", "kamenskuralsky", "miass", "elektrostal",
+            "zlatoust", "serpukhov", "kopeyk", "almetyevsk", "odintsovo", "korolyov",
+            "lyubertsy", "kovrov", "novouralsk", "khasavyurt", "pyatigorsk",
+            "serov", "arzamas", "berezniki", "kislovodsk", "anapa", "gelendzhik",
+            "yeysk", "komsomolsknaamure", "nizhnevartovsk", "novyurengoy",
+            "magadan", "norilsk", "salekhard", "surgut", "khanty-mansiysk",
+            "yuzhnosakhalinsk", "vorkuta", "nadym", "gubkinsky", "murmansk",
+            "severomorsk", "arzamas", "arzamas", "ivanteevka"
+        ]
+        uuid = choice(cities)
+        while f'{uuid}.json' in [file for file in listdir(path.join('saves', 'cities')) if file.endswith('.json')]:
+            uuid = choice(cities)
+
+        return uuid
 
     def update(self):
         pass
