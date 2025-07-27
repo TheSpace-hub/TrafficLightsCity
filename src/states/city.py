@@ -22,6 +22,7 @@ class SelectorType:
     """
     BUILD = 0
     GET_INFO = 1
+    REMOVE = 2
 
 
 class City(State):
@@ -97,15 +98,23 @@ class City(State):
     def add_construction_management_elements_buttons(self):
         """Добавление кнопок, отвечающих за строительство.
         """
-        self.add_traffic_lights_build_buttons()
         self.add_info_about_traffic_light_button()
+        self.add_remove_traffic_light_button()
+        self.add_traffic_lights_build_buttons()
 
     def add_info_about_traffic_light_button(self):
-        """Добавление кнопки отмены строительства.
+        """Добавление кнопки для получения информации о светофоре.
         """
         self.add_sprite('info_about_traffic_light', Button(self.game, (10, 970), (100, 100),
                                                            InBlockText(self.game, 'ИНФО', 16, (255, 255, 255)),
                                                            func=self.on_info_about_traffic_light_button_pressed))
+
+    def add_remove_traffic_light_button(self):
+        """Добавление кнопки для удаления светофора.
+        """
+        self.add_sprite('remove_traffic_light', Button(self.game, (120, 970), (100, 100),
+                                                       InBlockText(self.game, 'УДАЛ', 16, (255, 255, 255)),
+                                                       func=self.on_remove_traffic_light_button_pressed))
 
     def add_traffic_lights_build_buttons(self):
         """Добавление кнопок всех типов светофоров.
@@ -114,7 +123,7 @@ class City(State):
 
         for i in range(len(traffic_lights)):
             self.add_sprite(f'traffic_light_{traffic_lights[i].data.tfl_type}_build',
-                            Button(self.game, (10 + (i + 1) * 110, 970), (100, 100),
+                            Button(self.game, (10 + (i + 2) * 110, 970), (100, 100),
                                    InBlockText(self.game, '', 0, (0, 0, 0)),
                                    func=self.on_traffic_light_build_button_pressed,
                                    func_context=traffic_lights[i].data.tfl_type,
@@ -158,10 +167,19 @@ class City(State):
             tile_selection: TileSelection = self.get_sprite('tile_selection')
             tile_selection.set_visible(True)
 
+    def on_remove_traffic_light_button_pressed(self, status: ButtonStatus):
+        """Действие при нажатии на кнопку отмены строительства.
+        """
+        if status == ButtonStatus.PRESSED:
+            self.selected_type_of_selector = (SelectorType.REMOVE, None)
+            tile_selection: TileSelection = self.get_sprite('tile_selection')
+            tile_selection.set_visible(True)
+
     def apply_selector(self, pos: tuple[int, int]):
         actions: dict[int, Callable[[tuple[int, int]], None]] = {
             SelectorType.BUILD: self.build_traffic_light,
             SelectorType.GET_INFO: self.show_traffic_light_info,
+            SelectorType.REMOVE: self.remove_traffic_light,
         }
         actions[self.selected_type_of_selector[0]](pos)
 
@@ -197,6 +215,27 @@ class City(State):
 
         self.game.pinger.traffic_lights_data.append(data)
         field.traffic_lights[pos].data = data
+
+    def remove_traffic_light(self, pos: tuple[int, int]):
+        """Удаление светофора с поля.
+
+        Args:
+            pos: Координаты тала на поле.
+        """
+        field: Field = self.get_sprite('field')
+        if not field.can_build_traffic_light(pos):
+            return
+        if pos not in field.traffic_lights:
+            return
+
+        uuid: str = field.traffic_lights[pos].data.uuid
+        for i in range(len(self.game.pinger.traffic_lights_data)):
+            if self.game.pinger.traffic_lights_data[i].uuid == uuid:
+                del self.game.pinger.traffic_lights_data[i]
+                break
+
+        field.traffic_lights.pop(pos)
+        field.update_view()
 
     def generate_uuid_for_traffic_light(self) -> str:
         """Создание более интересного уникального uuid для светофора.
