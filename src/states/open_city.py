@@ -31,6 +31,9 @@ class OpenCity(State):
 
         self.create_open_city_choice()
 
+        self.add_sprite('open_city', Button(self.game, (510, 620), (900, 70),
+                                            InBlockText(self.game, 'Открыть город', 16, (255, 255, 255))))
+
         self.add_sprite('back', Button(self.game, (1710, 1000), (200, 70),
                                        InBlockText(self.game, 'Назад', 16,
                                                    (255, 255, 255)),
@@ -43,7 +46,7 @@ class OpenCity(State):
         options: list[Option] = []
         for city in cities:
             options.append(
-                Option(InBlockText(self.game, city, 16, (255, 255, 255)), f'city_{city}')
+                Option(InBlockText(self.game, city[:-5], 16, (255, 255, 255)), city)
             )
 
         if not options:
