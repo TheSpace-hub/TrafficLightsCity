@@ -44,8 +44,8 @@ jobs:
         run: |
           mkdir -p dist_package
 
-          pyinstaller --onefile --windowed --name "TrafficLightCityLite" main.py
-          cp dist/TrafficLightCityLite* dist_package/
+          pyinstaller --onefile --windowed --name "Lite" main.py
+          cp dist/TrafficLightsCityLite* dist_package/
 
           cp -r assets/ dist_package/
           cp -r logs/ dist_package/
@@ -54,14 +54,14 @@ jobs:
       - name: Create zip archive
         run: |
           cd dist_package
-          zip -r ../TrafficLightCityLite.zip *
+          zip -r ../TrafficLightsCityLite.zip *
           cd ..
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            TrafficLightCityLite.zip
+            TrafficLightsCityLite.zip
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
