@@ -15,12 +15,13 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
-          sudo apt install python3.13-tk
+          sudo apt-get update
+          sudo apt-get install -y python3-tk
           python -m pip install --upgrade pip
           pip install pyinstaller pillow numpy pygame colorlog requests
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name "TrafficLightCity.AppImage" main.py
+          pyinstaller --onefile --windowed --name "TrafficLightCity" main.py
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
