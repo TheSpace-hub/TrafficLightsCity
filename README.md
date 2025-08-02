@@ -1,7 +1,10 @@
 # Город светофоров для курса DevOps
 
-![GitHub Actions Pylint Workflow Status](https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/pylint.yml?style=flat-square&label=Pylint)
-![GitHub Actions Build Workflow Status](https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build)
+<p align="center">
+    <a href="https://github.com/charmbracelet/crush/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity" alt="Latest Release"></a>
+    <a href="https://github.com/charmbracelet/crush/releases"><img src="https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/pylint.yml?style=flat-square&label=Pylint" alt="Pylint"></a>
+    <a href="https://github.com/charmbracelet/crush/actions"><img src="https://github.com/TheSpace-hub/TrafficLightsCity/workflows/build/badge.svg" alt="Build Status"></a>
+</p>
 
 Долбилка в продакшн с GUI интерфейсом
 
