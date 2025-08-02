@@ -27,18 +27,17 @@ jobs:
         run: |
           mkdir -p dist_package
 
-          pyinstaller --onefile --windowed --name "TrafficLightCity" main.py
+          pyinstaller --onefile --windowed --name "TrafficLightCityLite" main.py
           cp dist/TrafficLightCity* dist_package/
 
           cp -r assets/ dist_package/
-          cp -r check/ dist_package/  
-          cp -r logs/ dist_package/  
-          cp -r saves/ dist_package/  
+          cp -r logs/ dist_package/
+          cp -r saves/ dist_package/
 
       - name: Create zip archive
         run: |
           cd dist_package
-          zip -r ../TrafficLightCity.zip *
+          zip -r ../TrafficLightCityLite.zip *
           cd ..
 
       - name: Upload to Release
