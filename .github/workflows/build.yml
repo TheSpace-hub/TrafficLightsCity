@@ -15,13 +15,17 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
+          sudo apt install python3.13-tk
           python -m pip install --upgrade pip
-          pip install pyinstaller
+          pip install pyinstaller pillow numpy pygame colorlog requests
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name "TrafficLightCity" main.py
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+          pyinstaller --onefile --windowed --name "TrafficLightCity.AppImage" main.py
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: TrafficLightCity-Build
-          path: dist/
+          files: |
+            dist/TrafficLightCity*
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
