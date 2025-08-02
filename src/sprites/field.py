@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 import pygame as pg
+from pathlib import Path
+from os import path
 
 from src.sprite import Sprite
 from src.sprites import Tile, TileTexture
@@ -45,10 +47,18 @@ class Field(Sprite):
             self._draw_zero_vectors()
 
     def update_traffic_light_view(self):
+        """Обновление отображения светофора.
+
+        Note:
+            Если используется Lite версия программы (с проверкой светофоров по умолчанию), то
+            бейдж, сообщающий об отсутствии проверки для светофора выводиться не будет.
+        """
         for pos in self.traffic_lights.keys():
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
+            if not Path('check').is_dir() and traffic_light.data.note.get_level() == 5:
+                continue
             self.image.blit(traffic_light.data.note.get_cover((50, 50)),
                             self.get_offset_from_coordinates_for_traffic_lights_note(pos, traffic_light, (50, 50)))
 
