@@ -57,6 +57,7 @@ class Field(Sprite):
             traffic_light: 'TrafficLight' = self.traffic_lights[pos]
             traffic_light.update_view()
             self.image.blit(traffic_light.image, self.get_offset_from_coordinates_for_traffic_light(pos, traffic_light))
+            print(Path('check').absolute(), Path('check').is_dir(), traffic_light.data.note.get_level())
             if not Path('check').is_dir() and traffic_light.data.note.get_level() == 5:
                 continue
             self.image.blit(traffic_light.data.note.get_cover((50, 50)),
