@@ -54,7 +54,7 @@ jobs:
       - name: Create zip archive
         run: |
           cd dist_package
-          zip -r ../TrafficLightsCityLite.zip *
+          zip -r ../TrafficLightsCityLite-Linux.zip *
           cd ..
 
       - name: Upload to Release
@@ -95,7 +95,7 @@ jobs:
 
       - name: Create zip archive
         run: |
-          7z a -tzip TrafficLightsCityLite.zip .\dist_package\*
+          7z a -tzip TrafficLightsCityLite-Windows.zip .\dist_package\*
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
