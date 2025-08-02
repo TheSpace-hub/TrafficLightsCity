@@ -14,6 +14,7 @@ class Pinger:
         self.traffic_lights_data: list['TrafficLightData'] = []
         self.running: bool = False
         self.checker = Checker()
+        что-нибудь
 
     def add_traffic_light(self, traffic_light: 'TrafficLightData'):
         self.traffic_lights_data.append(traffic_light)
