@@ -14,11 +14,12 @@ from src.sprites.pixelart import Pixelart
 
 
 class NoteType(Enum):
-    EXCLAMATION_ERROR = 0
+    OK = 0
     WAIT_MARK = 1
     CLOUD_ERROR = 2
     QUESTION_ERROR = 3
-    OK = 4
+    EXCLAMATION_ERROR = 4
+    QUESTION_WARNING = 5
 
 
 class Note:
@@ -70,6 +71,7 @@ class Note:
             NoteType.WAIT_MARK: path.join('assets', 'images', 'wait_mark.png'),
             NoteType.CLOUD_ERROR: path.join('assets', 'images', 'cloud_error.png'),
             NoteType.QUESTION_ERROR: path.join('assets', 'images', 'question_error.png'),
+            NoteType.QUESTION_WARNING: path.join('assets', 'images', 'question_warning.png'),
             NoteType.OK: path.join('assets', 'images', 'ok_mark.png'),
         }
 

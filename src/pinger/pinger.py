@@ -24,9 +24,9 @@ class Pinger:
             result: Optional[tuple[bool, str]] = self._ping_traffic_light(data)
             results[data.uuid] = result
             if result is None:
-                logging.error('Не удалось выполнить проверку светофора %s типа %s.',
-                              data.uuid, data.tfl_type)
-                data.note.set_level(3)
+                logging.warning('Не удалось выполнить проверку светофора %s типа %s.',
+                                data.uuid, data.tfl_type)
+                data.note.set_level(5)
                 data.note.note = f'Не удалось выполнить проверку светофора типа {data.tfl_type}.'
             elif result[0]:
                 logging.info('Проверка светофора %s прошла успешно.',
@@ -41,7 +41,7 @@ class Pinger:
             elif not result[0]:
                 logging.warning('Проверка светофора %s привела к ошибке "%s".',
                                 data.uuid, result[1])
-                data.note.set_level(0)
+                data.note.set_level(4)
                 data.note.note = result[1]
         return results
 

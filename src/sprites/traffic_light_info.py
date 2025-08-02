@@ -34,7 +34,7 @@ class TrafficLightInfo(Sprite):
             20, 180, self.image.get_size()[0] - 40, 3
         ))
 
-        note_level: int = 4 if self.data.note.get_level() is None else self.data.note.get_level()
+        note_level: int = 0 if self.data.note.get_level() is None else self.data.note.get_level()
         self.image.blit(self.data.note.get_cover_by_level((100, 100), note_level), (150, 30))
 
         uuid_text = Text(self.game, (200, 155), self.data.uuid, 16, (255, 255, 255))
