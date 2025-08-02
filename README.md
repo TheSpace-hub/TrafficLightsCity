@@ -1,7 +1,7 @@
 # Город светофоров для курса DevOps
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/pylint.yml?style=flat-square&label=Pylint)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build)
+![GitHub Actions Workflow Status 1](https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build)
 
 Долбилка в продакшн с GUI интерфейсом
 
