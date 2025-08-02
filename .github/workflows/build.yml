@@ -61,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            TrafficLightsCityLite.zip
+            TrafficLightsCityLite-Linux.zip
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -101,7 +101,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            TrafficLightsCityLite.zip
+            TrafficLightsCityLite-Windows.zip
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
