@@ -1,4 +1,4 @@
-# Город светофоров для курса DevOps
+# Город светофоров
 
 <p align="center">
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="Latest Release"></a>
