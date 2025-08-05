@@ -71,7 +71,7 @@ class Pinger:
         """
         try:
             response = requests.get(data.url, params={
-                # 'type': str(data.type_value),
+                'type': str(data.type_value),
                 'data': json.dumps({
                     'uuid': str(data.uuid),
                     'current_time': data.current_time,
