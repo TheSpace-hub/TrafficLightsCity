@@ -87,7 +87,7 @@ class Pinger:
             data.set_state(int(json.loads(response.content)['next_state']) - 1)
             data.note.set_level(None)
 
-            checking = self.checker.check(data.tfl_type, {
+            checking: tuple[bool, Optional[str]] = self.checker.check(data.tfl_type, {
                 'type': str(data.type_value),
                 'data': {
                     'uuid': str(data.uuid),
@@ -97,6 +97,6 @@ class Pinger:
             }, json.loads(response.content))
             if checking is None:
                 return None
-            return checking[0], checking[1], response.status_code
+            return checking[0], checking[1], response.status_code if checking[0] else 400
         except requests.exceptions.ConnectionError:
             return False, 'Сервер недоступен', -1
