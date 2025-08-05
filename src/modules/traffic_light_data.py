@@ -153,7 +153,7 @@ class TrafficLightData:
         self.type_value: str = self._get_type_value(data)
         self.segments: dict[str, TrafficLightSegment] = self._get_segments(data)
         self.states: list[dict[str, str]] = self._get_states(data)
-        self.current_time: int = 0
+        self.current_time: int = 1
         self.note: Note = Note()
         self._state: int = 0
 
@@ -164,7 +164,7 @@ class TrafficLightData:
 
     def set_state(self, state: int):
         if state != self._state:
-            self.current_time = 0
+            self.current_time = 1
         self._state = state
         self._update_segments()
 
