@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="Latest Release"></a>
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/actions"><img src="https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build" alt="Build Status"></a>
-    <a href="https://github.com/TheSpace-hub/TrafficLightsCity/blob/main/LICENSE"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
+    <a href="https://github.com/TheSpace-hub/TrafficLightsCity?tab=GPL-3.0-1-ov-file"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
 </p>
 
 Приложение с графическим интерфейсом для моделирования и тестирования работы сервиса обрабатывающего светофоры.
