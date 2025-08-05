@@ -27,7 +27,7 @@ def check_basic(request: dict, response: dict) -> tuple[bool, Optional[str]]:
 
 
 @checker('arrow')
-def check_basic(request: dict, response: dict) -> tuple[bool, Optional[str]]:
+def check_arrow(request: dict, response: dict) -> tuple[bool, Optional[str]]:
     """
     Пример проверки запроса на 3-х сегментный светофор со стрелкой и ответа.
 
@@ -45,7 +45,7 @@ def check_basic(request: dict, response: dict) -> tuple[bool, Optional[str]]:
 
 
 @checker('pedestrian_crossing')
-def check_basic(request: dict, response: dict) -> tuple[bool, Optional[str]]:
+def check_pedestrian_crossing(request: dict, response: dict) -> tuple[bool, Optional[str]]:
     """
     Пример проверки запроса на светофор для пешеходного перехода и ответа.
 
