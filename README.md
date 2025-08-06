@@ -8,6 +8,7 @@
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity?tab=GPL-3.0-1-ov-file"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
 </p>
 
+Приложение с графическим интерфейсом для моделирования и тестирования работы сервиса обрабатывающего светофоры.
 
 ## Технологический стек
 
