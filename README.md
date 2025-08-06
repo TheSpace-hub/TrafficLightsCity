@@ -1,7 +1,8 @@
 # Город светофоров 🚦
 
+[preview.webm](https://github.com/user-attachments/assets/93c9c23b-0d31-410c-8ed3-b165bd59b2f4)
+
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/3b35ecfb-7da5-4516-a345-d4a849bd702a" alt="Preview">
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="Latest Release"></a>
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/actions"><img src="https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build" alt="Build Status"></a>
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity?tab=GPL-3.0-1-ov-file"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
