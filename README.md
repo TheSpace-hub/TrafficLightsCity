@@ -1,6 +1,6 @@
 # Город светофоров 🚦
 
-[preview.webm](https://github.com/user-attachments/assets/93c9c23b-0d31-410c-8ed3-b165bd59b2f4)
+![preview](https://github.com/user-attachments/assets/de8f88ad-c3d4-4809-b2b3-be63ecf0ed92)
 
 <p align="center">
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="Latest Release"></a>
@@ -8,7 +8,6 @@
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity?tab=GPL-3.0-1-ov-file"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
 </p>
 
-Приложение с графическим интерфейсом для моделирования и тестирования работы сервиса обрабатывающего светофоры.
 
 ## Технологический стек
 
