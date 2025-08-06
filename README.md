@@ -6,7 +6,6 @@
 ---
 
 <p align="center">
-    <img width="1915" height="1079" alt="preview" src="https://github.com/user-attachments/assets/cc855d0c-771f-400e-a3b8-22080c38c632" />
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/releases"><img src="https://img.shields.io/github/v/release/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="Latest Release"></a>
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity/actions"><img src="https://img.shields.io/github/actions/workflow/status/TheSpace-hub/TrafficLightsCity/build.yml?style=flat-square&label=Build" alt="Build Status"></a>
     <a href="https://github.com/TheSpace-hub/TrafficLightsCity?tab=GPL-3.0-1-ov-file"><img src="https://img.shields.io/github/license/TheSpace-hub/TrafficLightsCity?style=flat-square" alt="License"></a>
