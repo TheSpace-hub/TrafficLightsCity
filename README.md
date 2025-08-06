@@ -1,4 +1,9 @@
 # Город светофоров 🚦
+<p align="center">
+    <img width="1915" height="1079" alt="preview" src="https://github.com/user-attachments/assets/cc855d0c-771f-400e-a3b8-22080c38c632" />
+</p>
+
+---
 
 <p align="center">
     <img width="1915" height="1079" alt="preview" src="https://github.com/user-attachments/assets/cc855d0c-771f-400e-a3b8-22080c38c632" />
