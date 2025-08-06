@@ -160,6 +160,9 @@ class City(State):
             for pos in self.game.transmitted_data['traffic_lights'][tfl_type]:
                 self.build_traffic_light(tuple[int, int](pos), tfl_type)
 
+        city_info: CityInfo = self.get_sprite('city_info')
+        city_info.city_name = self.name
+
     def on_dashboard_button_pressed(self, status: ButtonStatus):
         """Переход на сцену при нажатии на кнопку "Панель управления".
         """
