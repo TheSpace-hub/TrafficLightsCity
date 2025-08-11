@@ -123,8 +123,10 @@ jobs:
       - name: Prepare resources
         run: |
           mkdir -p dist_package
-          pyinstaller --onefile --windowed --name "TrafficLightsCityLite" main.py
-          cp dist/TrafficLightsCityLite* dist_package/
+          pyinstaller --windowed --name "TrafficLightsCityLite" main.py
+
+          cp -R dist/TrafficLightsCityLite.app dist_package/
+
           cp -r assets/ dist_package/
           cp -r logs/ dist_package/
           cp -r saves/ dist_package/
