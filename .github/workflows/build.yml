@@ -105,3 +105,41 @@ jobs:
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-for-macos:
+    needs: quality-check
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller pillow numpy pygame colorlog requests
+
+      - name: Prepare resources
+        run: |
+          mkdir -p dist_package
+          pyinstaller --onefile --windowed --name "TrafficLightsCityLite" main.py
+          cp dist/TrafficLightsCityLite* dist_package/
+          cp -r assets/ dist_package/
+          cp -r logs/ dist_package/
+          cp -r saves/ dist_package/
+
+      - name: Create zip archive
+        run: |
+          cd dist_package
+          zip -r ../TrafficLightsCityLite-MacOS.zip *
+          cd ..
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            TrafficLightsCityLite-MacOS.zip
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
